@@ -1,0 +1,100 @@
+<!-- 个人信息页 -->
+<view class="container">
+
+  <!-- 会员卡 -->
+  <view class="member-card">
+    <view class="member-top">
+      <view class="member-avatar">
+        <text class="avatar-text">{{userInfo.nickname ? userInfo.nickname[0] : '你'}}</text>
+      </view>
+      <view class="member-info">
+        <text class="member-name">{{userInfo.nickname}}</text>
+        <view class="vip-level-badge">
+          <text class="vip-star">✦</text>
+          <text class="vip-level">{{userInfo.vipLevel}}</text>
+        </view>
+      </view>
+      <view class="member-edit">编辑</view>
+    </view>
+
+    <!-- 数据栏 -->
+    <view class="stats-row">
+      <view class="stat-item">
+        <text class="stat-num">{{userInfo.points}}</text>
+        <text class="stat-label">积分</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">¥{{userInfo.balance}}</text>
+        <text class="stat-label">余额</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">3</text>
+        <text class="stat-label">预约次数</text>
+      </view>
+    </view>
+
+    <!-- 快捷按钮 -->
+    <view class="quick-btns">
+      <view class="quick-btn-item" bindtap="showRecharge">
+        <text class="qb-icon">💳</text>
+        <text class="qb-label">充值</text>
+      </view>
+      <view class="quick-btn-item" bindtap="switchSection" data-sec="booking">
+        <text class="qb-icon">📋</text>
+        <text class="qb-label">预约记录</text>
+      </view>
+      <view class="quick-btn-item" bindtap="switchSection" data-sec="points">
+        <text class="qb-icon">✦</text>
+        <text class="qb-label">积分明细</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 内容切换 Tab -->
+  <view class="content-tabs">
+    <view
+      class="content-tab {{activeSection === 'booking' ? 'ct-active' : ''}}"
+      bindtap="switchSection"
+      data-sec="booking"
+    >预约记录</view>
+    <view
+      class="content-tab {{activeSection === 'points' ? 'ct-active' : ''}}"
+      bindtap="switchSection"
+      data-sec="points"
+    >积分明细</view>
+  </view>
+
+  <!-- 预约记录 -->
+  <view wx:if="{{activeSection === 'booking'}}">
+    <view class="record-card" wx:for="{{bookingRecords}}" wx:key="id">
+      <view class="record-top">
+        <view class="record-service">
+          <text class="record-name">{{item.service}}</text>
+          <text class="record-tech">技师：{{item.tech}}</text>
+        </view>
+        <view class="record-status status-{{item.status}}">{{item.statusLabel}}</view>
+      </view>
+      <view class="record-bottom">
+        <text class="record-time">{{item.date}} {{item.time}}</text>
+        <text class="record-price">¥{{item.price}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 积分明细 -->
+  <view wx:if="{{activeSection === 'points'}}">
+    <view class="points-log-card" wx:for="{{pointsLogs}}" wx:key="id">
+      <view class="log-left">
+        <view class="log-dot log-{{item.type}}"></view>
+        <view class="log-info">
+          <text class="log-desc">{{item.desc}}</text>
+          <text class="log-time">{{item.time}}</text>
+        </view>
+      </view>
+      <text class="log-points log-pts-{{item.type}}">{{item.points}}</text>
+    </view>
+  </view>
+
+</view>

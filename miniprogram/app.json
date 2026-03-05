@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/technician/index",
+    "pages/booking/index",
+    "pages/shop/index",
+    "pages/community/index",
+    "pages/community/detail/index",
+    "pages/post/index",
+    "pages/profile/index"
+  ],
+  "tabBar": {
+    "color": "#AAAAAA",
+    "selectedColor": "#C8847A",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/technician/index",
+        "text": "技师"
+      },
+      {
+        "pagePath": "pages/shop/index",
+        "text": "商城"
+      },
+      {
+        "pagePath": "pages/community/index",
+        "text": "社区"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FAF7F4",
+    "navigationBarTitleText": "第五季",
+    "navigationBarTextStyle": "black"
+  },
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,65 @@
+<!-- 技师列表 -->
+<view class="container">
+
+  <view class="page-header">
+    <text class="page-title">专属技师团队</text>
+    <text class="page-sub">每一位技师都是美丽的创作者</text>
+  </view>
+
+  <view class="tech-list">
+    <view class="tech-card" wx:for="{{technicians}}" wx:key="id">
+
+      <!-- 头部：头像 + 基本信息 -->
+      <view class="tech-top">
+        <view class="tech-avatar-wrap">
+          <view class="tech-avatar">
+            <text class="tech-emoji">{{item.avatar}}</text>
+          </view>
+          <view class="avail-dot avail-{{item.available ? 'on' : 'off'}}"></view>
+        </view>
+
+        <view class="tech-info">
+          <view class="tech-name-row">
+            <text class="tech-name">{{item.name}}</text>
+            <view class="tech-badge" wx:if="{{item.badge}}">{{item.badge}}</view>
+          </view>
+          <text class="tech-title">{{item.title}}</text>
+          <view class="tech-rating">
+            <text class="star-icon">★</text>
+            <text class="rating-score">{{item.ratingText}}</text>
+            <text class="rating-reviews">({{item.reviews}} 条评价)</text>
+          </view>
+        </view>
+
+        <view class="tech-price">
+          <text class="price-from">起价</text>
+          <text class="price-num">¥{{item.priceFrom}}</text>
+        </view>
+      </view>
+
+      <!-- 简介 -->
+      <text class="tech-desc">{{item.desc}}</text>
+
+      <!-- 技能标签 -->
+      <view class="skill-list">
+        <view class="skill-tag" wx:for="{{item.skills}}" wx:key="*this" wx:for-item="skill">
+          {{skill}}
+        </view>
+      </view>
+
+      <!-- 预约按钮 -->
+      <view class="tech-footer">
+        <view class="avail-label avail-text-{{item.available ? 'on' : 'off'}}">
+          {{item.available ? '● 今日可约' : '○ 暂不可约'}}
+        </view>
+        <view
+          class="book-btn {{item.available ? 'book-active' : 'book-disabled'}}"
+          bindtap="goBooking"
+          data-id="{{item.id}}"
+        >立即预约</view>
+      </view>
+
+    </view>
+  </view>
+
+</view>

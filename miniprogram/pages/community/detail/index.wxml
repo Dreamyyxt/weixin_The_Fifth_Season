@@ -1,0 +1,123 @@
+<!-- 帖子详情页 -->
+<view class="container" wx:if="{{post}}">
+
+  <!-- 作者信息 -->
+  <view class="post-author">
+    <view class="author-avatar">
+      <text class="avatar-emoji">{{post.avatar}}</text>
+    </view>
+    <view class="author-info">
+      <view class="author-name-row">
+        <text class="author-name">{{post.user}}</text>
+        <view class="level-badge level-{{post.levelClass}}">{{post.level}}会员</view>
+      </view>
+      <text class="post-time">{{post.time}}</text>
+    </view>
+  </view>
+
+  <!-- 正文 -->
+  <view class="post-body">
+    <text class="post-content">{{post.content}}</text>
+  </view>
+
+  <!-- 图片区 -->
+  <view class="post-images">
+    <view
+      class="post-img img-{{imgColor}}"
+      wx:for="{{post.colors}}"
+      wx:key="*this"
+      wx:for-item="imgColor"
+    ></view>
+  </view>
+
+  <!-- 标签 -->
+  <view class="post-tags">
+    <view class="post-tag" wx:for="{{post.tags}}" wx:key="*this" wx:for-item="tag">
+      #{{tag}}
+    </view>
+  </view>
+
+  <!-- 互动操作栏 -->
+  <view class="action-bar">
+    <view
+      class="action-item {{post.liked ? 'action-liked' : ''}}"
+      bindtap="togglePostLike"
+    >
+      <text class="action-emoji">{{post.liked ? '❤️' : '🤍'}}</text>
+      <text class="action-num">{{post.likes}}</text>
+      <text class="action-label">点赞</text>
+    </view>
+    <view class="action-item" bindtap="focusInput">
+      <text class="action-emoji">💬</text>
+      <text class="action-num">{{post.commentCount}}</text>
+      <text class="action-label">评论</text>
+    </view>
+    <button class="action-item action-share" open-type="share">
+      <text class="action-emoji">↗</text>
+      <text class="action-num"></text>
+      <text class="action-label">分享</text>
+    </button>
+  </view>
+
+  <view class="divider-line"></view>
+
+  <!-- 评论区 -->
+  <view class="comments-section">
+    <text class="comments-title">评论 ({{post.commentCount}})</text>
+
+    <!-- 空评论 -->
+    <view class="empty-comments" wx:if="{{post.commentList.length === 0}}">
+      <text class="empty-icon">💬</text>
+      <text class="empty-text">还没有评论，来第一个吧！</text>
+    </view>
+
+    <!-- 评论列表 -->
+    <view class="comment-item" wx:for="{{post.commentList}}" wx:key="id">
+      <view class="comment-avatar">
+        <text class="comment-avatar-emoji">{{item.avatar}}</text>
+      </view>
+      <view class="comment-body">
+        <view class="comment-header">
+          <text class="comment-user">{{item.user}}</text>
+          <text class="comment-time">{{item.time}}</text>
+        </view>
+        <text class="comment-text">{{item.text}}</text>
+        <view class="comment-footer">
+          <view
+            class="comment-like {{item.liked ? 'cmt-liked' : ''}}"
+            bindtap="toggleCommentLike"
+            data-cid="{{item.id}}"
+          >
+            <text>{{item.liked ? '❤️' : '🤍'}}</text>
+            <text class="cmt-like-num">{{item.likes}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部占位，防止被输入框遮住 -->
+  <view style="height: 120rpx;"></view>
+
+</view>
+
+<!-- 底部评论输入框（固定） -->
+<view class="comment-input-bar">
+  <view class="input-wrap">
+    <input
+      class="comment-input"
+      placeholder="说点什么..."
+      value="{{inputText}}"
+      bindinput="onInputChange"
+      bindfocus="onInputFocus"
+      bindblur="onInputBlur"
+      confirm-type="send"
+      bindconfirm="submitComment"
+      id="commentInput"
+    />
+  </view>
+  <view
+    class="send-btn {{inputText ? 'send-active' : 'send-disabled'}}"
+    bindtap="submitComment"
+  >发送</view>
+</view>

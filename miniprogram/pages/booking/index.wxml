@@ -1,0 +1,165 @@
+<!-- 预约页 -->
+<view class="container">
+
+  <!-- 进度步骤 -->
+  <view class="steps">
+    <view class="step {{step >= 1 ? 'step-active' : ''}}">
+      <view class="step-num">1</view>
+      <text class="step-label">选择服务</text>
+    </view>
+    <view class="step-line"></view>
+    <view class="step {{step >= 2 ? 'step-active' : ''}}">
+      <view class="step-num">2</view>
+      <text class="step-label">填写信息</text>
+    </view>
+  </view>
+
+  <!-- 技师信息卡 -->
+  <view class="tech-card" wx:if="{{tech}}">
+    <view class="tech-avatar-sm">
+      <text>{{tech.avatar}}</text>
+    </view>
+    <view class="tech-meta">
+      <text class="tech-name">{{tech.name}}</text>
+      <text class="tech-title">{{tech.title}}</text>
+    </view>
+    <view class="tech-badge-sm">已选技师</view>
+  </view>
+
+  <!-- STEP 1: 选择服务 / 日期 / 时间 -->
+  <block wx:if="{{step === 1}}">
+
+    <!-- 服务项目 -->
+    <view class="section-header">
+      <text class="section-title">选择服务</text>
+    </view>
+    <view class="service-list">
+      <view
+        class="service-item {{selectedService && selectedService.id === item.id ? 'service-selected' : ''}}"
+        wx:for="{{services}}"
+        wx:key="id"
+        bindtap="selectService"
+        data-service="{{item}}"
+      >
+        <view class="service-left">
+          <text class="service-name">{{item.name}}</text>
+          <text class="service-duration">时长 {{item.duration}}</text>
+        </view>
+        <view class="service-right">
+          <text class="service-price">¥{{item.price}}</text>
+          <view class="service-check" wx:if="{{selectedService && selectedService.id === item.id}}">✓</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 选择日期 -->
+    <view class="section-header">
+      <text class="section-title">选择日期</text>
+    </view>
+    <view class="form-card">
+      <picker mode="date" value="{{selectedDate}}" bindchange="onDateChange">
+        <view class="picker-row">
+          <text class="picker-label">预约日期</text>
+          <text class="picker-value">{{selectedDate}} ›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 选择时间 -->
+    <view class="section-header">
+      <text class="section-title">选择时间</text>
+    </view>
+    <view class="time-grid">
+      <view
+        class="time-slot {{selectedTime === item ? 'time-selected' : ''}}"
+        wx:for="{{timeSlots}}"
+        wx:key="*this"
+        wx:for-item="item"
+        bindtap="selectTime"
+        data-time="{{item}}"
+      >{{item}}</view>
+    </view>
+
+    <view class="submit-wrap">
+      <view class="btn-primary" bindtap="nextStep">下一步</view>
+    </view>
+
+  </block>
+
+  <!-- STEP 2: 填写联系信息 -->
+  <block wx:if="{{step === 2}}">
+
+    <!-- 预约摘要 -->
+    <view class="summary-card">
+      <view class="summary-title">预约摘要</view>
+      <view class="summary-row">
+        <text class="summary-label">服务项目</text>
+        <text class="summary-value">{{selectedService.name}}</text>
+      </view>
+      <view class="summary-row">
+        <text class="summary-label">预约时间</text>
+        <text class="summary-value">{{selectedDate}} {{selectedTime}}</text>
+      </view>
+      <view class="summary-row">
+        <text class="summary-label">服务时长</text>
+        <text class="summary-value">{{selectedService.duration}}</text>
+      </view>
+      <view class="summary-row summary-price-row">
+        <text class="summary-label">参考价格</text>
+        <text class="summary-price">¥{{selectedService.price}}</text>
+      </view>
+    </view>
+
+    <!-- 联系信息 -->
+    <view class="section-header">
+      <text class="section-title">联系信息</text>
+    </view>
+    <view class="form-card">
+      <view class="form-row">
+        <text class="form-label">姓名</text>
+        <input
+          class="form-input"
+          placeholder="请输入您的姓名"
+          value="{{name}}"
+          bindinput="onNameInput"
+        />
+      </view>
+      <view class="form-divider"></view>
+      <view class="form-row">
+        <text class="form-label">手机号</text>
+        <input
+          class="form-input"
+          type="number"
+          placeholder="请输入手机号"
+          value="{{phone}}"
+          bindinput="onPhoneInput"
+          maxlength="11"
+        />
+      </view>
+      <view class="form-divider"></view>
+      <view class="form-row form-row-column">
+        <text class="form-label">备注</text>
+        <textarea
+          class="form-textarea"
+          placeholder="可以告诉我们您的想法、款式偏好或携带宠物..."
+          value="{{remark}}"
+          bindinput="onRemarkInput"
+          maxlength="200"
+        />
+      </view>
+    </view>
+
+    <!-- 宠物提示 -->
+    <view class="pet-tip">
+      <text class="pet-icon">🐾</text>
+      <text class="pet-text">本店宠物友好，欢迎携带您的毛孩子！</text>
+    </view>
+
+    <view class="btn-group">
+      <view class="btn-back" bindtap="prevStep">返回修改</view>
+      <view class="btn-primary btn-submit" bindtap="submitBooking">确认预约</view>
+    </view>
+
+  </block>
+
+</view>

@@ -1,0 +1,130 @@
+/* 全局样式 - 第五季 The Fifth Season */
+page {
+  background-color: #FAF7F4;
+  font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  color: #2C2C2C;
+  font-size: 28rpx;
+}
+
+/* 通用容器 */
+.container {
+  min-height: 100vh;
+  background-color: #FAF7F4;
+  padding-bottom: 40rpx;
+}
+
+/* 卡片 */
+.card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin: 0 30rpx 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(200, 132, 122, 0.08);
+}
+
+/* 区块标题 */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx 30rpx 20rpx;
+}
+
+.section-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+}
+
+.section-more {
+  font-size: 26rpx;
+  color: #C8847A;
+}
+
+/* 按钮 */
+.btn-primary {
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  color: #FFFFFF;
+  border-radius: 50rpx;
+  padding: 20rpx 48rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  text-align: center;
+  border: none;
+}
+
+.btn-secondary {
+  background: #F5EDEB;
+  color: #C8847A;
+  border-radius: 50rpx;
+  padding: 20rpx 48rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  text-align: center;
+  border: none;
+}
+
+.btn-green {
+  background: linear-gradient(135deg, #8DAB87, #AECA88);
+  color: #FFFFFF;
+  border-radius: 50rpx;
+  padding: 20rpx 48rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  text-align: center;
+  border: none;
+}
+
+/* 标签 */
+.tag {
+  display: inline-block;
+  padding: 6rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+}
+
+.tag-rose {
+  background: #FDE8E6;
+  color: #C8847A;
+}
+
+.tag-green {
+  background: #E6F0E5;
+  color: #8DAB87;
+}
+
+.tag-gold {
+  background: #FDF3E3;
+  color: #C9A76B;
+}
+
+/* 评分星星 */
+.stars {
+  color: #F5A623;
+  font-size: 26rpx;
+}
+
+/* 分割线 */
+.divider {
+  height: 1rpx;
+  background: #F0EBE8;
+  margin: 0 30rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 30rpx;
+  color: #BBBBBB;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+}

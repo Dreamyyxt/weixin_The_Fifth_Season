@@ -1,0 +1,353 @@
+/* 预约页样式 */
+
+/* 步骤条 */
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36rpx 60rpx;
+  gap: 0;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.step-num {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #F0EDED;
+  color: #CCCCCC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  font-weight: 600;
+}
+
+.step-active .step-num {
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  color: #FFFFFF;
+}
+
+.step-label {
+  font-size: 22rpx;
+  color: #AAAAAA;
+}
+
+.step-active .step-label {
+  color: #C8847A;
+  font-weight: 500;
+}
+
+.step-line {
+  flex: 1;
+  height: 2rpx;
+  background: #F0EDED;
+  margin: 0 20rpx;
+  margin-bottom: 30rpx;
+}
+
+/* 技师卡片 */
+.tech-card {
+  margin: 0 30rpx 24rpx;
+  background: #FEF8F7;
+  border: 1rpx solid #F5DDD9;
+  border-radius: 20rpx;
+  padding: 24rpx 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.tech-avatar-sm {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #F7D9D7, #F2BEB8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+}
+
+.tech-meta {
+  flex: 1;
+}
+
+.tech-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+  margin-bottom: 4rpx;
+}
+
+.tech-title {
+  display: block;
+  font-size: 22rpx;
+  color: #888888;
+}
+
+.tech-badge-sm {
+  font-size: 22rpx;
+  color: #C8847A;
+  background: #FDE8E6;
+  padding: 6rpx 18rpx;
+  border-radius: 16rpx;
+}
+
+/* 服务列表 */
+.service-list {
+  margin: 0 30rpx 12rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(200, 132, 122, 0.06);
+}
+
+.service-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 32rpx;
+  border-bottom: 1rpx solid #F5F0ED;
+  transition: background 0.2s;
+}
+
+.service-item:last-child {
+  border-bottom: none;
+}
+
+.service-selected {
+  background: #FEF8F7;
+}
+
+.service-left {
+  flex: 1;
+}
+
+.service-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #2C2C2C;
+  margin-bottom: 6rpx;
+}
+
+.service-duration {
+  display: block;
+  font-size: 22rpx;
+  color: #AAAAAA;
+}
+
+.service-right {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.service-price {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #C8847A;
+}
+
+.service-check {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: #C8847A;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+/* Picker */
+.form-card {
+  margin: 0 30rpx 12rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(200, 132, 122, 0.06);
+}
+
+.picker-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+}
+
+.picker-label {
+  font-size: 28rpx;
+  color: #2C2C2C;
+}
+
+.picker-value {
+  font-size: 28rpx;
+  color: #C8847A;
+}
+
+/* 时间格子 */
+.time-grid {
+  margin: 0 30rpx 12rpx;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+}
+
+.time-slot {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: 26rpx;
+  color: #555555;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+
+.time-selected {
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  color: #FFFFFF;
+}
+
+/* 表单 */
+.form-row {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 32rpx;
+}
+
+.form-row-column {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16rpx;
+}
+
+.form-label {
+  width: 120rpx;
+  font-size: 28rpx;
+  color: #2C2C2C;
+  flex-shrink: 0;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #2C2C2C;
+  text-align: right;
+}
+
+.form-textarea {
+  width: 100%;
+  min-height: 120rpx;
+  font-size: 26rprc;
+  color: #555555;
+  line-height: 1.6;
+}
+
+.form-divider {
+  height: 1rpx;
+  background: #F5F0ED;
+  margin: 0 32rpx;
+}
+
+/* 预约摘要 */
+.summary-card {
+  margin: 0 30rpx 24rpx;
+  background: linear-gradient(135deg, #FDE8E6, #FEF3F2);
+  border-radius: 20rpx;
+  padding: 32rpx;
+}
+
+.summary-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #C8847A;
+  margin-bottom: 20rpx;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.summary-label {
+  font-size: 26rpx;
+  color: #888888;
+}
+
+.summary-value {
+  font-size: 26rpx;
+  color: #2C2C2C;
+  font-weight: 500;
+}
+
+.summary-price-row {
+  padding-top: 16rpx;
+  border-top: 1rpx solid rgba(200, 132, 122, 0.2);
+  margin-top: 8rpx;
+  margin-bottom: 0;
+}
+
+.summary-price {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #C8847A;
+}
+
+/* 宠物提示 */
+.pet-tip {
+  margin: 12rpx 30rpx 24rpx;
+  background: #E6F0E5;
+  border-radius: 16rpx;
+  padding: 20rpx 28rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.pet-icon {
+  font-size: 28rpx;
+}
+
+.pet-text {
+  font-size: 24rpx;
+  color: #8DAB87;
+}
+
+/* 按钮组 */
+.submit-wrap {
+  padding: 24rpx 30rpx 40rpx;
+}
+
+.btn-group {
+  display: flex;
+  gap: 20rpx;
+  padding: 24rpx 30rpx 40rpx;
+}
+
+.btn-back {
+  flex: 1;
+  background: #F5EDEB;
+  color: #C8847A;
+  border-radius: 50rpx;
+  padding: 24rpx 0;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+.btn-submit {
+  flex: 2;
+  padding: 24rpx 0;
+}

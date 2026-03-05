@@ -1,0 +1,59 @@
+<!-- 发帖页 -->
+<view class="container">
+
+  <!-- 积分提示 -->
+  <view class="points-hint">
+    <text class="hint-icon">✦</text>
+    <text class="hint-text">发布帖子可获得 <text class="hint-pts">+10 积分</text></text>
+  </view>
+
+  <!-- 图片上传 -->
+  <view class="section-card">
+    <view class="section-label">添加图片 <text class="count-label">{{images.length}}/{{maxImages}}</text></view>
+    <view class="image-grid">
+      <view class="img-item" wx:for="{{images}}" wx:key="*this" wx:for-item="img">
+        <image class="img-preview" src="{{img}}" mode="aspectFill" />
+        <view class="img-remove" bindtap="removeImage" data-index="{{index}}">×</view>
+      </view>
+      <view class="img-add" bindtap="chooseImage" wx:if="{{images.length < maxImages}}">
+        <text class="img-add-icon">+</text>
+        <text class="img-add-text">添加图片</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 内容 -->
+  <view class="section-card">
+    <view class="section-label">分享内容</view>
+    <textarea
+      class="content-textarea"
+      placeholder="分享你的美甲美睫体验，或者带着毛孩子来的故事..."
+      value="{{content}}"
+      bindinput="onContentInput"
+      maxlength="{{contentMax}}"
+      auto-height
+    />
+    <text class="word-count">{{content.length}}/{{contentMax}}</text>
+  </view>
+
+  <!-- 标签 -->
+  <view class="section-card">
+    <view class="section-label">添加标签 <text class="count-label">最多3个</text></view>
+    <view class="tags-wrap">
+      <view
+        class="tag-item {{selectedTags.indexOf(tag) !== -1 ? 'tag-selected' : ''}}"
+        wx:for="{{tags}}"
+        wx:key="*this"
+        wx:for-item="tag"
+        bindtap="toggleTag"
+        data-tag="{{tag}}"
+      >#{{tag}}</view>
+    </view>
+  </view>
+
+  <!-- 提交 -->
+  <view class="submit-area">
+    <view class="btn-primary submit-btn" bindtap="submitPost">发布帖子</view>
+  </view>
+
+</view>

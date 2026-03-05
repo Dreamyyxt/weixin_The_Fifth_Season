@@ -1,0 +1,207 @@
+/* 技师列表样式 */
+
+.page-header {
+  padding: 48rpx 36rpx 24rpx;
+}
+
+.page-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #2C2C2C;
+  margin-bottom: 8rpx;
+}
+
+.page-sub {
+  display: block;
+  font-size: 24rpx;
+  color: #AAAAAA;
+}
+
+.tech-list {
+  padding: 0 30rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.tech-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 36rpx;
+  box-shadow: 0 4rpx 20rpx rgba(200, 132, 122, 0.08);
+}
+
+/* 头部布局 */
+.tech-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.tech-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tech-avatar {
+  width: 108rpx;
+  height: 108rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #F7D9D7, #F2BEB8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tech-emoji {
+  font-size: 52rpx;
+}
+
+.avail-dot {
+  position: absolute;
+  bottom: 4rpx;
+  right: 4rpx;
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 50%;
+  border: 3rpx solid #FFFFFF;
+}
+
+.avail-on { background: #6BBF6B; }
+.avail-off { background: #CCCCCC; }
+
+.tech-info {
+  flex: 1;
+}
+
+.tech-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 6rpx;
+}
+
+.tech-name {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #2C2C2C;
+}
+
+.tech-badge {
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  color: #FFFFFF;
+  font-size: 20rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 16rpx;
+  font-weight: 500;
+}
+
+.tech-title {
+  display: block;
+  font-size: 24rpx;
+  color: #888888;
+  margin-bottom: 10rpx;
+}
+
+.tech-rating {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.star-icon {
+  color: #F5A623;
+  font-size: 26rpx;
+}
+
+.rating-score {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+}
+
+.rating-reviews {
+  font-size: 22rpx;
+  color: #AAAAAA;
+}
+
+.tech-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.price-from {
+  font-size: 20rpx;
+  color: #AAAAAA;
+}
+
+.price-num {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #C8847A;
+}
+
+/* 简介 */
+.tech-desc {
+  display: block;
+  font-size: 26rpx;
+  color: #666666;
+  line-height: 1.7;
+  margin-bottom: 24rpx;
+}
+
+/* 技能标签 */
+.skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 28rpx;
+}
+
+.skill-tag {
+  background: #FDE8E6;
+  color: #C8847A;
+  font-size: 22rpx;
+  padding: 8rpx 24rpx;
+  border-radius: 20rpx;
+}
+
+/* 底部 */
+.tech-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 24rpx;
+  border-top: 1rpx solid #F5F0ED;
+}
+
+.avail-text-on {
+  font-size: 24rpx;
+  color: #6BBF6B;
+}
+
+.avail-text-off {
+  font-size: 24rpx;
+  color: #CCCCCC;
+}
+
+.book-btn {
+  padding: 18rpx 52rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  text-align: center;
+}
+
+.book-active {
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  color: #FFFFFF;
+}
+
+.book-disabled {
+  background: #F0EDED;
+  color: #CCCCCC;
+}

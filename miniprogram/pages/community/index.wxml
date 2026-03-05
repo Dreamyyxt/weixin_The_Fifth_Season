@@ -1,0 +1,92 @@
+<!-- 社区论坛 -->
+<view class="container">
+
+  <!-- 顶部 -->
+  <view class="community-header">
+    <view class="header-left">
+      <text class="header-title">美丽社区</text>
+      <text class="header-sub">分享你的美丽，获得积分</text>
+    </view>
+    <view class="points-tip-badge">
+      <text class="points-tip-icon">✦</text>
+      <text class="points-tip-text">发帖 +10 积分</text>
+    </view>
+  </view>
+
+  <!-- 帖子列表 -->
+  <view class="post-list">
+    <view
+      class="post-card"
+      wx:for="{{posts}}"
+      wx:key="id"
+      bindtap="goDetail"
+      data-id="{{item.id}}"
+    >
+
+      <!-- 用户信息 -->
+      <view class="post-header">
+        <view class="post-avatar">
+          <text class="avatar-emoji">{{item.avatar}}</text>
+        </view>
+        <view class="post-user-info">
+          <view class="post-user-row">
+            <text class="post-username">{{item.user}}</text>
+            <view class="level-badge level-{{item.levelClass}}">{{item.level}}会员</view>
+          </view>
+          <text class="post-time">{{item.time}}</text>
+        </view>
+        <view class="post-points-badge">
+          <text class="points-earn">+{{item.points}}分</text>
+        </view>
+      </view>
+
+      <!-- 内容 -->
+      <text class="post-content">{{item.content}}</text>
+
+      <!-- 图片占位（颜色块代替） -->
+      <view class="post-images">
+        <view
+          class="post-img img-{{imgColor}}"
+          wx:for="{{item.colors}}"
+          wx:key="*this"
+          wx:for-item="imgColor"
+        ></view>
+      </view>
+
+      <!-- 标签 -->
+      <view class="post-tags">
+        <view class="post-tag" wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag">
+          #{{tag}}
+        </view>
+      </view>
+
+      <!-- 互动 -->
+      <view class="post-actions">
+        <view
+          class="action-btn {{item.liked ? 'liked' : ''}}"
+          catchtap="toggleLike"
+          data-id="{{item.id}}"
+        >
+          <text class="action-icon">{{item.liked ? '❤️' : '🤍'}}</text>
+          <text class="action-count">{{item.likes}}</text>
+        </view>
+        <view class="action-btn" catchtap="goDetail" data-id="{{item.id}}">
+          <text class="action-icon">💬</text>
+          <text class="action-count">{{item.commentCount}}</text>
+        </view>
+        <view class="action-btn">
+          <text class="action-icon">↗</text>
+          <text class="action-count">分享</text>
+        </view>
+      </view>
+
+    </view>
+  </view>
+
+  <!-- 发帖 FAB -->
+  <view class="fab" bindtap="goPost">
+    <text class="fab-icon">✎</text>
+    <text class="fab-text">发帖</text>
+  </view>
+
+</view>

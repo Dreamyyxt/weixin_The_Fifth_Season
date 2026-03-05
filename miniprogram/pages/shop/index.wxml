@@ -1,0 +1,84 @@
+<!-- 积分商城 -->
+<view class="container">
+
+  <!-- 积分余额卡 -->
+  <view class="points-banner">
+    <view class="points-left">
+      <text class="points-label">我的积分</text>
+      <view class="points-num-row">
+        <text class="points-coin">✦</text>
+        <text class="points-num">{{userPoints}}</text>
+        <text class="points-unit">分</text>
+      </view>
+      <text class="points-tip">发帖、消费均可获得积分</text>
+    </view>
+    <view class="points-right">
+      <text class="points-icon-big">🎁</text>
+    </view>
+  </view>
+
+  <!-- Tab 切换 -->
+  <view class="tabs">
+    <view
+      class="tab-item {{activeTab === index ? 'tab-active' : ''}}"
+      wx:for="{{tabs}}"
+      wx:key="*this"
+      wx:for-item="tab"
+      bindtap="switchTab"
+      data-index="{{index}}"
+    >
+      <text class="tab-text">{{tab}}</text>
+      <view class="tab-underline" wx:if="{{activeTab === index}}"></view>
+    </view>
+  </view>
+
+  <!-- 服务套餐 -->
+  <view class="product-grid" wx:if="{{activeTab === 0}}">
+    <view class="product-card" wx:for="{{packages}}" wx:key="id">
+      <view class="product-thumb pkg-bg">
+        <text class="product-emoji">{{item.emoji}}</text>
+        <view class="product-tag tag-rose">{{item.tag}}</view>
+      </view>
+      <view class="product-body">
+        <text class="product-name">{{item.name}}</text>
+        <text class="product-desc">{{item.desc}}</text>
+        <view class="product-footer">
+          <view class="product-price-row">
+            <text class="price-unit">¥</text>
+            <text class="price-big">{{item.price}}</text>
+          </view>
+          <view class="buy-btn" bindtap="buyPackage" data-item="{{item}}">立即购买</view>
+        </view>
+        <text class="sold-text">已售 {{item.sold}} 件</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 积分兑换 -->
+  <view class="product-grid" wx:if="{{activeTab === 1}}">
+    <view class="product-card" wx:for="{{redeemItems}}" wx:key="id">
+      <view class="product-thumb redeem-bg">
+        <text class="product-emoji">{{item.emoji}}</text>
+        <view class="product-tag tag-gold">{{item.tag}}</view>
+      </view>
+      <view class="product-body">
+        <text class="product-name">{{item.name}}</text>
+        <text class="product-desc">{{item.desc}}</text>
+        <view class="product-footer">
+          <view class="points-price-row">
+            <text class="points-coin-sm">✦</text>
+            <text class="points-price-num">{{item.points}}</text>
+            <text class="points-price-unit">积分</text>
+          </view>
+          <view
+            class="redeem-btn {{userPoints >= item.points ? 'redeem-active' : 'redeem-disabled'}}"
+            bindtap="redeemItem"
+            data-item="{{item}}"
+          >立即兑换</view>
+        </view>
+        <text class="stock-text">剩余 {{item.stock}} 件</text>
+      </view>
+    </view>
+  </view>
+
+</view>

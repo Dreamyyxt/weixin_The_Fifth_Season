@@ -1,0 +1,258 @@
+/* 商城样式 */
+
+/* 积分横幅 */
+.points-banner {
+  margin: 24rpx 30rpx;
+  background: linear-gradient(135deg, #3D3228, #5A4A3C);
+  border-radius: 24rpx;
+  padding: 40rpx 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.points-label {
+  display: block;
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 12rpx;
+}
+
+.points-num-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+  margin-bottom: 12rpx;
+}
+
+.points-coin {
+  color: #C9A76B;
+  font-size: 28rpx;
+}
+
+.points-num {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.points-unit {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.7);
+}
+
+.points-tip {
+  display: block;
+  font-size: 22rpx;
+  color: #C9A76B;
+}
+
+.points-icon-big {
+  font-size: 80rpx;
+}
+
+/* Tab */
+.tabs {
+  display: flex;
+  margin: 0 30rpx 24rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 8rpx;
+  box-shadow: 0 2rpx 12rpx rgba(200, 132, 122, 0.06);
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 0;
+  position: relative;
+  border-radius: 16rpx;
+}
+
+.tab-active {
+  background: #FDE8E6;
+}
+
+.tab-text {
+  font-size: 28rpx;
+  color: #888888;
+  font-weight: 500;
+}
+
+.tab-active .tab-text {
+  color: #C8847A;
+  font-weight: 600;
+}
+
+.tab-underline {
+  position: absolute;
+  bottom: 6rpx;
+  width: 40rpx;
+  height: 4rpx;
+  background: #C8847A;
+  border-radius: 2rpx;
+}
+
+/* 商品格 */
+.product-grid {
+  padding: 0 30rpx 40rpx;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+}
+
+.product-card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(200, 132, 122, 0.08);
+}
+
+.product-thumb {
+  height: 200rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.pkg-bg {
+  background: linear-gradient(135deg, #F7D9D7, #F2BEB8);
+}
+
+.redeem-bg {
+  background: linear-gradient(135deg, #F2E6C8, #E8CFA0);
+}
+
+.product-emoji {
+  font-size: 70rpx;
+}
+
+.product-tag {
+  position: absolute;
+  top: 14rpx;
+  right: 14rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 4rpx 14rpx;
+  border-radius: 14rpx;
+}
+
+.tag-rose {
+  background: rgba(255,255,255,0.9);
+  color: #C8847A;
+}
+
+.tag-gold {
+  background: rgba(255,255,255,0.9);
+  color: #C9A76B;
+}
+
+.product-body {
+  padding: 20rpx 20rpx 16rpx;
+}
+
+.product-name {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+  margin-bottom: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-desc {
+  display: block;
+  font-size: 22rpx;
+  color: #AAAAAA;
+  margin-bottom: 16rpx;
+}
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.product-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2rpx;
+}
+
+.price-unit {
+  font-size: 22rpx;
+  color: #C8847A;
+  font-weight: 600;
+}
+
+.price-big {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #C8847A;
+}
+
+.buy-btn {
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  color: #FFFFFF;
+  font-size: 22rpx;
+  padding: 10rpx 22rpx;
+  border-radius: 20rpx;
+  font-weight: 500;
+}
+
+.sold-text {
+  font-size: 20rpx;
+  color: #CCCCCC;
+}
+
+/* 积分兑换 */
+.points-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+}
+
+.points-coin-sm {
+  color: #C9A76B;
+  font-size: 20rpx;
+}
+
+.points-price-num {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #C9A76B;
+}
+
+.points-price-unit {
+  font-size: 20rpx;
+  color: #C9A76B;
+}
+
+.redeem-btn {
+  font-size: 22rpx;
+  padding: 10rpx 22rpx;
+  border-radius: 20rpx;
+  font-weight: 500;
+}
+
+.redeem-active {
+  background: linear-gradient(135deg, #C9A76B, #E0C080);
+  color: #FFFFFF;
+}
+
+.redeem-disabled {
+  background: #F0EDED;
+  color: #CCCCCC;
+}
+
+.stock-text {
+  font-size: 20rpx;
+  color: #CCCCCC;
+}

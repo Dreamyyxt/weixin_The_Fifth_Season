@@ -1,0 +1,116 @@
+<!-- 首页 - 第五季 The Fifth Season -->
+<view class="container">
+
+  <!-- 顶部品牌区 -->
+  <view class="hero">
+    <view class="hero-logo">
+      <view class="logo-circle">
+        <text class="logo-zh">第五季</text>
+      </view>
+    </view>
+    <view class="hero-text">
+      <text class="hero-en">The Fifth Season</text>
+      <text class="hero-slogan">在春夏秋冬之外，遇见宠物、花卉与美丽</text>
+    </view>
+  </view>
+
+  <!-- 轮播 Banner -->
+  <swiper class="banner" autoplay="{{true}}" interval="3500" circular="{{true}}" indicator-dots="{{true}}" indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#FFFFFF">
+    <swiper-item wx:for="{{banners}}" wx:key="id">
+      <view class="banner-item banner-{{item.theme}}">
+        <view class="banner-tag">{{item.tag}}</view>
+        <text class="banner-title">{{item.title}}</text>
+        <text class="banner-sub">{{item.subtitle}}</text>
+        <view class="banner-btn" bindtap="goTechnician">立即预约</view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 快捷入口 -->
+  <view class="quick-grid">
+    <view class="quick-item" bindtap="goTechnician">
+      <view class="quick-icon q-rose">
+        <text class="quick-emoji">💅</text>
+      </view>
+      <text class="quick-label">预约技师</text>
+    </view>
+    <view class="quick-item" bindtap="goShop">
+      <view class="quick-icon q-gold">
+        <text class="quick-emoji">🎁</text>
+      </view>
+      <text class="quick-label">积分商城</text>
+    </view>
+    <view class="quick-item" bindtap="goCommunity">
+      <view class="quick-icon q-green">
+        <text class="quick-emoji">📸</text>
+      </view>
+      <text class="quick-label">晒图社区</text>
+    </view>
+    <view class="quick-item" bindtap="goProfile">
+      <view class="quick-icon q-purple">
+        <text class="quick-emoji">👑</text>
+      </view>
+      <text class="quick-label">会员中心</text>
+    </view>
+  </view>
+
+  <!-- 精选作品 -->
+  <view class="section-header">
+    <text class="section-title">精选作品</text>
+    <text class="section-more" bindtap="goCommunity">查看全部 ›</text>
+  </view>
+  <scroll-view class="works-scroll" scroll-x="{{true}}" enhanced="{{true}}">
+    <view class="works-list">
+      <view class="work-card" wx:for="{{works}}" wx:key="id">
+        <view class="work-thumb work-{{item.color}}">
+          <text class="work-emoji">{{item.emoji}}</text>
+        </view>
+        <text class="work-label">{{item.label}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- VIP 会员横幅 -->
+  <view class="vip-banner" bindtap="goProfile">
+    <view class="vip-deco">✦</view>
+    <view class="vip-content">
+      <text class="vip-title">第五季 会员俱乐部</text>
+      <text class="vip-desc">专属折扣 · 积分兑礼 · VIP Room</text>
+    </view>
+    <text class="vip-arrow">›</text>
+  </view>
+
+  <!-- 公告滚动 -->
+  <view class="notice-bar">
+    <text class="notice-icon">🌸</text>
+    <text class="notice-text">{{notices[noticeIndex]}}</text>
+  </view>
+
+  <!-- 关于我们 -->
+  <view class="about-card">
+    <view class="about-row">
+      <view class="about-item">
+        <text class="about-icon">🐾</text>
+        <text class="about-label">宠物友好</text>
+      </view>
+      <view class="about-item">
+        <text class="about-icon">🌺</text>
+        <text class="about-label">四季花艺</text>
+      </view>
+      <view class="about-item">
+        <text class="about-icon">🏅</text>
+        <text class="about-label">高定美甲</text>
+      </view>
+      <view class="about-item">
+        <text class="about-icon">🚪</text>
+        <text class="about-label">VIP 包间</text>
+      </view>
+    </view>
+    <view class="about-quote">
+      <text class="quote-mark">"</text>
+      <text class="quote-text">独属于你的 第五季</text>
+      <text class="quote-mark">"</text>
+    </view>
+  </view>
+
+</view>
