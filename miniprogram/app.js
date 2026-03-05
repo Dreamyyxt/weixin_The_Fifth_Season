@@ -1,11 +1,12 @@
 App({
   globalData: {
     userInfo: {
-      nickname: '美丽的你',
-      avatar: '',
-      vipLevel: '银卡会员',
-      points: 1280,
-      balance: 500,
+      nickname: '',
+      avatarUrl: '',
+      vipLevel: '普通会员',
+      points: 0,
+      balance: 0,
+      isRegistered: false,
     },
     posts: [
       {
@@ -93,9 +94,9 @@ App({
   },
 
   onLaunch() {
-    const userInfo = wx.getStorageSync('userInfo');
-    if (userInfo) {
-      this.globalData.userInfo = userInfo;
+    const stored = wx.getStorageSync('userInfo');
+    if (stored && stored.isRegistered) {
+      this.globalData.userInfo = stored;
     }
   },
 

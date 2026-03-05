@@ -1,0 +1,76 @@
+<!-- 登录 / 编辑资料页 -->
+<view class="container">
+
+  <!-- 顶部品牌 -->
+  <view class="brand">
+    <view class="brand-logo">
+      <text class="brand-zh">第五季</text>
+    </view>
+    <text class="brand-en">The Fifth Season</text>
+    <text class="brand-slogan">在春夏秋冬之外，遇见宠物、花卉与美丽</text>
+  </view>
+
+  <!-- 卡片 -->
+  <view class="form-card">
+    <text class="form-title">{{isEdit ? '编辑资料' : '欢迎加入'}}</text>
+    <text class="form-sub">{{isEdit ? '修改您的昵称和头像' : '使用微信信息快速完善您的资料'}}</text>
+
+    <!-- 头像选择 -->
+    <view class="avatar-section">
+      <button
+        class="avatar-btn"
+        open-type="chooseAvatar"
+        bindchooseavatar="onChooseAvatar"
+      >
+        <image
+          wx:if="{{avatarUrl}}"
+          class="avatar-img"
+          src="{{avatarUrl}}"
+          mode="aspectFill"
+        />
+        <view wx:else class="avatar-placeholder">
+          <text class="avatar-icon">📷</text>
+          <text class="avatar-hint">点击选择头像</text>
+        </view>
+      </button>
+      <text class="avatar-label">点击更换微信头像</text>
+    </view>
+
+    <!-- 昵称输入 -->
+    <view class="input-group">
+      <text class="input-label">昵称</text>
+      <view class="input-wrap">
+        <input
+          class="nickname-input"
+          type="nickname"
+          placeholder="点击填写微信昵称"
+          value="{{nickname}}"
+          bindinput="onNicknameInput"
+          maxlength="20"
+        />
+      </view>
+    </view>
+
+    <!-- 新用户提示 -->
+    <view class="welcome-tips" wx:if="{{!isEdit}}">
+      <view class="tip-item">
+        <text class="tip-icon">🎁</text>
+        <text class="tip-text">注册即送 100 积分</text>
+      </view>
+      <view class="tip-item">
+        <text class="tip-icon">🐾</text>
+        <text class="tip-text">宠物友好，欢迎携毛孩子来访</text>
+      </view>
+      <view class="tip-item">
+        <text class="tip-icon">✦</text>
+        <text class="tip-text">发帖、消费均可积累积分</text>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-btn" bindtap="submit">
+      {{isEdit ? '保存修改' : '开始体验'}}
+    </view>
+  </view>
+
+</view>
