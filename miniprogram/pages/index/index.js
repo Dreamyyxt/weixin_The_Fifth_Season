@@ -27,6 +27,13 @@ Page({
     this.startNoticeTimer();
   },
 
+  onShow() {
+    // 未注册时跳转到登录页
+    if (!app.globalData.userInfo.isRegistered) {
+      wx.navigateTo({ url: '/pages/login/index' });
+    }
+  },
+
   onUnload() {
     if (this.noticeTimer) clearInterval(this.noticeTimer);
   },

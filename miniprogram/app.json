@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/login/index",
     "pages/technician/index",
     "pages/booking/index",
     "pages/shop/index",
