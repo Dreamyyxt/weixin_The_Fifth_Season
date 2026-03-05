@@ -22,6 +22,10 @@ Page({
     this.setData({ userInfo: app.globalData.userInfo });
   },
 
+  goEdit() {
+    wx.navigateTo({ url: '/pages/login/index?mode=edit' });
+  },
+
   switchSection(e) {
     this.setData({ activeSection: e.currentTarget.dataset.sec });
   },

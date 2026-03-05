@@ -4,17 +4,24 @@
   <!-- 会员卡 -->
   <view class="member-card">
     <view class="member-top">
+      <!-- 头像：有微信头像则显示图片，否则显示首字母 -->
       <view class="member-avatar">
-        <text class="avatar-text">{{userInfo.nickname ? userInfo.nickname[0] : '你'}}</text>
+        <image
+          wx:if="{{userInfo.avatarUrl}}"
+          class="avatar-img"
+          src="{{userInfo.avatarUrl}}"
+          mode="aspectFill"
+        />
+        <text wx:else class="avatar-text">{{userInfo.nickname ? userInfo.nickname[0] : '我'}}</text>
       </view>
       <view class="member-info">
-        <text class="member-name">{{userInfo.nickname}}</text>
+        <text class="member-name">{{userInfo.nickname || '点击设置昵称'}}</text>
         <view class="vip-level-badge">
           <text class="vip-star">✦</text>
-          <text class="vip-level">{{userInfo.vipLevel}}</text>
+          <text class="vip-level">{{userInfo.vipLevel || '普通会员'}}</text>
         </view>
       </view>
-      <view class="member-edit">编辑</view>
+      <view class="member-edit" bindtap="goEdit">编辑</view>
     </view>
 
     <!-- 数据栏 -->
