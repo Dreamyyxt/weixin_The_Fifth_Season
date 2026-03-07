@@ -212,11 +212,31 @@
   font-size: 26rpx;
   color: #555555;
   box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+  position: relative;
 }
 
 .time-selected {
   background: linear-gradient(135deg, #C8847A, #E8A89E);
   color: #FFFFFF;
+}
+
+.time-disabled {
+  background: #F5F5F5;
+  color: #CCCCCC;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.time-booked-tag {
+  display: block;
+  font-size: 18rpx;
+  color: #C8847A;
+  margin-top: 4rpx;
+  font-weight: 500;
+}
+
+.time-disabled .time-booked-tag {
+  color: #AAAAAA;
 }
 
 /* 表单 */
