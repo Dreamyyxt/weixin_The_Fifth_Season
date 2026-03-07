@@ -238,6 +238,83 @@
   color: #C8847A;
 }
 
+.record-duration {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 12rpx;
+  padding-top: 12rpx;
+  border-top: 1rpx dashed #F5F0ED;
+}
+
+.duration-label {
+  font-size: 22rpx;
+  color: #AAAAAA;
+}
+
+.duration-value {
+  font-size: 22rpx;
+  color: #555555;
+  font-weight: 500;
+}
+
+.record-remark {
+  margin-top: 12rpx;
+  padding: 16rpx;
+  background: #FAF7F4;
+  border-radius: 12rpx;
+}
+
+.remark-label {
+  display: block;
+  font-size: 22rpx;
+  color: #AAAAAA;
+  margin-bottom: 6rpx;
+}
+
+.remark-value {
+  display: block;
+  font-size: 24rpx;
+  color: #555555;
+  line-height: 1.5;
+}
+
+.record-actions {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #F5F0ED;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-cancel {
+  font-size: 24rpx;
+  color: #E74C3C;
+  padding: 10rpx 24rpx;
+  border: 1rpx solid #E74C3C;
+  border-radius: 20rpx;
+  text-align: center;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0;
+  gap: 20rpx;
+}
+
+.empty-icon {
+  font-size: 100rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #AAAAAA;
+}
+
 /* 积分明细 */
 .points-log-card {
   margin: 0 30rpx 16rpx;

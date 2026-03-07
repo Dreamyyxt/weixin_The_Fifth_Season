@@ -56,7 +56,12 @@
           class="book-btn {{item.available ? 'book-active' : 'book-disabled'}}"
           bindtap="goBooking"
           data-id="{{item.id}}"
+          wx:if="{{item.available}}"
         >立即预约</view>
+        <view
+          class="book-btn book-disabled"
+          wx:else
+        >{{item.badge ? '暂不可约' : '已约满'}}</view>
       </view>
 
     </view>

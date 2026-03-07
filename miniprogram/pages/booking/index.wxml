@@ -71,13 +71,16 @@
     </view>
     <view class="time-grid">
       <view
-        class="time-slot {{selectedTime === item ? 'time-selected' : ''}}"
+        class="time-slot {{item.disabled ? 'time-disabled' : ''}} {{selectedTime === item.time ? 'time-selected' : ''}}"
         wx:for="{{timeSlots}}"
-        wx:key="*this"
+        wx:key="time"
         wx:for-item="item"
         bindtap="selectTime"
-        data-time="{{item}}"
-      >{{item}}</view>
+        data-timeinfo="{{item}}"
+      >
+        {{item.time}}
+        <text wx:if="{{item.disabled}}" class="time-booked-tag">已约</text>
+      </view>
     </view>
 
     <view class="submit-wrap">
