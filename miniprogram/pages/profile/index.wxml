@@ -87,6 +87,23 @@
         <text class="record-time">{{item.date}} {{item.time}}</text>
         <text class="record-price">¥{{item.price}}</text>
       </view>
+      <view class="record-duration" wx:if="{{item.duration}}">
+        <text class="duration-label">时长：</text>
+        <text class="duration-value">{{item.duration}}</text>
+      </view>
+      <view class="record-remark" wx:if="{{item.remark}}">
+        <text class="remark-label">备注：</text>
+        <text class="remark-value">{{item.remark}}</text>
+      </view>
+      <view class="record-actions" wx:if="{{item.status === 'pending' || item.status === 'today'}}">
+        <view class="btn-cancel" bindtap="cancelBooking" data-id="{{item.id}}">取消预约</view>
+      </view>
+    </view>
+    
+    <!-- 空状态提示 -->
+    <view class="empty-state" wx:if="{{bookingRecords.length === 0}}">
+      <text class="empty-icon">📋</text>
+      <text class="empty-text">暂无预约记录</text>
     </view>
   </view>
 
