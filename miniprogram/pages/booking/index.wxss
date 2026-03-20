@@ -1,5 +1,22 @@
 /* 预约页样式 */
 
+.vip-notice {
+  margin: 0 32rpx 24rpx;
+  padding: 20rpx 24rpx;
+  background: #FFF8E7;
+  border-radius: 12rpx;
+  border-left: 6rpx solid #F5A623;
+  font-size: 24rpx;
+  color: #7A5C00;
+  line-height: 1.5;
+}
+
+.vip-notice-perk {
+  background: #F0EBF8;
+  border-left-color: #9B59B6;
+  color: #5C2D8A;
+}
+
 /* 步骤条 */
 .steps {
   display: flex;
@@ -73,7 +90,9 @@
   align-items: center;
   justify-content: center;
   font-size: 40rpx;
+  overflow: hidden;
 }
+.tech-avatar-sm-img { width: 80rpx; height: 80rpx; display: block; }
 
 .tech-meta {
   flex: 1;
@@ -99,6 +118,87 @@
   background: #FDE8E6;
   padding: 6rpx 18rpx;
   border-radius: 16rpx;
+}
+
+/* 服务子分类标签 */
+.service-sub-label {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin: 0 30rpx 12rpx;
+}
+
+.sub-label-dot {
+  font-size: 28rpx;
+  color: #C8847A;
+  line-height: 1;
+}
+
+.sub-label-text {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+}
+
+.sub-label-hint {
+  font-size: 22rpx;
+  color: #AAAAAA;
+  margin-left: 4rpx;
+}
+
+/* 专属套餐横向滚动 */
+.pkg-scroll {
+  width: 100%;
+  margin-bottom: 4rpx;
+}
+
+.pkg-scroll-inner {
+  display: flex;
+  padding: 4rpx 30rpx 16rpx;
+  gap: 20rpx;
+}
+
+.pkg-mini-card {
+  flex-shrink: 0;
+  width: 220rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 24rpx 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(200, 132, 122, 0.1);
+  border: 2rpx solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.pkg-mini-selected {
+  border-color: #C8847A;
+  background: #FEF8F7;
+}
+
+.pkg-mini-emoji {
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+.pkg-mini-name {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pkg-mini-price {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #C8847A;
+}
+
+.pkg-mini-dur {
+  font-size: 20rpx;
+  color: #AAAAAA;
 }
 
 /* 服务列表 */
@@ -151,10 +251,25 @@
   gap: 16rpx;
 }
 
+.service-price-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4rpx;
+}
+
 .service-price {
   font-size: 30rpx;
   font-weight: 600;
   color: #C8847A;
+}
+
+.service-price-discount {
+  font-size: 20rpx;
+  color: #9B59B6;
+  background: #F0EBF8;
+  padding: 2rpx 10rpx;
+  border-radius: 20rpx;
 }
 
 .service-check {
@@ -239,6 +354,20 @@
   color: #AAAAAA;
 }
 
+.time-past-tag {
+  display: block;
+  font-size: 18rpx;
+  color: #BBBBBB;
+  margin-top: 4rpx;
+}
+
+.time-insuf-tag {
+  display: block;
+  font-size: 18rpx;
+  color: #BBBBBB;
+  margin-top: 4rpx;
+}
+
 /* 表单 */
 .form-row {
   display: flex;
@@ -319,10 +448,31 @@
   margin-bottom: 0;
 }
 
+.summary-price-group {
+  display: flex;
+  align-items: baseline;
+  gap: 12rpx;
+}
+
+.summary-discount-note {
+  margin: 4rpx 0 12rpx;
+  font-size: 22rpx;
+  color: #9B59B6;
+  line-height: 1.5;
+}
+
 .summary-price {
   font-size: 32rpx;
   font-weight: 700;
   color: #C8847A;
+}
+
+.summary-price-tag {
+  font-size: 22rpx;
+  color: #9B59B6;
+  background: #F0EBF8;
+  padding: 2rpx 12rpx;
+  border-radius: 20rpx;
 }
 
 /* 宠物提示 */
@@ -370,4 +520,40 @@
 .btn-submit {
   flex: 2;
   padding: 24rpx 0;
+}
+
+/* 定金提示 */
+.deposit-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  margin-top: 20rpx;
+  padding: 20rpx 24rpx;
+  background: #FFF8E7;
+  border-radius: 14rpx;
+  border-left: 6rpx solid #E8A83A;
+}
+
+.deposit-notice-icon {
+  font-size: 30rpx;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.deposit-notice-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.deposit-notice-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #7A5C00;
+}
+
+.deposit-notice-desc {
+  font-size: 22rpx;
+  color: #B08020;
+  line-height: 1.5;
 }

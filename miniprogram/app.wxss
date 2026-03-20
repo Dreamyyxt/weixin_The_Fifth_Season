@@ -36,6 +36,11 @@ page {
   color: #2C2C2C;
 }
 
+.section-hint {
+  font-size: 22rpx;
+  color: #AAAAAA;
+}
+
 .section-more {
   font-size: 26rpx;
   color: #C8847A;

@@ -17,7 +17,8 @@
   <!-- 技师信息卡 -->
   <view class="tech-card" wx:if="{{tech}}">
     <view class="tech-avatar-sm">
-      <text>{{tech.avatar}}</text>
+      <image wx:if="{{tech.avatarIsImg}}" src="{{tech.avatar}}" mode="aspectFill" class="tech-avatar-sm-img" />
+      <text wx:else>{{tech.avatar}}</text>
     </view>
     <view class="tech-meta">
       <text class="tech-name">{{tech.name}}</text>
@@ -33,9 +34,39 @@
     <view class="section-header">
       <text class="section-title">选择服务</text>
     </view>
+
+    <!-- 专属套餐（来自商城） -->
+    <block wx:if="{{techPackages.length > 0}}">
+      <view class="service-sub-label">
+        <text class="sub-label-dot">▍</text>
+        <text class="sub-label-text">专属套餐</text>
+        <text class="sub-label-hint">商城套餐，直接选用</text>
+      </view>
+      <scroll-view class="pkg-scroll" scroll-x enable-flex>
+        <view class="pkg-scroll-inner">
+          <view
+            class="pkg-mini-card {{selectedService && selectedService._pkgId === item._id ? 'pkg-mini-selected' : ''}}"
+            wx:for="{{techPackages}}"
+            wx:key="_id"
+            bindtap="selectPackage"
+            data-pkg="{{item}}"
+          >
+            <text class="pkg-mini-emoji">{{item.emoji}}</text>
+            <text class="pkg-mini-name">{{item.name}}</text>
+            <text class="pkg-mini-price">¥{{item.price}}</text>
+            <text class="pkg-mini-dur">{{item.duration}}</text>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="service-sub-label" style="margin-top:24rpx;">
+        <text class="sub-label-dot">▍</text>
+        <text class="sub-label-text">单项服务</text>
+      </view>
+    </block>
+
     <view class="service-list">
       <view
-        class="service-item {{selectedService && selectedService.id === item.id ? 'service-selected' : ''}}"
+        class="service-item {{selectedService && selectedService.id === item.id && !selectedService._pkgId ? 'service-selected' : ''}}"
         wx:for="{{services}}"
         wx:key="id"
         bindtap="selectService"
@@ -46,10 +77,21 @@
           <text class="service-duration">时长 {{item.duration}}</text>
         </view>
         <view class="service-right">
-          <text class="service-price">¥{{item.price}}</text>
-          <view class="service-check" wx:if="{{selectedService && selectedService.id === item.id}}">✓</view>
+          <view class="service-price-wrap">
+            <text class="service-price">¥{{item.price}}</text>
+            <text class="service-price-discount" wx:if="{{userDiscount < 1}}">{{userDiscountText}}</text>
+          </view>
+          <view class="service-check" wx:if="{{selectedService && selectedService.id === item.id && !selectedService._pkgId}}">✓</view>
         </view>
       </view>
+    </view>
+
+    <!-- VIP 提前预约提示（钻石会员不受限制） -->
+    <view class="vip-notice" wx:if="{{selectedService && selectedService.id === 6 && !userPerks.noVipAdvanceLimit}}">
+      <text>📌 VIP 高定全套需提前 3 天预约，日期已自动调整</text>
+    </view>
+    <view class="vip-notice vip-notice-perk" wx:if="{{selectedService && selectedService.id === 6 && userPerks.noVipAdvanceLimit}}">
+      <text>💎 钻石会员专属：无需提前预约</text>
     </view>
 
     <!-- 选择日期 -->
@@ -57,7 +99,7 @@
       <text class="section-title">选择日期</text>
     </view>
     <view class="form-card">
-      <picker mode="date" value="{{selectedDate}}" bindchange="onDateChange">
+      <picker mode="date" value="{{selectedDate}}" start="{{minDate}}" bindchange="onDateChange">
         <view class="picker-row">
           <text class="picker-label">预约日期</text>
           <text class="picker-value">{{selectedDate}} ›</text>
@@ -68,6 +110,8 @@
     <!-- 选择时间 -->
     <view class="section-header">
       <text class="section-title">选择时间</text>
+      <text class="section-hint" wx:if="{{loadingSlots}}">加载中...</text>
+      <text class="section-hint" wx:elif="{{selectedService}}">需要 {{selectedService.duration}}</text>
     </view>
     <view class="time-grid">
       <view
@@ -79,7 +123,9 @@
         data-timeinfo="{{item}}"
       >
         {{item.time}}
-        <text wx:if="{{item.disabled}}" class="time-booked-tag">已约</text>
+        <text wx:if="{{item.booked}}" class="time-booked-tag">已约</text>
+        <text wx:elif="{{item.past}}" class="time-past-tag">已过</text>
+        <text wx:elif="{{item.disabled}}" class="time-insuf-tag">不足</text>
       </view>
     </view>
 
@@ -109,7 +155,21 @@
       </view>
       <view class="summary-row summary-price-row">
         <text class="summary-label">参考价格</text>
-        <text class="summary-price">¥{{selectedService.price}}</text>
+        <view class="summary-price-group">
+          <text class="summary-price">¥{{selectedService.price}}</text>
+          <text class="summary-price-tag" wx:if="{{userDiscount < 1}}">{{userDiscountText}}会员</text>
+        </view>
+      </view>
+      <view class="summary-discount-note" wx:if="{{userDiscount < 1}}">
+        <text>💡 你享有{{userDiscountText}}会员折扣，最终价格由技师服务完成后确认</text>
+      </view>
+      <!-- 定金提示 -->
+      <view class="deposit-notice" wx:if="{{depositRequired}}">
+        <text class="deposit-notice-icon">💰</text>
+        <view class="deposit-notice-body">
+          <text class="deposit-notice-title">需支付定金 ¥{{depositAmount}}</text>
+          <text class="deposit-notice-desc">技师确认前可全额退还；确认后取消定金不退</text>
+        </view>
       </view>
     </view>
 

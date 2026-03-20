@@ -2,9 +2,8 @@
 <view class="container">
 
   <!-- 会员卡 -->
-  <view class="member-card">
+  <view class="member-card" style="{{cardStyle}}">
     <view class="member-top">
-      <!-- 头像：有微信头像则显示图片，否则显示首字母 -->
       <view class="member-avatar">
         <image
           wx:if="{{userInfo.avatarUrl}}"
@@ -18,45 +17,106 @@
         <text class="member-name">{{userInfo.nickname || '点击设置昵称'}}</text>
         <view class="vip-level-badge">
           <text class="vip-star">✦</text>
-          <text class="vip-level">{{userInfo.vipLevel || '普通会员'}}</text>
+          <text class="vip-level">{{currentTier.name}}</text>
         </view>
       </view>
       <view class="member-edit" bindtap="goEdit">编辑</view>
     </view>
 
+    <!-- 升级进度条 -->
+    <view class="tier-progress-wrap" wx:if="{{nextTier}}">
+      <view class="tier-progress-labels">
+        <text class="tier-label-current">{{currentTier.name}}</text>
+        <text class="tier-label-next">{{nextTier.name}}</text>
+      </view>
+      <view class="tier-progress-track">
+        <view class="tier-progress-fill" style="width: {{tierProgress}}%"></view>
+      </view>
+      <text class="tier-progress-hint">距 {{nextTier.name}} 还差 ¥{{nextTierGap}}</text>
+    </view>
+    <view class="tier-max-wrap" wx:else>
+      <text class="tier-max-text">✦ 您已达到最高等级 — 钻石会员</text>
+    </view>
+
     <!-- 数据栏 -->
     <view class="stats-row">
       <view class="stat-item">
-        <text class="stat-num">{{userInfo.points}}</text>
-        <text class="stat-label">积分</text>
-      </view>
-      <view class="stat-divider"></view>
-      <view class="stat-item">
-        <text class="stat-num">¥{{userInfo.balance}}</text>
+        <text class="stat-num">¥{{userInfo.balance || 0}}</text>
         <text class="stat-label">余额</text>
       </view>
       <view class="stat-divider"></view>
       <view class="stat-item">
-        <text class="stat-num">3</text>
-        <text class="stat-label">预约次数</text>
+        <text class="stat-num">¥{{userInfo.totalSpend || 0}}</text>
+        <text class="stat-label">累计消费</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">{{userInfo.points || 0}}</text>
+        <text class="stat-label">消费积分</text>
       </view>
     </view>
 
-    <!-- 快捷按钮 -->
+    <!-- 快捷按钮（功能性操作，不与下方 Tab 重复） -->
     <view class="quick-btns">
       <view class="quick-btn-item" bindtap="showRecharge">
         <text class="qb-icon">💳</text>
-        <text class="qb-label">充值</text>
+        <text class="qb-label">充值余额</text>
       </view>
-      <view class="quick-btn-item" bindtap="switchSection" data-sec="booking">
-        <text class="qb-icon">📋</text>
-        <text class="qb-label">预约记录</text>
+      <view class="quick-btn-item" bindtap="goBook">
+        <text class="qb-icon">📅</text>
+        <text class="qb-label">去预约</text>
       </view>
-      <view class="quick-btn-item" bindtap="switchSection" data-sec="points">
-        <text class="qb-icon">✦</text>
-        <text class="qb-label">积分明细</text>
+      <view class="quick-btn-item" bindtap="goShop">
+        <text class="qb-icon">🛍️</text>
+        <text class="qb-label">去商城</text>
       </view>
     </view>
+  </view>
+
+  <!-- 管理后台入口（仅管理员 / 技师可见） -->
+
+  <!-- 普通管理员（无技师身份）：单入口 -->
+  <view class="admin-entry-btn"
+    wx:if="{{userInfo.role === 'admin' && !userInfo.linkedTechId}}"
+    bindtap="goAdmin">
+    <text class="admin-entry-icon">⚙️</text>
+    <view class="admin-entry-text">
+      <text class="admin-entry-title">管理后台</text>
+      <text class="admin-entry-sub">管理预约 · 技师 · 套餐</text>
+    </view>
+    <text class="admin-entry-arrow">›</text>
+  </view>
+
+  <!-- 管理员兼技师：双入口并排 -->
+  <view class="admin-entry-group" wx:if="{{userInfo.role === 'admin' && userInfo.linkedTechId}}">
+    <view class="admin-entry-btn admin-entry-half" bindtap="goAdmin">
+      <text class="admin-entry-icon">⚙️</text>
+      <view class="admin-entry-text">
+        <text class="admin-entry-title">管理后台</text>
+        <text class="admin-entry-sub">管理预约 · 套餐</text>
+      </view>
+      <text class="admin-entry-arrow">›</text>
+    </view>
+    <view class="admin-entry-btn admin-entry-half" bindtap="goTechWorkbench">
+      <text class="admin-entry-icon">📋</text>
+      <view class="admin-entry-text">
+        <text class="admin-entry-title">技师工作台</text>
+        <text class="admin-entry-sub">今日预约 · 档案</text>
+      </view>
+      <text class="admin-entry-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 纯技师：单入口 -->
+  <view class="admin-entry-btn"
+    wx:if="{{userInfo.role === 'technician'}}"
+    bindtap="goTechWorkbench">
+    <text class="admin-entry-icon">📋</text>
+    <view class="admin-entry-text">
+      <text class="admin-entry-title">技师工作台</text>
+      <text class="admin-entry-sub">查看预约 · 编辑资料</text>
+    </view>
+    <text class="admin-entry-arrow">›</text>
   </view>
 
   <!-- 内容切换 Tab -->
@@ -71,11 +131,16 @@
       bindtap="switchSection"
       data-sec="points"
     >积分明细</view>
+    <view
+      class="content-tab {{activeSection === 'benefits' ? 'ct-active' : ''}}"
+      bindtap="showBenefits"
+    >会员权益</view>
   </view>
 
   <!-- 预约记录 -->
   <view wx:if="{{activeSection === 'booking'}}">
-    <view class="record-card" wx:for="{{bookingRecords}}" wx:key="id">
+    <view class="record-card" wx:for="{{bookingRecords}}" wx:key="_id"
+      bindtap="goBookingDetail" data-id="{{item._id}}">
       <view class="record-top">
         <view class="record-service">
           <text class="record-name">{{item.service}}</text>
@@ -85,22 +150,16 @@
       </view>
       <view class="record-bottom">
         <text class="record-time">{{item.date}} {{item.time}}</text>
-        <text class="record-price">¥{{item.price}}</text>
+        <text class="record-price">¥{{item.finalPrice !== undefined ? item.finalPrice : item.price}}</text>
       </view>
-      <view class="record-duration" wx:if="{{item.duration}}">
-        <text class="duration-label">时长：</text>
-        <text class="duration-value">{{item.duration}}</text>
-      </view>
-      <view class="record-remark" wx:if="{{item.remark}}">
-        <text class="remark-label">备注：</text>
-        <text class="remark-value">{{item.remark}}</text>
-      </view>
-      <view class="record-actions" wx:if="{{item.status === 'pending' || item.status === 'today'}}">
-        <view class="btn-cancel" bindtap="cancelBooking" data-id="{{item.id}}">取消预约</view>
-      </view>
+      <!-- 定金状态标签 -->
+      <view class="deposit-tag deposit-tag-pending" wx:if="{{item.depositRequired && item.depositStatus === 'pending'}}">定金 ¥{{item.depositAmount}} 待收</view>
+      <view class="deposit-tag deposit-tag-paid"    wx:elif="{{item.depositRequired && item.depositStatus === 'paid'}}">定金 ¥{{item.depositAmount}} 已收</view>
+      <view class="deposit-tag deposit-tag-forfeited" wx:elif="{{item.depositRequired && item.depositStatus === 'forfeited'}}">定金 ¥{{item.depositAmount}} 不退</view>
+      <view class="deposit-tag deposit-tag-refunded"  wx:elif="{{item.depositRequired && item.depositStatus === 'refunded'}}">定金 ¥{{item.depositAmount}} 已退</view>
+      <!-- 查看详情箭头 -->
+      <view class="record-detail-hint">查看详情 ›</view>
     </view>
-    
-    <!-- 空状态提示 -->
     <view class="empty-state" wx:if="{{bookingRecords.length === 0}}">
       <text class="empty-icon">📋</text>
       <text class="empty-text">暂无预约记录</text>
@@ -109,7 +168,7 @@
 
   <!-- 积分明细 -->
   <view wx:if="{{activeSection === 'points'}}">
-    <view class="points-log-card" wx:for="{{pointsLogs}}" wx:key="id">
+    <view class="points-log-card" wx:for="{{pointsLogs}}" wx:key="_id">
       <view class="log-left">
         <view class="log-dot log-{{item.type}}"></view>
         <view class="log-info">
@@ -119,6 +178,50 @@
       </view>
       <text class="log-points log-pts-{{item.type}}">{{item.points}}</text>
     </view>
+    <view class="empty-state" wx:if="{{pointsLogs.length === 0}}">
+      <text class="empty-icon">✦</text>
+      <text class="empty-text">暂无积分记录</text>
+    </view>
+  </view>
+
+  <!-- 会员权益 -->
+  <view wx:if="{{activeSection === 'benefits'}}">
+
+    <!-- 当前权益卡 -->
+    <view class="benefits-current-card" style="{{cardStyle}}">
+      <text class="benefits-current-title">当前等级权益 — {{currentTier.name}}</text>
+      <view class="benefit-item" wx:for="{{currentTierBenefits}}" wx:key="index">
+        <text class="benefit-check">✓</text>
+        <text class="benefit-text">{{item}}</text>
+      </view>
+      <text class="benefits-discount-badge">{{currentTier.discountText}}</text>
+    </view>
+
+    <!-- 等级对照表 -->
+    <view class="tier-table-card">
+      <text class="tier-table-title">等级体系</text>
+      <view class="tier-table-row tier-table-header">
+        <text class="tc-name">等级</text>
+        <text class="tc-spend">累计门槛</text>
+        <text class="tc-discount">折扣</text>
+      </view>
+      <view
+        wx:for="{{memberTiersDisplay}}"
+        wx:key="level"
+        class="tier-table-row {{item.level === currentTier.level ? 'tier-row-active' : ''}}"
+      >
+        <text class="tc-name">{{item.name}}</text>
+        <text class="tc-spend">{{item.minSpendText}}</text>
+        <text class="tc-discount">{{item.discountText}}</text>
+      </view>
+    </view>
+
+    <!-- 升级提示 -->
+    <view class="upgrade-hint-card" wx:if="{{nextTier}}">
+      <text class="upgrade-hint-text">再消费 ¥{{nextTierGap}} 即可升级为 {{nextTier.name}}，享受 {{nextTier.discountText}} 优惠</text>
+      <view class="upgrade-recharge-btn" bindtap="showRecharge">立即充值</view>
+    </view>
+
   </view>
 
 </view>

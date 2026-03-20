@@ -8,7 +8,18 @@
     "pages/community/index",
     "pages/community/detail/index",
     "pages/post/index",
-    "pages/profile/index"
+    "pages/profile/index",
+    "pages/profile/booking-detail/index",
+    "pages/packageDetail/index",
+    "pages/admin/index",
+    "pages/admin/bookings/index",
+    "pages/admin/tech-list/index",
+    "pages/admin/tech-edit/index",
+    "pages/admin/pkg-list/index",
+    "pages/admin/pkg-edit/index",
+    "pages/admin/roles/index",
+    "pages/admin/chart-detail/index",
+    "pages/admin/day-perf/index"
   ],
   "tabBar": {
     "color": "#AAAAAA",

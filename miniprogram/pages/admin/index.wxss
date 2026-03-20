@@ -1,0 +1,819 @@
+@import './admin-common.wxss';
+
+/* ═══ admin-page-tabbed: extra bottom padding for fixed tab bar ═══ */
+.admin-page-tabbed { padding-bottom: 120rpx; }
+
+/* ═══════════════════ 概览 Tab ═══════════════════ */
+
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 28rpx 12rpx;
+}
+.dash-title { font-size: 30rpx; font-weight: 700; color: #2C2420; }
+.dash-date  { font-size: 22rpx; color: #AAAAAA; }
+
+.stats-row-big {
+  display: flex;
+  gap: 16rpx;
+  margin: 0 24rpx 16rpx;
+}
+.stat-card-big {
+  flex: 1;
+  border-radius: 20rpx;
+  padding: 28rpx 24rpx 24rpx;
+  min-width: 0;
+}
+.stat-big-pink { background: linear-gradient(135deg, #FDE8E6, #F9A29A); }
+.stat-big-gold { background: linear-gradient(135deg, #FFF3E0, #F5C06A); }
+.stat-big-top  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12rpx; }
+.stat-big-icon { font-size: 40rpx; }
+.stat-big-num  { font-size: 52rpx; font-weight: 800; color: #2C2C2C; line-height: 1; }
+.stat-revenue  { font-size: 40rpx; }
+.stat-big-label { font-size: 24rpx; color: #555555; font-weight: 500; }
+
+.stats-row-small { display: flex; gap: 12rpx; margin: 0 24rpx 8rpx; }
+.stat-card-sm {
+  flex: 1;
+  border-radius: 16rpx;
+  padding: 20rpx 12rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  min-width: 0;
+}
+.stat-sm-green  { background: linear-gradient(135deg, #E8F5E9, #A8D8B0); }
+.stat-sm-orange { background: linear-gradient(135deg, #FFF3E0, #FECB8B); }
+.stat-sm-blue   { background: linear-gradient(135deg, #E8F4FD, #A8D4F0); }
+.stat-sm-teal   { background: linear-gradient(135deg, #E0F5F5, #8FD4D4); }
+.stat-sm-num    { font-size: 40rpx; font-weight: 700; color: #2C2C2C; line-height: 1; }
+.stat-sm-label  { font-size: 20rpx; color: #555555; text-align: center; }
+
+.section-row    { display: flex; gap: 16rpx; margin: 0 24rpx 16rpx; }
+.chart-half-card {
+  flex: 1;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 20rpx 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+  min-width: 0;
+}
+.chart-full-card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 20rpx 24rpx 16rpx;
+  margin: 0 24rpx 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+.chart-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12rpx; }
+.chart-card-title  { display: block; font-size: 26rpx; font-weight: 600; color: #2C2C2C; margin-bottom: 12rpx; }
+.chart-card-hint   { font-size: 22rpx; color: #AAAAAA; }
+.chart-canvas-pie  { width: 100%; height: 240rpx; display: block; }
+.chart-canvas-line { width: 100%; height: 160rpx; display: block; }
+
+/* ═══════════════════ 预约 Tab — 周历 ═══════════════════ */
+
+.week-header {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  padding: 12rpx 4rpx 10rpx;
+  margin: 12rpx 16rpx 0;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+.week-nav-btn {
+  font-size: 44rpx;
+  color: #C8847A;
+  padding: 0 12rpx;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.week-days { flex: 1; display: flex; justify-content: space-around; }
+.wday {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rpx;
+  padding: 6rpx 4rpx;
+  border-radius: 12rpx;
+  min-width: 56rpx;
+  position: relative;
+}
+.wday-label { font-size: 18rpx; color: #AAAAAA; }
+.wday-num {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+  width: 48rpx;
+  height: 48rpx;
+  line-height: 48rpx;
+  text-align: center;
+  border-radius: 50%;
+}
+.wday-dot {
+  width: 6rpx; height: 6rpx;
+  border-radius: 50%;
+  background: #C8847A;
+  position: absolute;
+  bottom: 0;
+}
+.wday-today .wday-num { color: #C8847A; font-weight: 700; }
+.wday-sel   .wday-num { background: #C8847A; color: #FFFFFF; }
+
+/* ═══════════════════ 日历视图 (Lark 风格) ═══════════════════ */
+
+.cal-empty {
+  text-align: center;
+  padding: 80rpx 0;
+  font-size: 26rpx;
+  color: #AAAAAA;
+}
+
+/*
+  外层容器：flex 行，时间列 + scroll-view 并排。
+  时间列不参与横向滚动，scroll-view 宽度由 JS 计算后注入。
+*/
+.gantt-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-top: 8rpx;
+  background: #FFFFFF;
+}
+
+/* 时间列（fixed-left，scroll-view 外部） */
+.time-col {
+  width: 104rpx;
+  flex-shrink: 0;
+  background: #F7F7F6;
+  border-right: 2rpx solid #E8E8E8;
+  box-sizing: border-box;
+}
+
+/* 占位块，与技师表头等高 */
+.time-ph {
+  height: 56rpx;
+  border-bottom: 1rpx solid #E8E8E8;
+  box-sizing: border-box;
+}
+
+/* 每个 30 分钟时间格 */
+.time-cell {
+  height: 80rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 6rpx 8rpx 0 10rpx;
+  border-bottom: 1rpx solid #EFEFEF;
+}
+.time-cell-hour { border-bottom-color: #DEDEDE; }
+
+.time-cell text {
+  font-size: 20rpx;
+  font-weight: 700;
+  color: #C8847A;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.time-end {
+  position: relative;
+  height: 0;
+}
+
+.time-end text {
+  position: absolute;
+  left: 10rpx;
+  bottom: -10rpx;
+  font-size: 20rpx;
+  font-weight: 700;
+  color: #C8847A;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* scroll-view：宽度由 JS 注入（windowWidth - 时间列宽） */
+.gantt-scroll { flex: none; display: block; }
+
+/* 内层 flex row：width: max-content 触发横向滚动 */
+.gantt-inner {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+}
+
+/* ─── 技师列 ─── */
+.cal-tech-col {
+  width: 180rpx;
+  flex-shrink: 0;
+  border-right: 1rpx solid #EFEFEF;
+  background: #FFFFFF;
+}
+
+.cal-tech-hdr {
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  background: #F7F7F6;
+  border-bottom: 1rpx solid #E8E8E8;
+  box-sizing: border-box;
+}
+.cal-tech-dot  { width: 12rpx; height: 12rpx; border-radius: 50%; flex-shrink: 0; }
+.cal-tech-name {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #333333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 128rpx;
+}
+
+/* 列体（相对定位容器，放绝对定位的预约卡片） */
+.cal-tech-body { position: relative; }
+
+.cal-slot {
+  height: 80rpx;
+  box-sizing: border-box;
+}
+
+.cal-grid-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.cal-grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1rpx solid #EFEFEF;
+  box-sizing: border-box;
+}
+
+.cal-grid-line-hour {
+  border-top-color: #DEDEDE;
+}
+
+/* ─── 预约卡片（绝对定位） ─── */
+.cal-bk {
+  position: absolute;
+  left: 3rpx;
+  right: 3rpx;
+  border-radius: 8rpx;
+  padding: 6rpx 8rpx 4rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-left: 4rpx solid transparent;
+  z-index: 1;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.13);
+}
+.cal-bk-pending   { background: #FFFCEB; border-left-color: #F5C06A; }
+.cal-bk-confirmed { background: #EBF5FF; border-left-color: #6AAFCB; }
+.cal-bk-completed { background: #EDFAF2; border-left-color: #5BAE78; }
+.cal-bk-cancelled { background: #F5F0EE; border-left-color: #CCBBBB; opacity: 0.65; }
+
+.cal-bk-name {
+  display: block;
+  font-size: 20rpx;
+  font-weight: 700;
+  color: #2C2C2C;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.cal-bk-svc {
+  display: block;
+  font-size: 16rpx;
+  color: #555555;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+.cal-bk-cxl { display: block; font-size: 16rpx; color: #BBBBBB; }
+
+/* ═══════════════════ 预约详情底部弹窗 ═══════════════════ */
+
+.bk-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+}
+.bk-sheet {
+  background: #FFFFFF;
+  border-radius: 28rpx 28rpx 0 0;
+  padding: 0 28rpx calc(40rpx + env(safe-area-inset-bottom));
+  width: 100%;
+  max-height: 78vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+.bk-handle {
+  width: 60rpx;
+  height: 6rpx;
+  background: #DDDDDD;
+  border-radius: 3rpx;
+  margin: 16rpx auto 24rpx;
+}
+
+/* shared booking card row styles (also used in bookings/index) */
+.bc-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+  flex-wrap: wrap;
+}
+.bc-datetime { font-size: 24rpx; color: #888888; margin-left: auto; }
+.bc-row { display: flex; align-items: flex-start; gap: 16rpx; margin-bottom: 12rpx; }
+.bc-label { font-size: 24rpx; color: #AAAAAA; width: 60rpx; flex-shrink: 0; }
+.bc-val   { flex: 1; font-size: 26rpx; color: #444444; }
+.bc-price-wrap { display: flex; align-items: baseline; gap: 12rpx; flex: 1; }
+.bc-price     { font-size: 28rpx; font-weight: 600; color: #C8847A; }
+.bc-ref-price { font-size: 22rpx; color: #BBBBBB; text-decoration: line-through; }
+.bc-paid      { color: #3D8B37; font-weight: 600; }
+.bc-unpaid    { color: #E8900A; font-weight: 600; }
+.bc-note      { color: #888888; font-style: italic; }
+
+.deposit-badge           { font-size: 20rpx; font-weight: 600; padding: 4rpx 14rpx; border-radius: 20rpx; flex-shrink: 0; }
+.deposit-badge-pending   { background: #FFF3CD; color: #7A5C00; }
+.deposit-badge-paid      { background: #D4EDDA; color: #155724; }
+.deposit-badge-forfeited { background: #F8D7DA; color: #721C24; }
+.action-btn-deposit      { background: #5BBCAA; color: #FFFFFF; }
+
+/* ═══════════════════ 标记完成弹窗 ═══════════════════ */
+
+.cm-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cm-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 40rpx 36rpx 32rpx;
+  width: 580rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.15);
+}
+.cm-title    { font-size: 32rpx; font-weight: 700; color: #2C2C2C; margin-bottom: 8rpx; }
+.cm-subtitle { font-size: 24rpx; color: #888888; margin-bottom: 28rpx; }
+.cm-row      { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20rpx; }
+.cm-label    { font-size: 26rpx; color: #666666; }
+.cm-ref      { font-size: 26rpx; color: #888888; }
+.cm-discount-hint { font-size: 26rpx; color: #C8847A; font-weight: 600; }
+.cm-input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+.cm-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: #FAF7F4;
+  border-radius: 12rpx;
+  padding: 12rpx 20rpx;
+  flex: 1;
+  max-width: 280rpx;
+}
+.cm-currency { font-size: 26rpx; color: #C8847A; font-weight: 600; }
+.cm-input    { flex: 1; font-size: 30rpx; font-weight: 600; color: #2C2C2C; }
+.cm-result-card { background: #FAF7F4; border-radius: 12rpx; padding: 8rpx 18rpx; margin-bottom: 24rpx; }
+.cm-result-row  { display: flex; justify-content: space-between; align-items: center; padding: 10rpx 0; border-bottom: 1rpx solid #F0EAE7; }
+.cm-result-row:last-child { border-bottom: none; }
+.cm-result-label  { font-size: 24rpx; color: #888888; }
+.cm-result-val    { font-size: 28rpx; font-weight: 700; color: #C8847A; }
+.cm-result-deduct { font-size: 24rpx; color: #5BBCAA; }
+.cm-result-due-val { font-size: 28rpx; font-weight: 700; color: #E8900A; }
+.cm-btns    { display: flex; gap: 16rpx; margin-top: 28rpx; }
+.cm-btn     { flex: 1; text-align: center; padding: 24rpx 0; border-radius: 50rpx; font-size: 28rpx; font-weight: 600; }
+.cm-btn-cancel  { background: #F5F5F5; color: #888888; }
+.cm-btn-confirm { background: linear-gradient(135deg, #C8847A, #E8A89E); color: #FFFFFF; box-shadow: 0 4rpx 12rpx rgba(200,132,122,0.4); }
+
+/* ═══════════════════ 店员 / 产品 Tab ═══════════════════ */
+
+.nav-tile {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 24rpx 16rpx;
+  border-bottom: 1rpx solid #F5F0ED;
+}
+.nav-tile-icon  { width: 72rpx; height: 72rpx; border-radius: 16rpx; display: flex; align-items: center; justify-content: center; font-size: 36rpx; flex-shrink: 0; }
+.nav-tile-info  { flex: 1; min-width: 0; }
+.nav-tile-title { display: block; font-size: 28rpx; font-weight: 600; color: #2C2C2C; margin-bottom: 4rpx; }
+.nav-tile-sub   { font-size: 22rpx; color: #AAAAAA; }
+.nav-tile-arrow { font-size: 36rpx; color: #CCCCCC; flex-shrink: 0; }
+
+/* ═══════════════════ 客户 Tab ═══════════════════ */
+
+.cust-search-bar { display: flex; align-items: center; gap: 16rpx; margin: 16rpx 24rpx 12rpx; }
+.cust-search-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  background: #FFFFFF;
+  border-radius: 50rpx;
+  padding: 16rpx 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.cust-search-icon  { font-size: 28rpx; flex-shrink: 0; }
+.cust-search-input { flex: 1; font-size: 26rpx; color: #2C2C2C; }
+.cust-add-btn {
+  background: #C8847A;
+  color: #FFFFFF;
+  font-size: 26rpx;
+  font-weight: 600;
+  padding: 16rpx 28rpx;
+  border-radius: 50rpx;
+  flex-shrink: 0;
+}
+.cust-item  { display: flex; align-items: center; padding: 24rpx 28rpx; gap: 20rpx; }
+.cust-avatar {
+  width: 72rpx; height: 72rpx; border-radius: 50%;
+  background: linear-gradient(135deg, #FDE8E6, #C8847A);
+  color: #FFFFFF; font-size: 30rpx; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; line-height: 72rpx; text-align: center;
+}
+.cust-info { flex: 1; min-width: 0; }
+.cust-name-row { display: flex; align-items: center; gap: 10rpx; margin-bottom: 4rpx; }
+.cust-name     { font-size: 28rpx; font-weight: 600; color: #2C2C2C; }
+.cust-tier-badge { font-size: 18rpx; font-weight: 600; padding: 2rpx 12rpx; border-radius: 20rpx; background: #FAF7F4; }
+.cust-phone    { font-size: 22rpx; color: #AAAAAA; }
+.cust-right    { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; }
+.cust-balance  { font-size: 30rpx; font-weight: 700; color: #C8847A; }
+.cust-balance-label { font-size: 20rpx; color: #AAAAAA; }
+
+/* ═══════════════════ 固定底部 Tab Bar (纯文字) ═══════════════════ */
+
+.admin-tab-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #FFFFFF;
+  border-top: 1rpx solid #F0ECEA;
+  display: flex;
+  align-items: stretch;
+  box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.06);
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.atb-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 0;
+}
+.atb-lbl      { font-size: 26rpx; color: #AAAAAA; font-weight: 500; }
+.atb-act .atb-lbl { color: #C8847A; font-weight: 700; }
+
+/* ═══════════════════ 技师工作台视图 ═══════════════════ */
+
+.tech-revenue-card {
+  background: linear-gradient(135deg, #FFF3E0, #F5C06A);
+  border-radius: 20rpx;
+  padding: 28rpx 32rpx;
+  margin: 16rpx 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tech-revenue-label { font-size: 26rpx; color: #555555; font-weight: 500; }
+.tech-revenue-num   { font-size: 48rpx; font-weight: 800; color: #2C2C2C; }
+
+.schedule-wrap { margin: 0 24rpx 16rpx; }
+.sch-item      { display: flex; align-items: flex-start; }
+.sch-time-col  { display: flex; flex-direction: column; align-items: center; width: 96rpx; flex-shrink: 0; padding-top: 16rpx; }
+.sch-time      { font-size: 26rpx; font-weight: 700; color: #C8847A; line-height: 1; white-space: nowrap; }
+.sch-connector { width: 2rpx; min-height: 36rpx; background: #F0E0DC; margin-top: 10rpx; flex: 1; }
+.sch-card      { flex: 1; background: #FFFFFF; border-radius: 16rpx; padding: 20rpx 24rpx; margin-bottom: 16rpx; box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.04); min-width: 0; }
+.sch-card-top  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8rpx; }
+.sch-name      { font-size: 28rpx; font-weight: 600; color: #2C2C2C; }
+.sch-service   { display: block; font-size: 24rpx; color: #555555; margin-bottom: 4rpx; }
+.sch-meta      { font-size: 22rpx; color: #AAAAAA; }
+
+/* ═══════════════════ 预约 Tab — 视图切换工具栏 ═══════════════════ */
+
+.sch-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12rpx 16rpx 0;
+  padding: 12rpx 16rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+.sch-toolbar-month { margin-bottom: 0; }
+.sch-toolbar-title { font-size: 28rpx; font-weight: 700; color: #2C2C2C; }
+.sch-view-tabs {
+  display: flex;
+  background: #F5F0ED;
+  border-radius: 20rpx;
+  padding: 4rpx;
+  gap: 0;
+}
+.sch-vtab {
+  padding: 10rpx 28rpx;
+  border-radius: 18rpx;
+  font-size: 26rpx;
+  color: #888888;
+  font-weight: 500;
+}
+.sch-vtab-act {
+  background: #C8847A;
+  color: #FFFFFF;
+  font-weight: 700;
+}
+.sch-all-btn {
+  font-size: 26rpx;
+  color: #C8847A;
+  font-weight: 600;
+  padding: 10rpx 0 10rpx 16rpx;
+}
+
+/* ═══════════════════ 月视图 ═══════════════════ */
+
+.mth-header {
+  display: flex;
+  align-items: center;
+  margin: 12rpx 16rpx 0;
+  padding: 16rpx 20rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+  gap: 8rpx;
+}
+.mth-nav-btn  { font-size: 44rpx; color: #C8847A; padding: 0 4rpx; line-height: 1; flex-shrink: 0; }
+.mth-title    { flex: 1; font-size: 28rpx; font-weight: 700; color: #2C2C2C; text-align: center; }
+.mth-all-btn  { font-size: 24rpx; color: #C8847A; font-weight: 600; flex-shrink: 0; padding-left: 8rpx; }
+
+.mth-cal {
+  margin: 8rpx 16rpx 0;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+.mth-weekrow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 8rpx;
+}
+.mth-wlabel {
+  text-align: center;
+  font-size: 20rpx;
+  color: #AAAAAA;
+  padding: 4rpx 0;
+}
+.mth-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4rpx;
+}
+.mth-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  padding: 10rpx 0;
+  border-radius: 12rpx;
+  min-height: 72rpx;
+}
+.mth-cell-empty { background: transparent; }
+.mth-cell-today { background: #FEF0EE; }
+.mth-cell-sel {
+  background: #C8847A;
+}
+.mth-day {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+  line-height: 1;
+}
+.mth-cell-today .mth-day { color: #C8847A; }
+.mth-cell-sel .mth-day { color: #FFFFFF; }
+.mth-bk-dot {
+  background: #C8847A;
+  border-radius: 20rpx;
+  padding: 2rpx 8rpx;
+  min-width: 28rpx;
+  text-align: center;
+}
+.mth-bk-num { font-size: 18rpx; color: #FFFFFF; font-weight: 700; }
+.mth-cell-sel .mth-bk-dot { background: rgba(255,255,255,0.22); }
+.mth-cell-sel .mth-bk-num { color: #FFFFFF; }
+
+.sel-day-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16rpx 16rpx 0;
+  padding: 0 4rpx;
+}
+
+.sel-day-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #2C2C2C;
+}
+
+/* ═══════════════════ 年视图 ═══════════════════ */
+
+.yr-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12rpx 16rpx 0;
+  padding: 16rpx 20rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+.yr-nav-btn { font-size: 44rpx; color: #C8847A; padding: 0 8rpx; line-height: 1; }
+.yr-title   { font-size: 28rpx; font-weight: 700; color: #2C2C2C; }
+
+.yr-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12rpx;
+  margin: 12rpx 16rpx 0;
+}
+.yr-mo-card {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 20rpx 12rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.yr-mo-current {
+  background: linear-gradient(135deg, #FDE8E6, #F9C3BB);
+}
+.yr-mo-label { font-size: 24rpx; font-weight: 600; color: #444444; }
+.yr-mo-count { font-size: 36rpx; font-weight: 800; color: #2C2C2C; line-height: 1; }
+.yr-mo-unit  { font-size: 18rpx; color: #AAAAAA; }
+.yr-mo-current .yr-mo-label { color: #C8847A; }
+.yr-mo-current .yr-mo-count { color: #C8847A; }
+
+/* ═══════════════════ 技师工作台 — 单列甘特 ═══════════════════ */
+
+/* 单列甘特：充满剩余宽度 */
+.gantt-tech-single {
+  flex: 1;
+  min-width: 0;
+  background: #FFFFFF;
+}
+
+.cal-tech-hdr-single {
+  justify-content: flex-start;
+  padding: 0 18rpx;
+}
+
+/* ═══════════════════ 技师工作台 — 固定底部 Tab Bar ═══════════════════ */
+
+.tech-tab-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #FFFFFF;
+  border-top: 1rpx solid #F0ECEA;
+  display: flex;
+  align-items: stretch;
+  box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.06);
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tech-tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16rpx 0;
+  gap: 4rpx;
+}
+.tech-tab-icon  { font-size: 36rpx; line-height: 1; }
+.tech-tab-label { font-size: 22rpx; color: #888888; font-weight: 500; }
+
+/* ═══════════════════ 技师 Lark 风格个人日历 ═══════════════════ */
+
+.tech-lark-cal {
+  background: #FFFFFF;
+  margin: 12rpx 16rpx 0;
+  border-radius: 20rpx;
+  padding: 16rpx 16rpx 12rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.05);
+}
+
+/* 月份导航栏 */
+.tech-cal-mth-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4rpx 12rpx;
+}
+.tech-cal-nav-btn  { font-size: 44rpx; color: #C8847A; line-height: 1; padding: 0 8rpx; }
+.tech-cal-mth-label { font-size: 28rpx; font-weight: 700; color: #2C2C2C; }
+
+/* 星期标题行 */
+.tech-cal-weekrow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4rpx;
+}
+.tech-cal-wlabel {
+  text-align: center;
+  font-size: 20rpx;
+  color: #AAAAAA;
+  padding: 4rpx 0;
+}
+
+/* 日期格 */
+.tech-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2rpx;
+}
+.tech-cal-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5rpx;
+  padding: 10rpx 0;
+  border-radius: 12rpx;
+  min-height: 76rpx;
+  position: relative;
+}
+.tech-cal-day-num {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #2C2C2C;
+  line-height: 1;
+}
+
+/* 今日高亮 */
+.tech-cal-today .tech-cal-day-num {
+  color: #C8847A;
+  font-weight: 700;
+}
+
+/* 选中日期 */
+.tech-cal-sel {
+  background: #C8847A;
+}
+.tech-cal-sel .tech-cal-day-num {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+.tech-cal-sel .tech-cal-dot {
+  background: rgba(255,255,255,0.75);
+}
+
+/* 预约点指示 */
+.tech-cal-dots {
+  display: flex;
+  gap: 3rpx;
+  justify-content: center;
+}
+.tech-cal-dot {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  background: #C8847A;
+  flex-shrink: 0;
+}
+
+/* 选中日期标题行 */
+.tech-day-label-row {
+  padding: 20rpx 24rpx 8rpx;
+}
+.tech-day-label {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #888888;
+  text-transform: uppercase;
+  letter-spacing: 2rpx;
+}

@@ -53,7 +53,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
+.tech-avatar-img { width: 108rpx; height: 108rpx; display: block; }
 
 .tech-emoji {
   font-size: 52rpx;

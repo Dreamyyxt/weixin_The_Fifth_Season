@@ -1,0 +1,34 @@
+@import '../admin-common.wxss';
+
+.skill-tags { display: flex; flex-wrap: wrap; gap: 10rpx; margin-bottom: 16rpx; }
+.skill-chip {
+  display: flex; align-items: center; gap: 8rpx;
+  background: #FDE8E6; color: #C8847A;
+  font-size: 24rpx; padding: 8rpx 16rpx; border-radius: 16rpx;
+}
+.skill-remove { color: #C8847A; font-size: 28rpx; }
+
+.skill-input-row { display: flex; gap: 12rpx; align-items: center; }
+.skill-input    { flex: 1; }
+.add-skill-btn  {
+  background: #C8847A; color: #FFFFFF;
+  font-size: 24rpx; padding: 18rpx 28rpx; border-radius: 12rpx; flex-shrink: 0;
+}
+
+.avail-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #F8F5F2; border-radius: 12rpx; padding: 20rpx 24rpx;
+}
+.avail-text { font-size: 28rpx; color: #2C2C2C; }
+
+.avail-switch {
+  width: 80rpx; height: 44rpx; border-radius: 22rpx;
+  display: flex; align-items: center; padding: 4rpx;
+  transition: background 0.2s;
+}
+.switch-on  { background: #27AE60; justify-content: flex-end; }
+.switch-off { background: #CCCCCC; justify-content: flex-start; }
+.switch-thumb {
+  width: 36rpx; height: 36rpx; border-radius: 50%; background: #FFFFFF;
+  box-shadow: 0 2rpx 6rpx rgba(0,0,0,0.2);
+}

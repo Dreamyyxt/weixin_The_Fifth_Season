@@ -1,0 +1,190 @@
+<!-- 预约详情页 -->
+<view class="detail-page">
+
+  <!-- 加载中 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <block wx:if="{{!loading && booking}}">
+
+    <!-- 状态卡片 -->
+    <view class="status-card status-card-{{statusCls}}">
+      <text class="status-main-label">{{statusLabel}}</text>
+      <text class="status-service-name">{{booking.serviceName}}</text>
+    </view>
+
+    <!-- 预约信息 -->
+    <view class="info-card">
+      <view class="info-row">
+        <text class="info-label">技师</text>
+        <text class="info-val">{{booking.techName}}</text>
+      </view>
+      <view class="info-divider"></view>
+      <view class="info-row">
+        <text class="info-label">日期</text>
+        <text class="info-val">{{booking.date}}</text>
+      </view>
+      <view class="info-divider"></view>
+      <view class="info-row">
+        <text class="info-label">时间</text>
+        <text class="info-val">{{booking.time}}</text>
+      </view>
+      <view class="info-divider"></view>
+      <view class="info-row">
+        <text class="info-label">时长</text>
+        <text class="info-val">{{booking.duration}}</text>
+      </view>
+      <view class="info-divider" wx:if="{{booking.remark}}"></view>
+      <view class="info-row" wx:if="{{booking.remark}}">
+        <text class="info-label">备注</text>
+        <text class="info-val info-remark">{{booking.remark}}</text>
+      </view>
+    </view>
+
+    <!-- 金额卡片 -->
+    <view class="amount-card">
+      <view class="amount-row">
+        <text class="amount-label">参考价格</text>
+        <text class="amount-val">¥{{booking.price}}</text>
+      </view>
+      <!-- 定金行 -->
+      <view class="amount-row" wx:if="{{booking.depositRequired}}">
+        <text class="amount-label">定金</text>
+        <view class="amount-right">
+          <text class="amount-val">¥{{booking.depositAmount}}</text>
+          <view class="deposit-tag deposit-tag-{{depositCls}}" wx:if="{{depositLabel}}">{{depositLabel}}</view>
+        </view>
+      </view>
+      <!-- 最终金额（技师确认后显示） -->
+      <view class="amount-row amount-final-row" wx:if="{{booking.finalPrice !== undefined && booking.finalPrice !== null}}">
+        <text class="amount-label amount-final-label">实际金额</text>
+        <text class="amount-final-val">¥{{booking.finalPrice}}</text>
+      </view>
+      <!-- 未出最终金额时 -->
+      <view class="amount-row" wx:else>
+        <text class="amount-label">实际金额</text>
+        <text class="amount-pending">待确认</text>
+      </view>
+      <!-- 应付尾款 -->
+      <view class="amount-row amount-due-row"
+        wx:if="{{booking.finalPrice !== undefined && booking.depositStatus === 'paid' && amountDue > 0}}">
+        <text class="amount-label">需付尾款</text>
+        <text class="amount-due-val">¥{{amountDue}}</text>
+      </view>
+    </view>
+
+    <!-- 定金支付按键（定金未付时显示） -->
+    <view class="pay-section"
+      wx:if="{{booking.depositRequired && booking.depositStatus === 'pending' && canCancel}}">
+      <view class="pay-hint">请在预约前支付定金以完成确认</view>
+      <view class="pay-btn pay-btn-active" bindtap="showDepositPaySelector">支付定金 ¥{{booking.depositAmount}}</view>
+    </view>
+
+    <!-- 支付按键 -->
+    <view class="pay-section" wx:if="{{booking.status === 'completed'}}">
+      <view wx:if="{{booking.paymentStatus === 'paid'}}" class="pay-done-row">
+        <text class="pay-done-icon">✓</text>
+        <text class="pay-done-text">订单已支付，感谢光临</text>
+      </view>
+      <block wx:else>
+        <view class="pay-hint" wx:if="{{!payBtnAvailable}}">
+          技师完成服务并确认金额后，此处将开放支付
+        </view>
+        <view
+          class="pay-btn {{payBtnAvailable ? 'pay-btn-active' : 'pay-btn-disabled'}}"
+          bindtap="showPaymentSelector"
+        >{{payBtnText}}</view>
+      </block>
+    </view>
+
+    <!-- 取消预约按键 -->
+    <view class="cancel-section" wx:if="{{canCancel}}">
+      <view class="btn-cancel-detail" bindtap="cancelBooking">取消预约</view>
+    </view>
+
+  </block>
+
+  <!-- 定金支付方式弹窗 -->
+  <view class="pm-mask" wx:if="{{showDepositModal}}" bindtap="cancelDepositModal">
+    <view class="pm-card" catchtap>
+      <view class="pm-title">支付定金</view>
+      <view class="pm-amount-hint">定金金额：¥{{booking.depositAmount}}</view>
+
+      <view
+        class="pm-option {{depositPayMethod === 'balance' ? 'pm-opt-selected' : ''}} {{!depBalanceSufficient ? 'pm-opt-disabled' : ''}}"
+        bindtap="selectDepositPayMethod" data-method="balance"
+      >
+        <view class="pm-opt-left">
+          <text class="pm-opt-icon">💳</text>
+          <view class="pm-opt-info">
+            <text class="pm-opt-name">余额支付</text>
+            <text class="pm-opt-sub {{!depBalanceSufficient ? 'pm-sub-warn' : ''}}">当前余额 ¥{{userBalance}}{{!depBalanceSufficient ? '（余额不足）' : ''}}</text>
+          </view>
+        </view>
+        <view class="pm-opt-check" wx:if="{{depositPayMethod === 'balance'}}">✓</view>
+      </view>
+
+      <view
+        class="pm-option {{depositPayMethod === 'wechat' ? 'pm-opt-selected' : ''}}"
+        bindtap="selectDepositPayMethod" data-method="wechat"
+      >
+        <view class="pm-opt-left">
+          <text class="pm-opt-icon">💚</text>
+          <view class="pm-opt-info">
+            <text class="pm-opt-name">微信支付</text>
+          </view>
+        </view>
+        <view class="pm-opt-check" wx:if="{{depositPayMethod === 'wechat'}}">✓</view>
+      </view>
+
+      <view class="pm-btns">
+        <view class="pm-btn pm-btn-cancel" bindtap="cancelDepositModal">取消</view>
+        <view class="pm-btn pm-btn-confirm" bindtap="confirmDepositPay">确认支付</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 尾款支付方式选择弹窗 -->
+  <view class="pm-mask" wx:if="{{showPayModal}}" bindtap="cancelPayModal">
+    <view class="pm-card" catchtap>
+      <view class="pm-title">选择支付方式</view>
+      <view class="pm-amount-hint">应付金额：¥{{amountDue}}</view>
+
+      <!-- 余额支付 -->
+      <view
+        class="pm-option {{paymentMethod === 'balance' ? 'pm-opt-selected' : ''}} {{!balanceSufficient ? 'pm-opt-disabled' : ''}}"
+        bindtap="selectPayMethod" data-method="balance"
+      >
+        <view class="pm-opt-left">
+          <text class="pm-opt-icon">💳</text>
+          <view class="pm-opt-info">
+            <text class="pm-opt-name">余额支付</text>
+            <text class="pm-opt-sub {{!balanceSufficient ? 'pm-sub-warn' : ''}}">当前余额 ¥{{userBalance}}{{!balanceSufficient ? '（余额不足）' : ''}}</text>
+          </view>
+        </view>
+        <view class="pm-opt-check" wx:if="{{paymentMethod === 'balance'}}">✓</view>
+      </view>
+
+      <!-- 微信支付 -->
+      <view
+        class="pm-option {{paymentMethod === 'wechat' ? 'pm-opt-selected' : ''}}"
+        bindtap="selectPayMethod" data-method="wechat"
+      >
+        <view class="pm-opt-left">
+          <text class="pm-opt-icon">💚</text>
+          <view class="pm-opt-info">
+            <text class="pm-opt-name">微信支付</text>
+          </view>
+        </view>
+        <view class="pm-opt-check" wx:if="{{paymentMethod === 'wechat'}}">✓</view>
+      </view>
+
+      <view class="pm-btns">
+        <view class="pm-btn pm-btn-cancel" bindtap="cancelPayModal">取消</view>
+        <view class="pm-btn pm-btn-confirm" bindtap="confirmPay">确认支付</view>
+      </view>
+    </view>
+  </view>
+
+</view>

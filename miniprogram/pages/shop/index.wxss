@@ -1,5 +1,22 @@
 /* 商城样式 */
 
+.pkg-duration {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  margin: 6rpx 0 10rpx;
+}
+
+.duration-icon {
+  font-size: 22rpx;
+  color: #C9A76B;
+}
+
+.duration-val {
+  font-size: 22rpx;
+  color: #888888;
+}
+
 /* 积分横幅 */
 .points-banner {
   margin: 24rpx 30rpx;

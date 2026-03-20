@@ -1,12 +1,63 @@
 /* 个人信息页样式 */
 
+/* 管理后台入口 */
+.admin-entry-btn {
+  margin: 0 30rpx 24rpx;
+  background: linear-gradient(135deg, #2C2420, #4A3830);
+  border-radius: 20rpx;
+  padding: 28rpx 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
+}
+
+/* 管理员兼技师：两个入口并排 */
+.admin-entry-group {
+  margin: 0 30rpx 24rpx;
+  display: flex;
+  gap: 16rpx;
+}
+
+.admin-entry-half {
+  flex: 1;
+  margin: 0;   /* 覆盖 admin-entry-btn 的 margin，由父级 group 统一控制 */
+}
+
+.admin-entry-icon {
+  font-size: 40rpx;
+  flex-shrink: 0;
+}
+
+.admin-entry-text {
+  flex: 1;
+}
+
+.admin-entry-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 4rpx;
+}
+
+.admin-entry-sub {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.admin-entry-arrow {
+  font-size: 36rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
 /* 会员卡 */
 .member-card {
   margin: 24rpx 30rpx;
-  background: linear-gradient(135deg, #3D3228, #5A4A3C);
   border-radius: 28rpx;
   padding: 40rpx 36rpx;
-  box-shadow: 0 8rpx 32rpx rgba(61, 50, 40, 0.3);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+  transition: background 0.4s;
 }
 
 .member-top {
@@ -78,6 +129,59 @@
   border: 1rpx solid rgba(255,255,255,0.2);
   padding: 8rpx 20rpx;
   border-radius: 16rpx;
+}
+
+/* 升级进度条 */
+.tier-progress-wrap {
+  margin: 24rpx 0 28rpx;
+}
+
+.tier-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.tier-label-current,
+.tier-label-next {
+  font-size: 20rpx;
+  color: rgba(255,255,255,0.6);
+}
+
+.tier-label-next {
+  text-align: right;
+}
+
+.tier-progress-track {
+  height: 8rpx;
+  background: rgba(255,255,255,0.2);
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.tier-progress-fill {
+  height: 100%;
+  background: rgba(255,255,255,0.85);
+  border-radius: 8rpx;
+  transition: width 0.4s ease;
+}
+
+.tier-progress-hint {
+  display: block;
+  font-size: 20rpx;
+  color: rgba(255,255,255,0.5);
+  margin-top: 8rpx;
+  text-align: center;
+}
+
+.tier-max-wrap {
+  margin: 16rpx 0 24rpx;
+  text-align: center;
+}
+
+.tier-max-text {
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.7);
 }
 
 /* 数据栏 */
@@ -156,7 +260,7 @@
   flex: 1;
   text-align: center;
   padding: 20rpx 0;
-  font-size: 28rpx;
+  font-size: 26rpx;
   color: #888888;
   font-weight: 500;
   border-radius: 16rpx;
@@ -296,6 +400,50 @@
   text-align: center;
 }
 
+/* 定金状态标签 */
+.deposit-tag {
+  display: inline-block;
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  margin-top: 12rpx;
+}
+
+.deposit-tag-pending {
+  background: #FFF3CD;
+  color: #7A5C00;
+}
+
+.deposit-tag-paid {
+  background: #D4EDDA;
+  color: #155724;
+}
+
+.deposit-tag-forfeited {
+  background: #F8D7DA;
+  color: #721C24;
+}
+
+.deposit-tag-refunded {
+  background: #E2E8F0;
+  color: #4A5568;
+}
+
+/* 查看详情提示 */
+.record-detail-hint {
+  font-size: 22rpx;
+  color: #BBBBBB;
+  text-align: right;
+  margin-top: 12rpx;
+}
+
+/* 待付款状态 */
+.status-unpaid {
+  background: #FFF3CD;
+  color: #7A5C00;
+}
+
 /* 空状态 */
 .empty-state {
   display: flex;
@@ -313,6 +461,148 @@
 .empty-text {
   font-size: 28rpx;
   color: #AAAAAA;
+}
+
+/* 会员权益 */
+.benefits-current-card {
+  margin: 0 30rpx 24rpx;
+  border-radius: 20rpx;
+  padding: 32rpx 36rpx;
+  box-shadow: 0 6rpx 24rpx rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.benefits-current-title {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 24rpx;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  margin-bottom: 16rpx;
+}
+
+.benefit-check {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.9);
+  flex-shrink: 0;
+}
+
+.benefit-text {
+  font-size: 28rpx;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+.benefits-discount-badge {
+  position: absolute;
+  top: 28rpx;
+  right: 32rpx;
+  font-size: 40rpx;
+  font-weight: 800;
+  color: rgba(255,255,255,0.25);
+}
+
+.tier-table-card {
+  margin: 0 30rpx 24rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(200, 132, 122, 0.06);
+}
+
+.tier-table-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+  padding: 24rpx 32rpx 16rpx;
+}
+
+.tier-table-row {
+  display: flex;
+  align-items: center;
+  padding: 18rpx 32rpx;
+  border-top: 1rpx solid #F5F0ED;
+}
+
+.tier-table-header {
+  background: #FAF7F4;
+  border-top: none;
+}
+
+.tier-table-header .tc-name,
+.tier-table-header .tc-spend,
+.tier-table-header .tc-discount {
+  font-size: 22rpx;
+  color: #AAAAAA;
+  font-weight: 500;
+}
+
+.tier-row-active {
+  background: #FDE8E6;
+}
+
+.tier-row-active .tc-name,
+.tier-row-active .tc-spend,
+.tier-row-active .tc-discount {
+  color: #C8847A;
+  font-weight: 600;
+}
+
+.tc-name {
+  flex: 2;
+  font-size: 26rpx;
+  color: #2C2C2C;
+}
+
+.tc-spend {
+  flex: 2;
+  font-size: 26rpx;
+  color: #555555;
+  text-align: center;
+}
+
+.tc-discount {
+  flex: 1;
+  font-size: 26rpx;
+  color: #555555;
+  text-align: right;
+}
+
+.upgrade-hint-card {
+  margin: 0 30rpx 32rpx;
+  background: #FFF8E7;
+  border-radius: 20rpx;
+  padding: 28rpx 32rpx;
+  border-left: 6rpx solid #F5A623;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.upgrade-hint-text {
+  flex: 1;
+  font-size: 24rpx;
+  color: #7A5C00;
+  line-height: 1.5;
+}
+
+.upgrade-recharge-btn {
+  background: #C9A76B;
+  color: #FFFFFF;
+  font-size: 24rpx;
+  font-weight: 600;
+  padding: 14rpx 28rpx;
+  border-radius: 20rpx;
+  flex-shrink: 0;
 }
 
 /* 积分明细 */

@@ -30,6 +30,18 @@
   font-size: 44rpx;
 }
 
+.author-avatar-img {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+}
+
+.comment-avatar-img {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+}
+
 .author-name-row {
   display: flex;
   align-items: center;

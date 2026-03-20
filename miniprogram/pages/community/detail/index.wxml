@@ -4,7 +4,8 @@
   <!-- 作者信息 -->
   <view class="post-author">
     <view class="author-avatar">
-      <text class="avatar-emoji">{{post.avatar}}</text>
+      <image wx:if="{{post.avatarUrl}}" class="author-avatar-img" src="{{post.avatarUrl}}" mode="aspectFill" />
+      <text wx:else class="avatar-emoji">🌟</text>
     </view>
     <view class="author-info">
       <view class="author-name-row">
@@ -21,13 +22,15 @@
   </view>
 
   <!-- 图片区 -->
-  <view class="post-images">
-    <view
-      class="post-img img-{{imgColor}}"
-      wx:for="{{post.colors}}"
+  <view class="post-images" wx:if="{{post.images && post.images.length > 0}}">
+    <image
+      class="post-img"
+      wx:for="{{post.images}}"
       wx:key="*this"
-      wx:for-item="imgColor"
-    ></view>
+      wx:for-item="imgUrl"
+      src="{{imgUrl}}"
+      mode="aspectFill"
+    />
   </view>
 
   <!-- 标签 -->
@@ -66,15 +69,16 @@
     <text class="comments-title">评论 ({{post.commentCount}})</text>
 
     <!-- 空评论 -->
-    <view class="empty-comments" wx:if="{{post.commentList.length === 0}}">
+    <view class="empty-comments" wx:if="{{comments.length === 0}}">
       <text class="empty-icon">💬</text>
       <text class="empty-text">还没有评论，来第一个吧！</text>
     </view>
 
     <!-- 评论列表 -->
-    <view class="comment-item" wx:for="{{post.commentList}}" wx:key="id">
+    <view class="comment-item" wx:for="{{comments}}" wx:key="_id">
       <view class="comment-avatar">
-        <text class="comment-avatar-emoji">{{item.avatar}}</text>
+        <image wx:if="{{item.avatarUrl}}" class="comment-avatar-img" src="{{item.avatarUrl}}" mode="aspectFill" />
+        <text wx:else class="comment-avatar-emoji">🌟</text>
       </view>
       <view class="comment-body">
         <view class="comment-header">
@@ -86,7 +90,7 @@
           <view
             class="comment-like {{item.liked ? 'cmt-liked' : ''}}"
             bindtap="toggleCommentLike"
-            data-cid="{{item.id}}"
+            data-cid="{{item._id}}"
           >
             <text>{{item.liked ? '❤️' : '🤍'}}</text>
             <text class="cmt-like-num">{{item.likes}}</text>
@@ -108,6 +112,7 @@
       class="comment-input"
       placeholder="说点什么..."
       value="{{inputText}}"
+      focus="{{inputFocused}}"
       bindinput="onInputChange"
       bindfocus="onInputFocus"
       bindblur="onInputBlur"

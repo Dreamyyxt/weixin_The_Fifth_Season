@@ -7,13 +7,14 @@
   </view>
 
   <view class="tech-list">
-    <view class="tech-card" wx:for="{{technicians}}" wx:key="id">
+    <view class="tech-card" wx:for="{{technicians}}" wx:key="_id">
 
       <!-- 头部：头像 + 基本信息 -->
       <view class="tech-top">
         <view class="tech-avatar-wrap">
           <view class="tech-avatar">
-            <text class="tech-emoji">{{item.avatar}}</text>
+            <image wx:if="{{item.avatarIsImg}}" src="{{item.avatar}}" mode="aspectFill" class="tech-avatar-img" />
+            <text wx:else class="tech-emoji">{{item.avatar}}</text>
           </view>
           <view class="avail-dot avail-{{item.available ? 'on' : 'off'}}"></view>
         </view>
@@ -55,7 +56,7 @@
         <view
           class="book-btn {{item.available ? 'book-active' : 'book-disabled'}}"
           bindtap="goBooking"
-          data-id="{{item.id}}"
+          data-id="{{item._id}}"
           wx:if="{{item.available}}"
         >立即预约</view>
         <view

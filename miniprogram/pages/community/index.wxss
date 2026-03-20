@@ -74,6 +74,13 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.avatar-img {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
 }
 
 .avatar-emoji {
@@ -153,8 +160,10 @@
 
 .post-img {
   flex: 1;
+  min-width: 0;
   height: 220rpx;
   border-radius: 16rpx;
+  overflow: hidden;
 }
 
 .img-pink     { background: linear-gradient(135deg, #F9D7D4, #F2B5B0); }

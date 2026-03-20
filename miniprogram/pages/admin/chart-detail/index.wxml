@@ -1,0 +1,109 @@
+<!-- 图表详情页 -->
+<view class="detail-page">
+
+  <!-- 导航栏 -->
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <text class="admin-nav-title">{{title}}</text>
+    <view class="nav-right-placeholder"></view>
+  </view>
+
+  <!-- 时间范围选择 -->
+  <view class="range-tabs">
+    <view
+      class="range-tab {{!customMode && chartRange === 7 ? 'range-active' : ''}}"
+      bindtap="switchRange"
+      data-range="7"
+    >近 7 天</view>
+    <view
+      class="range-tab {{!customMode && chartRange === 30 ? 'range-active' : ''}}"
+      bindtap="switchRange"
+      data-range="30"
+    >近 30 天</view>
+    <view
+      class="range-tab {{customMode ? 'range-active' : ''}}"
+      bindtap="toggleCustom"
+    >自定义</view>
+  </view>
+
+  <!-- 自定义日期范围（最多 180 天） -->
+  <view class="custom-range-row" wx:if="{{customMode}}">
+    <picker mode="date" value="{{customStart}}" bindchange="onStartChange">
+      <view class="custom-date-chip {{customStart ? 'cdp-filled' : ''}}">
+        {{customStart || '开始日期'}}
+      </view>
+    </picker>
+    <text class="custom-range-sep">至</text>
+    <picker mode="date" value="{{customEnd}}" bindchange="onEndChange">
+      <view class="custom-date-chip {{customEnd ? 'cdp-filled' : ''}}">
+        {{customEnd || '结束日期'}}
+      </view>
+    </picker>
+    <view class="custom-apply-btn" bindtap="applyCustomRange">查询</view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="admin-loading" wx:if="{{loading}}">加载中...</view>
+
+  <block wx:if="{{!loading}}">
+
+    <!-- 图表卡片 -->
+    <view class="detail-chart-card">
+      <!-- 多线图例（仅预约量） -->
+      <view class="chart-legend" wx:if="{{isMulti}}">
+        <view class="cl-item" wx:for="{{seriesLegend}}" wx:key="name">
+          <view class="cl-line" style="background:{{item.color}};"></view>
+          <text class="cl-name">{{item.name}}</text>
+        </view>
+      </view>
+      <canvas
+        type="2d"
+        id="detail-chart"
+        class="detail-canvas"
+        bindtouchstart="onChartTouch"
+        bindtouchmove="onChartTouch"
+      ></canvas>
+    </view>
+
+    <!-- 多系列统计（预约量图） -->
+    <view class="multi-stats-card" wx:if="{{isMulti}}">
+      <view class="msc-row header-row">
+        <view class="msc-name-col"></view>
+        <text class="msc-col-head">合计</text>
+        <text class="msc-col-head">日均</text>
+        <text class="msc-col-head">峰值</text>
+      </view>
+      <view class="msc-row" wx:for="{{multiStats}}" wx:key="name">
+        <view class="msc-name-col">
+          <view class="msc-dot" style="background:{{item.color}};"></view>
+          <text class="msc-name">{{item.name}}</text>
+        </view>
+        <text class="msc-val">{{item.total}}</text>
+        <text class="msc-val">{{item.avg}}</text>
+        <text class="msc-val">{{item.max}}</text>
+      </view>
+    </view>
+
+    <!-- 单系列统计（营业额 / 客单价） -->
+    <view class="detail-stats-row" wx:if="{{!isMulti}}">
+      <block wx:if="{{showTotal}}">
+        <view class="detail-stat">
+          <text class="detail-stat-num">¥{{totalVal}}</text>
+          <text class="detail-stat-label">合计</text>
+        </view>
+        <view class="detail-stat-divider"></view>
+      </block>
+      <view class="detail-stat">
+        <text class="detail-stat-num">¥{{avgVal}}</text>
+        <text class="detail-stat-label">日均</text>
+      </view>
+      <view class="detail-stat-divider"></view>
+      <view class="detail-stat">
+        <text class="detail-stat-num">¥{{maxVal}}</text>
+        <text class="detail-stat-label">峰值</text>
+      </view>
+    </view>
+
+  </block>
+
+</view>

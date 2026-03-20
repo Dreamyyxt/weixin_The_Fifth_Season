@@ -1,0 +1,519 @@
+<!-- 管理后台 / 技师工作台 -->
+<view class="admin-page admin-page-tabbed" wx:if="{{!loading}}">
+
+  <!-- 顶部导航栏 -->
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <text class="admin-nav-title">{{role === 'admin' ? '管理后台' : '技师工作台'}}</text>
+  </view>
+
+  <!-- ═══════════════════════════════ 管理员视图 ═══════════════════════════════ -->
+  <block wx:if="{{role === 'admin'}}">
+
+    <!-- ─────────────────── 概览 Tab ─────────────────── -->
+    <block wx:if="{{adminTab === 'overview'}}">
+
+      <view class="dash-header">
+        <text class="dash-title">数据概览</text>
+        <text class="dash-date">{{todayDateStr}}</text>
+      </view>
+
+      <view class="stats-row-big">
+        <view class="stat-card-big stat-big-pink">
+          <view class="stat-big-top">
+            <text class="stat-big-icon">📅</text>
+            <text class="stat-big-num">{{todayCount}}</text>
+          </view>
+          <text class="stat-big-label">今日总预约量</text>
+        </view>
+        <view class="stat-card-big stat-big-gold" bindtap="goDayPerf">
+          <view class="stat-big-top">
+            <text class="stat-big-icon">💰</text>
+            <text class="stat-big-num stat-revenue">¥{{todayRevenue}}</text>
+          </view>
+          <text class="stat-big-label">今日营业额 ›</text>
+        </view>
+      </view>
+
+      <view class="stats-row-small">
+        <view class="stat-card-sm stat-sm-green">
+          <text class="stat-sm-num">{{todayCompleted}}</text>
+          <text class="stat-sm-label">今日完成客单</text>
+        </view>
+        <view class="stat-card-sm stat-sm-orange">
+          <text class="stat-sm-num">{{pendingCount}}</text>
+          <text class="stat-sm-label">待确认客单</text>
+        </view>
+        <view class="stat-card-sm stat-sm-blue">
+          <text class="stat-sm-num">{{userCount}}</text>
+          <text class="stat-sm-label">用户总量</text>
+        </view>
+        <view class="stat-card-sm stat-sm-teal">
+          <text class="stat-sm-num">{{newUserCount}}</text>
+          <text class="stat-sm-label">今日新增用户</text>
+        </view>
+      </view>
+
+      <view class="section-row">
+        <view class="chart-half-card">
+          <text class="chart-card-title">预约比例</text>
+          <canvas type="2d" id="pie-bookings" class="chart-canvas-pie"></canvas>
+        </view>
+        <view class="chart-half-card">
+          <text class="chart-card-title">营业额比例</text>
+          <canvas type="2d" id="pie-revenue" class="chart-canvas-pie"></canvas>
+        </view>
+      </view>
+
+      <view class="chart-full-card" bindtap="goChartDetail" data-type="bookings">
+        <view class="chart-card-header">
+          <text class="chart-card-title">预约量曲线</text>
+          <text class="chart-card-hint">近7天 ›</text>
+        </view>
+        <canvas type="2d" id="line-bookings" class="chart-canvas-line"></canvas>
+      </view>
+
+      <view class="chart-full-card" bindtap="goChartDetail" data-type="revenue">
+        <view class="chart-card-header">
+          <text class="chart-card-title">营业额曲线</text>
+          <text class="chart-card-hint">近7天 ›</text>
+        </view>
+        <canvas type="2d" id="line-revenue" class="chart-canvas-line"></canvas>
+      </view>
+
+      <view class="chart-full-card" bindtap="goChartDetail" data-type="avg">
+        <view class="chart-card-header">
+          <text class="chart-card-title">平均客单价曲线</text>
+          <text class="chart-card-hint">近7天 ›</text>
+        </view>
+        <canvas type="2d" id="line-avg" class="chart-canvas-line"></canvas>
+      </view>
+
+    </block>
+
+    <!-- ─────────────────── 预约 Tab ─────────────────── -->
+    <block wx:elif="{{adminTab === 'schedule'}}">
+
+      <view class="sch-toolbar sch-toolbar-month">
+        <text class="sch-toolbar-title">预约月历</text>
+        <view class="sch-all-btn" bindtap="goBookings">全部预约 ›</view>
+      </view>
+
+      <view class="mth-header">
+        <view class="mth-nav-btn" bindtap="prevMonth">‹</view>
+        <text class="mth-title">{{scheduleMonthLabel}}</text>
+        <view class="mth-nav-btn" bindtap="nextMonth">›</view>
+      </view>
+
+      <view class="admin-loading" wx:if="{{monthLoading}}">加载中...</view>
+
+      <view class="mth-cal" wx:else>
+        <view class="mth-weekrow">
+          <text class="mth-wlabel" wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="*this">{{item}}</text>
+        </view>
+        <view class="mth-grid">
+          <view
+            wx:for="{{monthDays}}" wx:key="index"
+            class="mth-cell {{item.empty ? 'mth-cell-empty' : ''}} {{item.isToday ? 'mth-cell-today' : ''}} {{scheduleDate === item.dateStr ? 'mth-cell-sel' : ''}}"
+            bindtap="onMonthDayTap" data-date="{{item.dateStr}}"
+          >
+            <text class="mth-day" wx:if="{{!item.empty}}">{{item.day}}</text>
+            <view class="mth-bk-dot" wx:if="{{!item.empty && item.count > 0}}">
+              <text class="mth-bk-num">{{item.count}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="sel-day-bar">
+        <text class="sel-day-title">{{scheduleDate}} 日程</text>
+      </view>
+
+      <view class="admin-loading" wx:if="{{ganttLoading}}">加载中...</view>
+      <view class="cal-empty" wx:elif="{{ganttTechs.length === 0}}"><text>暂无技师数据</text></view>
+
+      <view class="gantt-wrapper" wx:else>
+        <view class="time-col">
+          <view class="time-ph"></view>
+          <view
+            wx:for="{{timeSlots}}" wx:key="*this"
+            class="time-cell {{item.endsWith(':00') ? 'time-cell-hour' : ''}}"
+          ><text>{{item}}</text></view>
+          <view class="time-end"><text>22:00</text></view>
+        </view>
+        <scroll-view scroll-x class="gantt-scroll" style="width:{{ganttScrollW}}px;">
+          <view class="gantt-inner">
+            <view
+              wx:for="{{ganttTechs}}" wx:key="_id" wx:for-item="tech"
+              class="cal-tech-col"
+            >
+              <view class="cal-tech-hdr">
+                <view class="cal-tech-dot" style="background:{{tech.color}};"></view>
+                <text class="cal-tech-name">{{tech.name}}</text>
+              </view>
+              <view class="cal-tech-body">
+                <view wx:for="{{timeSlots}}" wx:key="*this" wx:for-item="ts" class="cal-slot"></view>
+                <view class="cal-grid-lines">
+                  <view
+                    wx:for="{{gridLines}}" wx:key="top" wx:for-item="line"
+                    class="cal-grid-line {{line.isHour ? 'cal-grid-line-hour' : ''}}"
+                    style="top:{{line.top}}rpx;"
+                  ></view>
+                </view>
+                <view
+                  wx:for="{{tech.bookings}}" wx:key="_id" wx:for-item="bk"
+                  class="cal-bk cal-bk-{{bk.status}}"
+                  style="top:{{bk.ganttTop}}rpx; height:{{bk.ganttHeight}}rpx;"
+                  catchtap="onGanttCardTap" data-id="{{bk._id}}"
+                >
+                  <text class="cal-bk-name">{{bk.name}}</text>
+                  <text class="cal-bk-svc" wx:if="{{bk.status !== 'cancelled'}}">{{bk.serviceName}}</text>
+                  <text class="cal-bk-cxl" wx:else>✕ 已取消</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+    </block>
+
+    <!-- ─────────────────── 店员 Tab ─────────────────── -->
+    <block wx:elif="{{adminTab === 'staff'}}">
+
+      <text class="admin-section-title">人员管理</text>
+      <view class="admin-card" style="padding: 8rpx 16rpx;">
+        <view class="nav-tile" bindtap="goTechList">
+          <view class="nav-tile-icon" style="background:#E8F5E9;">👩‍🎨</view>
+          <view class="nav-tile-info">
+            <text class="nav-tile-title">技师管理</text>
+            <text class="nav-tile-sub">添加 · 编辑 · 上下线技师</text>
+          </view>
+          <text class="nav-tile-arrow">›</text>
+        </view>
+        <view class="nav-tile" bindtap="goRoles" style="border-bottom:none;">
+          <view class="nav-tile-icon" style="background:#EDE7F6;">🔑</view>
+          <view class="nav-tile-info">
+            <text class="nav-tile-title">角色分配</text>
+            <text class="nav-tile-sub">设置管理员 · 绑定技师账号</text>
+          </view>
+          <text class="nav-tile-arrow">›</text>
+        </view>
+      </view>
+
+    </block>
+
+    <!-- ─────────────────── 产品 Tab ─────────────────── -->
+    <block wx:elif="{{adminTab === 'products'}}">
+
+      <text class="admin-section-title">产品 &amp; 套餐</text>
+      <view class="admin-card" style="padding: 8rpx 16rpx;">
+        <view class="nav-tile" bindtap="goPkgList" style="border-bottom:none;">
+          <view class="nav-tile-icon" style="background:#FFF3E0;">🛍️</view>
+          <view class="nav-tile-info">
+            <text class="nav-tile-title">套餐管理</text>
+            <text class="nav-tile-sub">添加 · 编辑 · 删除套餐</text>
+          </view>
+          <text class="nav-tile-arrow">›</text>
+        </view>
+      </view>
+
+    </block>
+
+    <!-- ─────────────────── 客户 Tab ─────────────────── -->
+    <block wx:elif="{{adminTab === 'customers'}}">
+
+      <view class="cust-search-bar">
+        <view class="cust-search-wrap">
+          <text class="cust-search-icon">🔍</text>
+          <input
+            class="cust-search-input"
+            placeholder="搜索姓名或手机号"
+            value="{{customerSearch}}"
+            bindinput="onCustomerSearchInput"
+            bindconfirm="onCustomerSearch"
+            confirm-type="search"
+          />
+        </view>
+        <view class="cust-add-btn" bindtap="goAddCustomer">+ 新增</view>
+      </view>
+
+      <view class="admin-loading" wx:if="{{customerLoading}}">加载中...</view>
+
+      <view class="admin-empty" wx:elif="{{customers.length === 0}}">
+        <text>暂无会员记录</text>
+      </view>
+
+      <view class="admin-card" style="padding: 0;" wx:else>
+        <view
+          class="cust-item"
+          wx:for="{{customers}}" wx:key="_id"
+          bindtap="goCustomerDetail"
+          data-id="{{item._id}}"
+          style="border-bottom: {{index < customers.length - 1 ? '1rpx solid #F5F0ED' : 'none'}};"
+        >
+          <view class="cust-avatar">{{item.name.slice(0,1)}}</view>
+          <view class="cust-info">
+            <view class="cust-name-row">
+              <text class="cust-name">{{item.name}}</text>
+              <view class="cust-tier-badge" style="color:{{item.tierColor}};">{{item.tierLabel}}</view>
+            </view>
+            <text class="cust-phone">{{item.phone || '未填写手机号'}}</text>
+          </view>
+          <view class="cust-right">
+            <text class="cust-balance">¥{{item.balance}}</text>
+            <text class="cust-balance-label">余额</text>
+          </view>
+        </view>
+      </view>
+
+    </block>
+
+    <!-- ─────────────────── 固定底部 Tab Bar ─────────────────── -->
+    <view class="admin-tab-bar">
+      <view class="atb-item {{adminTab === 'overview'   ? 'atb-act' : ''}}" bindtap="switchAdminTab" data-tab="overview">
+        <text class="atb-lbl">概览</text>
+      </view>
+      <view class="atb-item {{adminTab === 'schedule'  ? 'atb-act' : ''}}" bindtap="switchAdminTab" data-tab="schedule">
+        <text class="atb-lbl">预约</text>
+      </view>
+      <view class="atb-item {{adminTab === 'staff'     ? 'atb-act' : ''}}" bindtap="switchAdminTab" data-tab="staff">
+        <text class="atb-lbl">店员</text>
+      </view>
+      <view class="atb-item {{adminTab === 'products'  ? 'atb-act' : ''}}" bindtap="switchAdminTab" data-tab="products">
+        <text class="atb-lbl">产品</text>
+      </view>
+      <view class="atb-item {{adminTab === 'customers' ? 'atb-act' : ''}}" bindtap="switchAdminTab" data-tab="customers">
+        <text class="atb-lbl">客户</text>
+      </view>
+    </view>
+
+  </block>
+
+  <!-- ═══════════════════════════════ 技师工作台视图 ═══════════════════════════ -->
+  <block wx:else>
+
+    <!-- 营业额卡片 -->
+    <view class="tech-revenue-card" bindtap="goTechDayPerf">
+      <text class="tech-revenue-label">今日营业额 ›</text>
+      <text class="tech-revenue-num">¥{{techRevenue}}</text>
+    </view>
+
+    <!-- Lark 风格个人日历 -->
+    <view class="tech-lark-cal">
+
+      <!-- 月份导航 -->
+      <view class="tech-cal-mth-bar">
+        <view class="tech-cal-nav-btn" bindtap="prevTechMonth">‹</view>
+        <text class="tech-cal-mth-label">{{techCalMonthLabel}}</text>
+        <view class="tech-cal-nav-btn" bindtap="nextTechMonth">›</view>
+      </view>
+
+      <!-- 星期标题行 -->
+      <view class="tech-cal-weekrow">
+        <text class="tech-cal-wlabel" wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="*this">{{item}}</text>
+      </view>
+
+      <!-- 日期格 -->
+      <view class="tech-cal-grid">
+        <view
+          wx:for="{{techMonthDays}}" wx:key="index"
+          class="tech-cal-cell {{item.isToday ? 'tech-cal-today' : ''}} {{techCalDate === item.dateStr ? 'tech-cal-sel' : ''}}"
+          bindtap="onTechCalDayTap" data-date="{{item.dateStr}}"
+        >
+          <text class="tech-cal-day-num" wx:if="{{!item.empty}}">{{item.day}}</text>
+          <!-- booking dots (up to 3) -->
+          <view class="tech-cal-dots" wx:if="{{!item.empty && item.count > 0}}">
+            <view class="tech-cal-dot"></view>
+            <view class="tech-cal-dot" wx:if="{{item.count > 1}}"></view>
+            <view class="tech-cal-dot" wx:if="{{item.count > 2}}"></view>
+          </view>
+        </view>
+      </view>
+
+    </view>
+
+    <!-- 选中日期标题 -->
+    <view class="tech-day-label-row">
+      <text class="tech-day-label">{{techCalDateLabel}} 的预约</text>
+    </view>
+
+    <!-- 当日甘特 -->
+    <view class="admin-loading" wx:if="{{techDayLoading}}">加载中...</view>
+    <view class="admin-empty" wx:elif="{{techDayGantt.length === 0}}">当天暂无预约</view>
+    <view class="gantt-wrapper" wx:else>
+      <view class="time-col">
+        <view class="time-ph"></view>
+        <view
+          wx:for="{{timeSlots}}" wx:key="*this"
+          class="time-cell {{item.endsWith(':00') ? 'time-cell-hour' : ''}}"
+        ><text>{{item}}</text></view>
+        <view class="time-end"><text>22:00</text></view>
+      </view>
+      <view class="gantt-tech-single">
+        <view class="cal-tech-hdr cal-tech-hdr-single">
+          <text class="cal-tech-name">预约安排</text>
+        </view>
+        <view class="cal-tech-body">
+          <view wx:for="{{timeSlots}}" wx:key="*this" wx:for-item="ts" class="cal-slot"></view>
+          <view class="cal-grid-lines">
+            <view
+              wx:for="{{gridLines}}" wx:key="top" wx:for-item="line"
+              class="cal-grid-line {{line.isHour ? 'cal-grid-line-hour' : ''}}"
+              style="top:{{line.top}}rpx;"
+            ></view>
+          </view>
+          <view
+            wx:for="{{techDayGantt}}" wx:key="_id" wx:for-item="bk"
+            class="cal-bk cal-bk-{{bk.status}}"
+            style="top:{{bk.ganttTop}}rpx; height:{{bk.ganttHeight}}rpx;"
+            catchtap="onGanttCardTap" data-id="{{bk._id}}"
+          >
+            <text class="cal-bk-name">{{bk.name}}</text>
+            <text class="cal-bk-svc" wx:if="{{bk.status !== 'cancelled'}}">{{bk.serviceName}}</text>
+            <text class="cal-bk-cxl" wx:else>✕ 已取消</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 固定底部 Tab Bar -->
+    <view class="tech-tab-bar">
+      <view class="tech-tab-item" bindtap="goBookings">
+        <text class="tech-tab-icon">📅</text>
+        <text class="tech-tab-label">全部预约</text>
+      </view>
+      <view class="tech-tab-item" bindtap="goTechProfile">
+        <text class="tech-tab-icon">👤</text>
+        <text class="tech-tab-label">我的资料</text>
+      </view>
+    </view>
+
+  </block>
+
+</view>
+
+<!-- 加载中 -->
+<view class="admin-loading" wx:if="{{loading}}">
+  <text>加载中...</text>
+</view>
+
+<!-- ═══ 预约详情底部弹窗 ═══ -->
+<view class="bk-mask" wx:if="{{showBookingDetail}}" bindtap="closeBookingDetail">
+  <view class="bk-sheet" catchtap>
+    <view class="bk-handle"></view>
+
+    <!-- 状态 + 定金徽标 -->
+    <view class="bc-header">
+      <view class="status-badge status-{{detailBooking.status}}">{{detailBooking.statusLabel}}</view>
+      <view class="deposit-badge deposit-badge-pending"
+        wx:if="{{detailBooking.depositRequired && detailBooking.depositStatus === 'pending'}}">定金待收</view>
+      <view class="deposit-badge deposit-badge-paid"
+        wx:elif="{{detailBooking.depositRequired && detailBooking.depositStatus === 'paid'}}">定金已收</view>
+      <view class="deposit-badge deposit-badge-forfeited"
+        wx:elif="{{detailBooking.depositRequired && detailBooking.depositStatus === 'forfeited'}}">定金不退</view>
+      <text class="bc-datetime">{{detailBooking.date}} {{detailBooking.time}}</text>
+    </view>
+
+    <view class="bc-row">
+      <text class="bc-label">客户</text>
+      <text class="bc-val">{{detailBooking.name}}（{{detailBooking.phone}}）</text>
+    </view>
+    <view class="bc-row">
+      <text class="bc-label">服务</text>
+      <text class="bc-val">{{detailBooking.serviceName}} · {{detailBooking.duration}}</text>
+    </view>
+    <view class="bc-row">
+      <text class="bc-label">技师</text>
+      <text class="bc-val">{{detailBooking.techName}}</text>
+    </view>
+    <view class="bc-row">
+      <text class="bc-label">金额</text>
+      <view class="bc-price-wrap">
+        <text class="bc-price">¥{{detailBooking.finalPrice !== undefined ? detailBooking.finalPrice : detailBooking.price}}</text>
+        <text class="bc-ref-price"
+          wx:if="{{detailBooking.finalPrice !== undefined && detailBooking.finalPrice !== detailBooking.price}}">参考 ¥{{detailBooking.price}}</text>
+      </view>
+    </view>
+    <view class="bc-row" wx:if="{{detailBooking.status === 'completed'}}">
+      <text class="bc-label">收款</text>
+      <text class="bc-val {{detailBooking.paymentStatus === 'paid' ? 'bc-paid' : 'bc-unpaid'}}">
+        {{detailBooking.paymentStatus === 'paid' ? '已支付' : '待付款'}}
+      </text>
+    </view>
+    <view class="bc-row" wx:if="{{detailBooking.remark}}">
+      <text class="bc-label">备注</text>
+      <text class="bc-val">{{detailBooking.remark}}</text>
+    </view>
+    <view class="bc-row" wx:if="{{detailBooking.adminNote}}">
+      <text class="bc-label">记录</text>
+      <text class="bc-val bc-note">{{detailBooking.adminNote}}</text>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-btn-group" wx:if="{{detailBooking.status === 'pending'}}">
+      <view class="action-btn action-btn-confirm"
+        bindtap="updateStatus" data-id="{{detailBooking._id}}" data-status="confirmed">确认预约</view>
+      <view class="action-btn action-btn-deposit"
+        wx:if="{{detailBooking.depositRequired && detailBooking.depositStatus === 'pending'}}"
+        bindtap="markDepositPaid" data-id="{{detailBooking._id}}">已收定金</view>
+      <view class="action-btn action-btn-cancel"
+        bindtap="updateStatus" data-id="{{detailBooking._id}}" data-status="cancelled">取消</view>
+    </view>
+    <view class="action-btn-group" wx:elif="{{detailBooking.status === 'confirmed'}}">
+      <view class="action-btn action-btn-complete"
+        bindtap="updateStatus" data-id="{{detailBooking._id}}" data-status="completed">标记完成</view>
+      <view class="action-btn action-btn-deposit"
+        wx:if="{{detailBooking.depositRequired && detailBooking.depositStatus === 'pending'}}"
+        bindtap="markDepositPaid" data-id="{{detailBooking._id}}">已收定金</view>
+      <view class="action-btn action-btn-cancel"
+        bindtap="updateStatus" data-id="{{detailBooking._id}}" data-status="cancelled">取消</view>
+    </view>
+
+  </view>
+</view>
+
+<!-- ═══ 标记完成弹窗 ═══ -->
+<view class="cm-mask" wx:if="{{showCompleteModal}}" bindtap="cancelCompleteModal">
+  <view class="cm-card" catchtap>
+    <view class="cm-title">标记完成</view>
+    <view class="cm-subtitle">{{completingBooking.serviceName}} · {{completingBooking.name}}</view>
+    <view class="cm-row">
+      <text class="cm-label">门市参考价</text>
+      <text class="cm-ref">¥{{completingBooking.price}}</text>
+    </view>
+    <view class="cm-input-row">
+      <text class="cm-label">实际价格</text>
+      <view class="cm-input-wrap">
+        <text class="cm-currency">¥</text>
+        <input class="cm-input" type="digit" value="{{completePriceInput}}"
+          bindinput="onCompletePriceInput" placeholder="输入金额" focus />
+      </view>
+    </view>
+    <view class="cm-result-card" wx:if="{{completePriceInput}}">
+      <view class="cm-result-row"
+        wx:if="{{completingBooking.discountRate && completingBooking.discountRate < 1}}">
+        <text class="cm-result-label">会员折扣</text>
+        <text class="cm-discount-hint">× {{completingBooking.discountRate * 10}}折</text>
+      </view>
+      <view class="cm-result-row">
+        <text class="cm-result-label">实际收款</text>
+        <text class="cm-result-val">¥{{completeFinalPrice}}</text>
+      </view>
+      <view class="cm-result-row"
+        wx:if="{{completingBooking.depositRequired && completingBooking.depositStatus === 'paid'}}">
+        <text class="cm-result-label">已收定金</text>
+        <text class="cm-result-deduct">－¥{{completingBooking.depositAmount}}</text>
+      </view>
+      <view class="cm-result-row"
+        wx:if="{{completingBooking.depositRequired && completingBooking.depositStatus === 'paid'}}">
+        <text class="cm-result-label">客户需付</text>
+        <text class="cm-result-due-val">¥{{completeRemainder}}</text>
+      </view>
+    </view>
+    <view class="cm-btns">
+      <view class="cm-btn cm-btn-cancel" bindtap="cancelCompleteModal">取消</view>
+      <view class="cm-btn cm-btn-confirm" bindtap="confirmComplete">确认完成</view>
+    </view>
+  </view>
+</view>

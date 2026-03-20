@@ -1,0 +1,171 @@
+<!-- 预约管理 -->
+<view class="admin-page">
+
+  <!-- 导航栏 -->
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <view class="nav-center">
+      <text class="admin-nav-title">预约管理</text>
+      <text class="nav-count" wx:if="{{!loading}}">{{bookings.length}} 条</text>
+    </view>
+    <view class="nav-right-placeholder"></view>
+  </view>
+
+  <!-- 内嵌日历 -->
+  <view class="cal-wrap">
+    <view class="cal-header">
+      <view class="cal-nav-btn" bindtap="prevMonth">‹</view>
+      <text class="cal-month-label">{{calYear}}年{{calMonth}}月</text>
+      <view class="cal-nav-btn" bindtap="nextMonth">›</view>
+    </view>
+    <view class="cal-weekdays">
+      <text class="cal-wd">日</text>
+      <text class="cal-wd">一</text>
+      <text class="cal-wd">二</text>
+      <text class="cal-wd">三</text>
+      <text class="cal-wd">四</text>
+      <text class="cal-wd">五</text>
+      <text class="cal-wd">六</text>
+    </view>
+    <view class="cal-grid">
+      <view
+        wx:for="{{calDays}}" wx:key="dateStr"
+        class="cal-cell {{item.sel ? 'cal-sel' : ''}} {{item.today && !item.sel ? 'cal-today' : ''}} {{!item.cur ? 'cal-other-month' : ''}} {{item.past && item.cur ? 'cal-past' : ''}}"
+        bindtap="onCalDayTap"
+        data-date="{{item.dateStr}}"
+      >
+        <text class="cal-day-num">{{item.day}}</text>
+      </view>
+    </view>
+    <view class="cal-clear-row" wx:if="{{dateFilter}}" bindtap="clearDate">
+      <text class="cal-clear-text">显示全部日期</text>
+    </view>
+  </view>
+
+  <!-- 状态 Tab -->
+  <scroll-view class="status-tabs" scroll-x enable-flex>
+    <view class="tab-track">
+      <view
+        class="s-tab {{activeTab === item.key ? 's-tab-active' : ''}}"
+        wx:for="{{statusTabs}}"
+        wx:key="key"
+        bindtap="switchTab"
+        data-key="{{item.key}}"
+      >{{item.label}}</view>
+    </view>
+  </scroll-view>
+
+  <!-- 加载中 -->
+  <view class="admin-loading" wx:if="{{loading}}">加载中...</view>
+
+  <!-- 预约列表 -->
+  <view wx:if="{{!loading}}">
+    <view class="admin-empty" wx:if="{{bookings.length === 0}}">暂无符合条件的预约</view>
+
+    <view class="admin-card booking-card" wx:for="{{bookings}}" wx:key="_id">
+      <!-- 头部：状态 + 定金徽标 + 日期时间 -->
+      <view class="bc-header">
+        <view class="status-badge status-{{item.status}}">{{item.statusLabel}}</view>
+        <view class="deposit-badge deposit-badge-pending" wx:if="{{item.depositRequired && item.depositStatus === 'pending'}}">定金待收</view>
+        <view class="deposit-badge deposit-badge-paid"    wx:elif="{{item.depositRequired && item.depositStatus === 'paid'}}">定金已收</view>
+        <view class="deposit-badge deposit-badge-forfeited" wx:elif="{{item.depositRequired && item.depositStatus === 'forfeited'}}">定金不退</view>
+        <text class="bc-datetime">{{item.date}} {{item.time}}</text>
+      </view>
+
+      <!-- 客户信息 -->
+      <view class="bc-row">
+        <text class="bc-label">客户</text>
+        <text class="bc-val">{{item.name}}（{{item.phone}}）</text>
+      </view>
+      <view class="bc-row">
+        <text class="bc-label">服务</text>
+        <text class="bc-val">{{item.serviceName}} · {{item.duration}}</text>
+      </view>
+      <view class="bc-row">
+        <text class="bc-label">技师</text>
+        <text class="bc-val">{{item.techName}}</text>
+      </view>
+      <view class="bc-row">
+        <text class="bc-label">金额</text>
+        <view class="bc-price-wrap">
+          <text class="bc-price">¥{{item.finalPrice !== undefined ? item.finalPrice : item.price}}</text>
+          <text class="bc-ref-price" wx:if="{{item.finalPrice !== undefined && item.finalPrice !== item.price}}">参考 ¥{{item.price}}</text>
+        </view>
+      </view>
+      <view class="bc-row" wx:if="{{item.status === 'completed'}}">
+        <text class="bc-label">收款</text>
+        <text class="bc-val {{item.paymentStatus === 'paid' ? 'bc-paid' : 'bc-unpaid'}}">
+          {{item.paymentStatus === 'paid' ? '已支付' : '待付款'}}
+        </text>
+      </view>
+      <view class="bc-row" wx:if="{{item.remark}}">
+        <text class="bc-label">备注</text>
+        <text class="bc-val">{{item.remark}}</text>
+      </view>
+      <view class="bc-row" wx:if="{{item.adminNote}}">
+        <text class="bc-label">记录</text>
+        <text class="bc-val bc-note">{{item.adminNote}}</text>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="action-btn-group" wx:if="{{item.status === 'pending'}}">
+        <view class="action-btn action-btn-confirm" bindtap="updateStatus" data-id="{{item._id}}" data-status="confirmed">确认预约</view>
+        <view class="action-btn action-btn-deposit" wx:if="{{item.depositRequired && item.depositStatus === 'pending'}}" bindtap="markDepositPaid" data-id="{{item._id}}">已收定金</view>
+        <view class="action-btn action-btn-cancel"  bindtap="updateStatus" data-id="{{item._id}}" data-status="cancelled">取消</view>
+      </view>
+      <view class="action-btn-group" wx:elif="{{item.status === 'confirmed'}}">
+        <view class="action-btn action-btn-complete" bindtap="updateStatus" data-id="{{item._id}}" data-status="completed">标记完成</view>
+        <view class="action-btn action-btn-deposit" wx:if="{{item.depositRequired && item.depositStatus === 'pending'}}" bindtap="markDepositPaid" data-id="{{item._id}}">已收定金</view>
+        <view class="action-btn action-btn-cancel"   bindtap="updateStatus" data-id="{{item._id}}" data-status="cancelled">取消</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 标记完成弹窗 -->
+  <view class="cm-mask" wx:if="{{showCompleteModal}}" bindtap="cancelCompleteModal">
+    <view class="cm-card" catchtap>
+      <view class="cm-title">标记完成</view>
+      <view class="cm-subtitle">{{completingBooking.serviceName}} · {{completingBooking.name}}</view>
+      <view class="cm-row">
+        <text class="cm-label">门市参考价</text>
+        <text class="cm-ref">¥{{completingBooking.price}}</text>
+      </view>
+      <view class="cm-input-row">
+        <text class="cm-label">实际价格</text>
+        <view class="cm-input-wrap">
+          <text class="cm-currency">¥</text>
+          <input class="cm-input" type="digit" value="{{completePriceInput}}"
+            bindinput="onCompletePriceInput" placeholder="输入金额" focus />
+        </view>
+      </view>
+
+      <!-- 折算结果（实时显示，有输入才展开） -->
+      <view class="cm-result-card" wx:if="{{completePriceInput}}">
+        <view class="cm-result-row" wx:if="{{completingBooking.discountRate && completingBooking.discountRate < 1}}">
+          <text class="cm-result-label">会员折扣</text>
+          <text class="cm-discount-hint">× {{completingBooking.discountRate * 10}}折</text>
+        </view>
+        <view class="cm-result-row">
+          <text class="cm-result-label">实际收款</text>
+          <text class="cm-result-val">¥{{completeFinalPrice}}</text>
+        </view>
+        <view class="cm-result-row"
+          wx:if="{{completingBooking.depositRequired && completingBooking.depositStatus === 'paid'}}">
+          <text class="cm-result-label">已收定金</text>
+          <text class="cm-result-deduct">－¥{{completingBooking.depositAmount}}</text>
+        </view>
+        <view class="cm-result-row"
+          wx:if="{{completingBooking.depositRequired && completingBooking.depositStatus === 'paid'}}">
+          <text class="cm-result-label">客户需付</text>
+          <text class="cm-result-due-val">¥{{completeRemainder}}</text>
+        </view>
+      </view>
+
+      <view class="cm-btns">
+        <view class="cm-btn cm-btn-cancel" bindtap="cancelCompleteModal">取消</view>
+        <view class="cm-btn cm-btn-confirm" bindtap="confirmComplete">确认完成</view>
+      </view>
+    </view>
+  </view>
+
+</view>

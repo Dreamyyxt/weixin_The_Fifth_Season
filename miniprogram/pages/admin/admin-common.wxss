@@ -1,0 +1,212 @@
+/* 管理后台公共样式 */
+
+.admin-page {
+  background: #F0EDEA;
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+/* 顶部导航栏 — padding-top 由 JS 注入以适配各机型状态栏高度 */
+.admin-nav {
+  background: linear-gradient(135deg, #2C2420, #4A3830);
+  padding: 0 32rpx 24rpx;
+  display: flex;
+  align-items: flex-end;
+  gap: 20rpx;
+  min-height: 88rpx;
+  box-sizing: border-box;
+}
+
+.admin-back {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.12);
+  border-radius: 50%;
+  font-size: 32rpx;
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.admin-nav-title {
+  flex: 1;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.admin-nav-action {
+  font-size: 26rpx;
+  color: #C8847A;
+  background: rgba(200, 132, 122, 0.15);
+  padding: 10rpx 24rpx;
+  border-radius: 30rpx;
+}
+
+/* 状态徽章 */
+.status-badge {
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+}
+
+.status-pending   { background: #FFF3E0; color: #E67E22; }
+.status-confirmed { background: #E8F4FD; color: #2980B9; }
+.status-completed { background: #E8F5E9; color: #27AE60; }
+.status-cancelled { background: #F5F5F5; color: #999999; }
+
+/* 通用卡片 */
+.admin-card {
+  margin: 16rpx 20rpx 0;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 24rpx 28rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.06);
+}
+
+/* 分区标题 */
+.admin-section-title {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #888888;
+  text-transform: uppercase;
+  letter-spacing: 2rpx;
+  margin: 28rpx 24rpx 12rpx;
+}
+
+/* 列表行 */
+.admin-list-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #F5F0ED;
+  gap: 16rpx;
+}
+
+.admin-list-item:last-child {
+  border-bottom: none;
+}
+
+/* 操作按钮组 */
+.action-btn-group {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 20rpx;
+}
+
+.action-btn {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx 0;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+.action-btn-confirm  { background: #E8F4FD; color: #2980B9; }
+.action-btn-complete { background: #E8F5E9; color: #27AE60; }
+.action-btn-cancel   { background: #FEE9E7; color: #C0392B; }
+.action-btn-primary  { background: #C8847A; color: #FFFFFF; }
+.action-btn-danger   { background: #FEE9E7; color: #C0392B; }
+.action-btn-gray     { background: #F5F0ED; color: #888888; }
+
+/* 表单行 */
+.form-field {
+  margin-bottom: 32rpx;
+  width: 100%;
+}
+
+.field-label {
+  display: block;
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 12rpx;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/*
+  WeChat <input> 是原生组件，不自动继承 box-sizing。
+  必须加 display:block + line-height，否则文字垂直方向被裁剪。
+*/
+.field-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background: #F8F5F2;
+  border-radius: 12rpx;
+  padding: 22rpx 24rpx;
+  font-size: 28rpx;
+  color: #2C2C2C;
+  line-height: 1.5;
+  min-height: 84rpx;
+}
+
+.field-textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background: #F8F5F2;
+  border-radius: 12rpx;
+  padding: 22rpx 24rpx;
+  font-size: 28rpx;
+  color: #2C2C2C;
+  min-height: 160rpx;
+  line-height: 1.6;
+}
+
+.field-hint {
+  display: block;
+  font-size: 22rpx;
+  color: #AAAAAA;
+  margin-top: 8rpx;
+  line-height: 1.4;
+}
+
+/* 图片上传框 */
+.img-upload-box {
+  width: 160rpx; height: 160rpx; border-radius: 16rpx;
+  border: 2rpx dashed #DDDDDD;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  overflow: hidden; background: #F8F5F2;
+}
+.img-preview { width: 160rpx; height: 160rpx; display: block; }
+.img-placeholder { display: flex; flex-direction: column; align-items: center; gap: 8rpx; }
+.img-plus { font-size: 48rpx; color: #CCCCCC; line-height: 1; }
+.img-hint-text { font-size: 20rpx; color: #AAAAAA; }
+
+/* 空状态 */
+.admin-empty {
+  text-align: center;
+  padding: 80rpx 0;
+  color: #AAAAAA;
+  font-size: 26rpx;
+}
+
+/* 加载 */
+.admin-loading {
+  text-align: center;
+  padding: 60rpx 0;
+  color: #AAAAAA;
+  font-size: 26rpx;
+}
+
+/* 浮动新增按钮 */
+.fab-btn {
+  position: fixed;
+  bottom: 60rpx;
+  right: 40rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  color: #FFFFFF;
+  box-shadow: 0 8rpx 24rpx rgba(200, 132, 122, 0.5);
+}

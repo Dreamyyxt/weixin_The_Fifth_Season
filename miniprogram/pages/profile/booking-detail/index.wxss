@@ -1,0 +1,336 @@
+.detail-page {
+  background: #FAF7F4;
+  min-height: 100vh;
+  padding-bottom: 60rpx;
+}
+
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  padding-top: 120rpx;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #AAAAAA;
+}
+
+/* 状态卡片 */
+.status-card {
+  margin: 24rpx 24rpx 0;
+  border-radius: 20rpx;
+  padding: 36rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.status-card-pending   { background: #F0F4FF; }
+.status-card-confirmed { background: #EBF7F4; }
+.status-card-unpaid    { background: #FFF8E7; }
+.status-card-done      { background: #F0F7EE; }
+.status-card-cancelled { background: #F5F5F5; }
+
+.status-main-label {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2C2C2C;
+}
+
+.status-service-name {
+  font-size: 26rpx;
+  color: #666666;
+}
+
+/* 信息卡片 */
+.info-card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  margin: 16rpx 24rpx 0;
+  padding: 0 32rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 28rpx 0;
+  gap: 16rpx;
+}
+
+.info-label {
+  width: 80rpx;
+  font-size: 26rpx;
+  color: #AAAAAA;
+  flex-shrink: 0;
+}
+
+.info-val {
+  flex: 1;
+  font-size: 26rpx;
+  color: #2C2C2C;
+  font-weight: 500;
+}
+
+.info-remark {
+  font-weight: 400;
+  color: #666666;
+  line-height: 1.6;
+}
+
+.info-divider {
+  height: 1rpx;
+  background: #F5F0ED;
+}
+
+/* 金额卡片 */
+.amount-card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  margin: 16rpx 24rpx 0;
+  padding: 0 32rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+
+.amount-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #F5F0ED;
+}
+
+.amount-row:last-child {
+  border-bottom: none;
+}
+
+.amount-label {
+  font-size: 26rpx;
+  color: #888888;
+}
+
+.amount-val {
+  font-size: 26rpx;
+  color: #2C2C2C;
+  font-weight: 500;
+}
+
+.amount-right {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.amount-pending {
+  font-size: 24rpx;
+  color: #BBBBBB;
+}
+
+.amount-final-row {
+  border-top: 1rpx solid #F5F0ED;
+}
+
+.amount-final-label {
+  font-size: 28rpx;
+  color: #444444;
+  font-weight: 600;
+}
+
+.amount-final-val {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #C8847A;
+}
+
+.amount-due-row { }
+
+.amount-due-val {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #E8900A;
+}
+
+/* 定金标签 */
+.deposit-tag {
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+}
+
+.deposit-tag-pending  { background: #FFF3CD; color: #7A5C00; }
+.deposit-tag-paid     { background: #D4EDDA; color: #155724; }
+.deposit-tag-forfeited { background: #F8D7DA; color: #721C24; }
+.deposit-tag-refunded  { background: #E2E8F0; color: #4A5568; }
+
+/* 支付区域 */
+.pay-section {
+  margin: 24rpx 24rpx 0;
+}
+
+.pay-hint {
+  font-size: 24rpx;
+  color: #AAAAAA;
+  text-align: center;
+  margin-bottom: 16rpx;
+  padding: 0 16rpx;
+  line-height: 1.6;
+}
+
+.pay-btn {
+  width: 100%;
+  padding: 32rpx 0;
+  border-radius: 50rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.pay-btn-active {
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  color: #FFFFFF;
+  box-shadow: 0 4rpx 16rpx rgba(200,132,122,0.4);
+}
+
+.pay-btn-disabled {
+  background: #EEEEEE;
+  color: #BBBBBB;
+}
+
+.pay-done-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  padding: 32rpx 0;
+  background: #F0F7EE;
+  border-radius: 20rpx;
+}
+
+.pay-done-icon {
+  font-size: 32rpx;
+  color: #3D8B37;
+}
+
+.pay-done-text {
+  font-size: 28rpx;
+  color: #3D8B37;
+  font-weight: 500;
+}
+
+/* 支付方式选择弹窗 */
+.pm-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 999;
+  display: flex;
+  align-items: flex-end;
+}
+
+.pm-card {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 40rpx 32rpx 60rpx;
+}
+
+.pm-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2C2C2C;
+  text-align: center;
+  margin-bottom: 8rpx;
+}
+
+.pm-amount-hint {
+  font-size: 26rpx;
+  color: #C8847A;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.pm-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 24rpx;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  border: 2rpx solid #F0E8E4;
+  background: #FAFAFA;
+}
+
+.pm-opt-selected {
+  border-color: #C8847A;
+  background: #FFF6F5;
+}
+
+.pm-opt-disabled {
+  opacity: 0.45;
+}
+
+.pm-opt-left {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.pm-opt-icon { font-size: 40rpx; }
+
+.pm-opt-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+  margin-bottom: 4rpx;
+}
+
+.pm-opt-sub  { font-size: 22rpx; color: #AAAAAA; }
+.pm-sub-warn { color: #E8900A; }
+
+.pm-opt-check {
+  font-size: 28rpx;
+  color: #C8847A;
+  font-weight: 700;
+}
+
+.pm-btns {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 32rpx;
+}
+
+.pm-btn {
+  flex: 1;
+  padding: 28rpx 0;
+  border-radius: 50rpx;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.pm-btn-cancel  { background: #F5F5F5; color: #888888; }
+
+.pm-btn-confirm {
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  color: #FFFFFF;
+  box-shadow: 0 4rpx 16rpx rgba(200, 132, 122, 0.35);
+}
+
+/* 取消按键 */
+.cancel-section {
+  margin: 20rpx 24rpx 0;
+}
+
+.btn-cancel-detail {
+  width: 100%;
+  padding: 28rpx 0;
+  border-radius: 50rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #E74C3C;
+  border: 1rpx solid #E74C3C;
+  background: #FFFFFF;
+}
