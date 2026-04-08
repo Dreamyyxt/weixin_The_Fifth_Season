@@ -40,65 +40,81 @@ Page({
   toggleTag(e) {
     const tag = e.currentTarget.dataset.tag;
     const selected = this.data.selectedTags;
-    let newSelected;
+    let content = this.data.content;
+
     if (selected.includes(tag)) {
-      newSelected = selected.filter(t => t !== tag);
+      // 取消选中：从正文中移除 #tag
+      const newSelected = selected.filter(t => t !== tag);
+      content = content.split(` #${tag}`).join('').split(`#${tag}`).join('').trim();
+      this.setData({ selectedTags: newSelected, content });
     } else if (selected.length < 3) {
-      newSelected = [...selected, tag];
+      // 选中：在正文末尾追加 #tag
+      const newSelected = [...selected, tag];
+      content = content ? `${content} #${tag}` : `#${tag}`;
+      this.setData({ selectedTags: newSelected, content });
     } else {
       wx.showToast({ title: '最多选3个标签', icon: 'none' });
-      return;
     }
-    this.setData({ selectedTags: newSelected });
   },
 
-  submitPost() {
+  async submitPost() {
     const { content, images, selectedTags } = this.data;
     if (!content.trim()) {
-      wx.showToast({ title: '请输入内容', icon: 'none' });
-      return;
-    }
-    if (images.length === 0) {
-      wx.showToast({ title: '请至少添加一张图片', icon: 'none' });
-      return;
+      wx.showToast({ title: '请输入内容', icon: 'none' }); return;
     }
 
-    wx.showLoading({ title: '发布中...' });
-    setTimeout(() => {
-      wx.hideLoading();
+    wx.showLoading({ title: images.length > 0 ? '上传图片中...' : '发布中...' });
 
+    try {
+      // 1. 上传图片到云存储
+      const uploadedUrls = await Promise.all(
+        images.map((tempPath, i) =>
+          wx.cloud.uploadFile({
+            cloudPath: `posts/${Date.now()}_${i}${tempPath.match(/\.\w+$/)?.[0] || '.jpg'}`,
+            filePath: tempPath,
+          }).then(r => r.fileID)
+        )
+      );
+
+      wx.showLoading({ title: '发布中...' });
+
+      // 2. 调用云函数创建帖子
       const userInfo = app.globalData.userInfo;
-      // 图片路径映射为颜色 key，用于显示色块（真实场景应上传图片）
-      const colorPalette = ['pink', 'coral', 'lavender', 'gold', 'green', 'white'];
-      const colors = images.slice(0, 2).map((_, i) => colorPalette[i % colorPalette.length]);
-
-      app.addPost({
-        user: userInfo.nickname,
-        avatar: '🌟',
-        level: userInfo.vipLevel.replace('会员', '').replace('卡', '卡') || '普通',
-        levelClass: userInfo.vipLevel.includes('金') ? 'gold' : userInfo.vipLevel.includes('银') ? 'silver' : 'normal',
-        content: content.trim(),
-        colors: colors.length ? colors : ['pink'],
-        likes: 0,
-        points: 10,
-        liked: false,
-        time: '刚刚',
-        tags: selectedTags,
-      });
-
-      const pointsEarned = 10;
-      const currentPoints = app.globalData.userInfo.points;
-      app.saveUserInfo({ points: currentPoints + pointsEarned });
-
-      wx.showModal({
-        title: '发布成功！',
-        content: `您的帖子已发布，获得 +${pointsEarned} 积分！\n当前积分：${currentPoints + pointsEarned}`,
-        showCancel: false,
-        confirmText: '去看看',
-        success: () => {
-          wx.switchTab({ url: '/pages/community/index' });
+      const res = await wx.cloud.callFunction({
+        name: 'createPost',
+        data: {
+          content:    content.trim(),
+          images:     uploadedUrls,
+          tags:       selectedTags,
+          user:       userInfo.nickname || '用户',
+          avatarUrl:  userInfo.avatarUrl || '',
+          level:      (userInfo.vipLevel || '普通会员').replace('会员', ''),
+          levelClass: userInfo.vipLevel?.includes('金') ? 'gold'
+                    : userInfo.vipLevel?.includes('银') ? 'silver' : 'normal',
         },
       });
-    }, 800);
+
+      wx.hideLoading();
+
+      if (res.result.success) {
+        const earned = res.result.pointsEarned;
+        const newPoints = (app.globalData.userInfo.points || 0) + earned;
+        app.saveUserInfo({ points: newPoints });
+
+        wx.showModal({
+          title: '发布成功！',
+          content: `帖子已发布，获得 +${earned} 积分！\n当前积分：${newPoints}`,
+          showCancel: false,
+          confirmText: '去看看',
+          success: () => wx.switchTab({ url: '/pages/community/index' }),
+        });
+      } else {
+        wx.showToast({ title: res.result.error || '发布失败', icon: 'none' });
+      }
+    } catch (e) {
+      wx.hideLoading();
+      wx.showToast({ title: '发布失败，请重试', icon: 'none' });
+      console.error('submitPost:', e);
+    }
   },
 });

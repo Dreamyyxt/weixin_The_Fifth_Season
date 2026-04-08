@@ -18,15 +18,16 @@
     <view
       class="post-card"
       wx:for="{{posts}}"
-      wx:key="id"
+      wx:key="_id"
       bindtap="goDetail"
-      data-id="{{item.id}}"
+      data-id="{{item._id}}"
     >
 
       <!-- 用户信息 -->
       <view class="post-header">
         <view class="post-avatar">
-          <text class="avatar-emoji">{{item.avatar}}</text>
+          <image wx:if="{{item.avatarUrl}}" class="avatar-img" src="{{item.avatarUrl}}" mode="aspectFill" />
+          <text wx:else class="avatar-emoji">🌟</text>
         </view>
         <view class="post-user-info">
           <view class="post-user-row">
@@ -43,14 +44,16 @@
       <!-- 内容 -->
       <text class="post-content">{{item.content}}</text>
 
-      <!-- 图片占位（颜色块代替） -->
-      <view class="post-images">
-        <view
-          class="post-img img-{{imgColor}}"
-          wx:for="{{item.colors}}"
+      <!-- 图片 -->
+      <view class="post-images" wx:if="{{item.images && item.images.length > 0}}">
+        <image
+          class="post-img"
+          wx:for="{{item.images}}"
           wx:key="*this"
-          wx:for-item="imgColor"
-        ></view>
+          wx:for-item="imgUrl"
+          src="{{imgUrl}}"
+          mode="aspectFill"
+        />
       </view>
 
       <!-- 标签 -->
@@ -65,12 +68,12 @@
         <view
           class="action-btn {{item.liked ? 'liked' : ''}}"
           catchtap="toggleLike"
-          data-id="{{item.id}}"
+          data-id="{{item._id}}"
         >
           <text class="action-icon">{{item.liked ? '❤️' : '🤍'}}</text>
           <text class="action-count">{{item.likes}}</text>
         </view>
-        <view class="action-btn" catchtap="goDetail" data-id="{{item.id}}">
+        <view class="action-btn" catchtap="goDetail" data-id="{{item._id}}">
           <text class="action-icon">💬</text>
           <text class="action-count">{{item.commentCount}}</text>
         </view>

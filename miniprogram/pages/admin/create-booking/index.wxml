@@ -1,0 +1,97 @@
+<view class="admin-page" style="padding-bottom:160rpx;">
+  <!-- 导航栏 -->
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <text class="admin-nav-title">手动创建预约</text>
+    <view style="width:60rpx;"></view>
+  </view>
+
+  <view class="admin-card" style="margin-top:20rpx;">
+
+    <!-- 来源 -->
+    <view class="form-field">
+      <text class="field-label">来源</text>
+      <picker mode="selector" range="{{sources}}" range-key="label"
+        value="{{sourceIdx}}" bindchange="onSourceChange">
+        <view class="field-picker">{{sources[sourceIdx].label}}</view>
+      </picker>
+    </view>
+
+    <!-- 客户姓名 -->
+    <view class="form-field">
+      <text class="field-label">客户姓名</text>
+      <input class="field-input" placeholder="散客（选填）"
+        value="{{guestName}}" bindinput="onInput" data-field="guestName" />
+    </view>
+
+    <!-- 联系电话 -->
+    <view class="form-field">
+      <text class="field-label">联系电话</text>
+      <input class="field-input" placeholder="选填" type="number"
+        value="{{guestPhone}}" bindinput="onInput" data-field="guestPhone" />
+    </view>
+
+    <!-- 技师 -->
+    <view class="form-field">
+      <text class="field-label">技师 *</text>
+      <picker mode="selector" range="{{techs}}" range-key="name"
+        value="{{techIdx}}" bindchange="onTechChange">
+        <view class="field-picker">{{techs.length > 0 ? techs[techIdx].name : '加载中...'}}</view>
+      </picker>
+    </view>
+
+    <!-- 服务项目 -->
+    <view class="form-field">
+      <text class="field-label">服务项目 *</text>
+      <picker mode="selector" range="{{services}}" range-key="name"
+        value="{{serviceIdx}}" bindchange="onServiceChange" disabled="{{servicesLoading}}">
+        <view class="field-picker {{servicesLoading ? 'field-picker-muted' : ''}}">
+          {{servicesLoading ? '加载服务中...' : (services.length > 0 ? services[serviceIdx].name + ' · ' + services[serviceIdx].duration : '暂无服务')}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 日期 -->
+    <view class="form-field">
+      <text class="field-label">日期 *</text>
+      <picker mode="date" value="{{date}}" bindchange="onDateChange">
+        <view class="field-picker">{{date || '选择日期'}}</view>
+      </picker>
+    </view>
+
+    <!-- 时间 -->
+    <view class="form-field">
+      <text class="field-label">时间 *</text>
+      <picker mode="selector" range="{{availableSlots}}"
+        value="{{timeIdx}}" bindchange="onTimeChange">
+        <view class="field-picker {{slotsLoading ? 'field-picker-muted' : ''}}">
+          {{slotsLoading ? '加载可用时间...' : (availableSlots.length > 0 ? availableSlots[timeIdx] : '暂无可用时段')}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 价格 -->
+    <view class="form-field">
+      <text class="field-label">价格</text>
+      <view class="field-price-row">
+        <text class="field-currency">¥</text>
+        <input class="field-price-input" type="digit" value="{{priceInput}}"
+          bindinput="onInput" data-field="priceInput" placeholder="0" />
+        <text class="field-price-hint" wx:if="{{services.length > 0}}">参考价 ¥{{services[serviceIdx].price}}</text>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="form-field">
+      <text class="field-label">备注</text>
+      <textarea class="field-textarea" placeholder="选填"
+        value="{{remark}}" bindinput="onInput" data-field="remark" />
+    </view>
+
+  </view>
+</view>
+
+<!-- 底部提交按钮 -->
+<view class="submit-bar">
+  <view class="submit-btn" bindtap="submit">创建预约</view>
+</view>

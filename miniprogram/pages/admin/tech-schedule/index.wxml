@@ -1,0 +1,120 @@
+<!-- 技师排班管理 -->
+<view class="admin-page" style="padding-bottom:60rpx;">
+
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <text class="admin-nav-title">{{techName}} · 排班</text>
+    <view class="admin-nav-action"></view>
+  </view>
+
+  <!-- 图例 -->
+  <view class="legend-row">
+    <view class="legend-item">
+      <view class="legend-dot legend-working"></view>
+      <text class="legend-label">工作日（显示时数）</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-dot legend-off"></view>
+      <text class="legend-label">休息日</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-dot legend-default"></view>
+      <text class="legend-label">未设置</text>
+    </view>
+  </view>
+
+  <view class="admin-card" style="margin-top:16rpx;">
+
+    <!-- 月份导航 -->
+    <view class="sc-month-bar">
+      <view class="sc-nav-btn" bindtap="prevMonth">‹</view>
+      <text class="sc-month-label">{{monthLabel}}</text>
+      <view class="sc-nav-btn" bindtap="nextMonth">›</view>
+    </view>
+
+    <!-- 星期标题 -->
+    <view class="sc-weekrow">
+      <text class="sc-wlabel" wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="*this">{{item}}</text>
+    </view>
+
+    <!-- 日历格子 -->
+    <view class="admin-loading" wx:if="{{loading}}">加载中...</view>
+    <view class="sc-grid" wx:else>
+      <view
+        wx:for="{{calDays}}" wx:key="index"
+        class="sc-cell {{item.empty ? 'sc-cell-empty' : ''}} {{item.isToday ? 'sc-cell-today' : ''}} {{item.state === 'off' ? 'sc-cell-off' : ''}}"
+        bindtap="onDayTap"
+        data-date="{{item.dateStr}}"
+      >
+        <text class="sc-day-num" wx:if="{{!item.empty}}">{{item.day}}</text>
+        <text class="sc-day-badge sc-badge-off"     wx:if="{{item.badge === '休'}}">休</text>
+        <text class="sc-day-badge sc-badge-working" wx:elif="{{item.badge}}">{{item.badge}}</text>
+      </view>
+    </view>
+
+  </view>
+
+  <text class="sc-hint">点击日期设置当天排班时段。未设置默认视为全天可约。</text>
+
+</view>
+
+<!-- ══════════ 排班弹窗 ══════════ -->
+<view class="sheet-mask" wx:if="{{showSheet}}" bindtap="closeSheet">
+  <view class="sheet-card" catchtap>
+    <view class="sheet-handle"></view>
+
+    <!-- 标题 -->
+    <view class="sheet-header">
+      <text class="sheet-title">{{sheetDateLabel}} 排班设置</text>
+    </view>
+
+    <!-- 快捷按钮 -->
+    <view class="sheet-quick-row">
+      <view class="sheet-quick-btn sheet-quick-all" bindtap="selectAllSlots">全天工作</view>
+      <view class="sheet-quick-btn sheet-quick-off {{sheetIsOff ? 'sheet-quick-off-active' : ''}}" bindtap="setDayOff">设为休息日</view>
+    </view>
+
+    <!-- 休息日提示 -->
+    <view class="sheet-off-notice" wx:if="{{sheetIsOff}}">
+      <text class="sheet-off-text">已设为休息日，客户将无法在此日期预约。</text>
+    </view>
+
+    <!-- 时间段选择 -->
+    <view class="sheet-time-section" wx:if="{{!sheetIsOff}}">
+      <view class="sheet-time-row">
+        <text class="sheet-time-label">开始时间</text>
+        <picker mode="selector" range="{{timeOptions}}" value="{{startIndex}}" bindchange="onStartChange">
+          <view class="sheet-time-picker">
+            <text class="sheet-time-value">{{sheetStart}}</text>
+            <text class="sheet-time-arrow">›</text>
+          </view>
+        </picker>
+      </view>
+      <view class="sheet-time-divider"></view>
+      <view class="sheet-time-row">
+        <text class="sheet-time-label">结束时间</text>
+        <picker mode="selector" range="{{timeOptions}}" value="{{endIndex}}" bindchange="onEndChange">
+          <view class="sheet-time-picker">
+            <text class="sheet-time-value">{{sheetEnd}}</text>
+            <text class="sheet-time-arrow">›</text>
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 统计 -->
+    <view class="sheet-summary" wx:if="{{!sheetIsOff}}">
+      <text class="sheet-summary-text">共排班 {{sheetTotalHours}} 小时</text>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="sheet-btns">
+      <view class="sheet-btn sheet-btn-cancel" bindtap="closeSheet">取消</view>
+      <view
+        class="sheet-btn sheet-btn-save {{saving ? 'sheet-btn-disabled' : ''}}"
+        bindtap="saveSheet"
+      >{{saving ? '保存中...' : '保存排班'}}</view>
+    </view>
+
+  </view>
+</view>

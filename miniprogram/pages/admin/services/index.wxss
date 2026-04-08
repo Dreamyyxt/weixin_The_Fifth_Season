@@ -1,0 +1,171 @@
+page { background: #FAF7F4; min-height: 100vh; }
+.page { padding: 24rpx 0 80rpx; }
+.page-loading { padding: 80rpx; text-align: center; color: #AAAAAA; font-size: 28rpx; }
+
+.add-cat-btn {
+  margin: 0 30rpx 24rpx;
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 600;
+  padding: 28rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(200,132,122,0.3);
+}
+
+/* ── 大类卡片 ── */
+.cat-card {
+  margin: 0 30rpx 24rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(200,132,122,0.06);
+}
+.cat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 28rpx;
+  background: #FDE8E6;
+}
+.cat-name { font-size: 28rpx; font-weight: 700; color: #C8847A; flex: 1; }
+.cat-actions { display: flex; gap: 16rpx; }
+.cat-act-btn {
+  font-size: 22rpx;
+  color: #C8847A;
+  padding: 6rpx 18rpx;
+  border: 1rpx solid #C8847A;
+  border-radius: 20rpx;
+}
+.cat-act-del { color: #E74C3C; border-color: #E74C3C; }
+
+/* ── 服务行 ── */
+.svc-row {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 28rpx;
+  border-bottom: 1rpx solid #F5F0ED;
+}
+.svc-row-info { flex: 1; }
+.svc-row-top { display: flex; align-items: center; gap: 12rpx; margin-bottom: 6rpx; }
+.svc-row-name { font-size: 26rpx; color: #2C2C2C; font-weight: 500; }
+.svc-row-quote {
+  font-size: 18rpx;
+  color: #F5A623;
+  background: #FFF3CD;
+  padding: 2rpx 10rpx;
+  border-radius: 10rpx;
+}
+.svc-row-meta { font-size: 22rpx; color: #AAAAAA; }
+.svc-row-actions { display: flex; gap: 12rpx; flex-shrink: 0; }
+.svc-act-btn {
+  font-size: 20rpx;
+  color: #888888;
+  padding: 4rpx 14rpx;
+  border: 1rpx solid #DDDDDD;
+  border-radius: 14rpx;
+}
+.svc-act-del { color: #E74C3C; border-color: #F5C6CB; }
+
+.add-svc-btn {
+  padding: 20rpx 28rpx;
+  font-size: 24rpx;
+  color: #C8847A;
+  text-align: center;
+}
+
+/* ── 分类弹窗 ── */
+.modal-mask {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200;
+}
+.modal-box {
+  width: 580rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 40rpx 36rpx;
+}
+.modal-title { display: block; font-size: 32rpx; font-weight: 700; color: #2C2C2C; margin-bottom: 32rpx; }
+.modal-field { margin-bottom: 24rpx; }
+.modal-label { display: block; font-size: 24rpx; color: #888888; margin-bottom: 10rpx; }
+.modal-input {
+  width: 100%;
+  border: 1rpx solid #E8E0DC;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  font-size: 28rpx;
+  color: #2C2C2C;
+  box-sizing: border-box;
+}
+.modal-btns { display: flex; gap: 16rpx; margin-top: 32rpx; }
+.modal-btn-cancel {
+  flex: 1; text-align: center; padding: 24rpx; border-radius: 16rpx;
+  background: #F5F0ED; font-size: 28rpx; color: #888888;
+}
+.modal-btn-save {
+  flex: 1; text-align: center; padding: 24rpx; border-radius: 16rpx;
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  font-size: 28rpx; color: #FFFFFF; font-weight: 600;
+}
+
+/* ── 服务底部弹窗 ── */
+.sheet-mask {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex; align-items: flex-end;
+  z-index: 200;
+}
+.sheet-box {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 0 36rpx 48rpx;
+}
+.sheet-handle {
+  width: 72rpx; height: 8rpx;
+  background: #E0E0E0; border-radius: 8rpx;
+  margin: 20rpx auto 0;
+}
+.sheet-title { display: block; font-size: 32rpx; font-weight: 700; color: #2C2C2C; margin: 28rpx 0 24rpx; }
+.sheet-field { margin-bottom: 20rpx; }
+.sheet-label { display: block; font-size: 24rpx; color: #888888; margin-bottom: 8rpx; }
+.sheet-input {
+  width: 100%;
+  border: 1rpx solid #E8E0DC;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  font-size: 28rpx;
+  color: #2C2C2C;
+  box-sizing: border-box;
+}
+.sheet-row2 { display: flex; gap: 20rpx; }
+.sheet-field-half { flex: 1; }
+.sheet-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20rpx 0; border-top: 1rpx solid #F5F0ED; margin-top: 8rpx;
+}
+.sheet-toggle {
+  width: 80rpx; height: 44rpx; border-radius: 22rpx;
+  background: #DDDDDD; position: relative; transition: background 0.2s;
+}
+.sheet-toggle-on { background: #C8847A; }
+.sheet-toggle-thumb {
+  position: absolute; top: 4rpx; left: 4rpx;
+  width: 36rpx; height: 36rpx; border-radius: 50%;
+  background: #FFFFFF;
+  transition: left 0.2s;
+}
+.sheet-toggle-on .sheet-toggle-thumb { left: 40rpx; }
+.sheet-btns { display: flex; gap: 16rpx; margin-top: 28rpx; }
+.sheet-btn-cancel {
+  flex: 1; text-align: center; padding: 28rpx; border-radius: 50rpx;
+  background: #F5F0ED; font-size: 28rpx; color: #888888;
+}
+.sheet-btn-save {
+  flex: 2; text-align: center; padding: 28rpx; border-radius: 50rpx;
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  font-size: 28rpx; color: #FFFFFF; font-weight: 600;
+}

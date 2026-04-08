@@ -1,0 +1,91 @@
+/* ═══ 自定义底部导航 ═══ */
+
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: #FFFFFF;
+  border-top: 1rpx solid #F0EDE9;
+  box-shadow: 0 -2rpx 16rpx rgba(200,132,122,0.10);
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  z-index: 100;
+}
+
+/* 普通 tab */
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100rpx;
+  padding-top: 10rpx;
+}
+
+.tab-icon {
+  font-size: 38rpx;
+  line-height: 1;
+  color: #BBBBBB;
+  transition: color 0.2s;
+}
+
+.tab-label {
+  font-size: 19rpx;
+  margin-top: 4rpx;
+  color: #BBBBBB;
+  transition: color 0.2s;
+}
+
+.tab-active .tab-icon,
+.tab-active .tab-label {
+  color: #C8847A;
+}
+
+/* ─── 中央预约按钮 ─── */
+.tab-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: visible;
+}
+
+.tab-center-btn {
+  position: relative;
+  top: -36rpx;
+  width: 116rpx;
+  height: 116rpx;
+  border-radius: 58rpx;
+  background: linear-gradient(145deg, #C8847A, #E8A89E);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6rpx 24rpx rgba(200,132,122,0.50), 0 2rpx 8rpx rgba(200,132,122,0.30);
+  border: 5rpx solid #FFFFFF;
+}
+
+.tab-center-sel {
+  background: linear-gradient(145deg, #B5706A, #D9958C);
+  box-shadow: 0 8rpx 28rpx rgba(200,132,122,0.65), 0 2rpx 8rpx rgba(200,132,122,0.40);
+}
+
+.tab-center-icon {
+  font-size: 38rpx;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.tab-center-label {
+  font-size: 18rpx;
+  color: #FFFFFF;
+  font-weight: 600;
+  margin-top: 3rpx;
+  letter-spacing: 1rpx;
+}

@@ -1,0 +1,71 @@
+@import '../admin-common.wxss';
+
+.field-picker {
+  background: #F8F5F2;
+  border-radius: 12rpx;
+  padding: 22rpx 24rpx;
+  font-size: 28rpx;
+  color: #2C2C2C;
+  min-height: 84rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.field-picker-muted {
+  color: #AAAAAA;
+}
+
+.field-price-row {
+  display: flex;
+  align-items: center;
+  background: #F8F5F2;
+  border-radius: 12rpx;
+  padding: 22rpx 24rpx;
+  gap: 8rpx;
+  box-sizing: border-box;
+}
+
+.field-currency {
+  font-size: 28rpx;
+  color: #C8847A;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.field-price-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #2C2C2C;
+  min-width: 0;
+}
+
+.field-price-hint {
+  font-size: 22rpx;
+  color: #AAAAAA;
+  flex-shrink: 0;
+}
+
+.submit-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 32rpx 48rpx;
+  background: #FFFFFF;
+  box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.06);
+  box-sizing: border-box;
+}
+
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  color: #FFFFFF;
+  font-size: 30rpx;
+  font-weight: 600;
+  text-align: center;
+  padding: 28rpx 0;
+  border-radius: 50rpx;
+  box-shadow: 0 4rpx 12rpx rgba(200,132,122,0.4);
+  box-sizing: border-box;
+}

@@ -1,0 +1,231 @@
+@import '../admin-common.wxss';
+@import '../bookings/index.wxss';
+
+.nav-right-placeholder { width: 48rpx; }
+
+/* 日历选择器 */
+.rv-cal {
+  background: #FFFFFF;
+  margin: 12rpx 24rpx 0;
+  border-radius: 20rpx;
+  padding: 16rpx 16rpx 12rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.05);
+}
+.rv-cal-month-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4rpx 12rpx;
+}
+.rv-cal-nav         { font-size: 44rpx; color: #C8847A; padding: 0 8rpx; line-height: 1; }
+.rv-cal-month-label { font-size: 28rpx; font-weight: 700; color: #2C2C2C; }
+.rv-cal-weekrow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4rpx;
+}
+.rv-cal-wlbl { text-align: center; font-size: 20rpx; color: #AAAAAA; padding: 4rpx 0; }
+.rv-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2rpx;
+}
+.rv-cal-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5rpx;
+  padding: 8rpx 0;
+  border-radius: 12rpx;
+  min-height: 68rpx;
+}
+.rv-cal-empty   { pointer-events: none; }
+.rv-cal-daynum  { font-size: 26rpx; font-weight: 500; color: #2C2C2C; line-height: 1; }
+.rv-cal-today .rv-cal-daynum  { color: #C8847A; font-weight: 700; }
+.rv-cal-sel     { background: #C8847A; }
+.rv-cal-sel .rv-cal-daynum    { color: #FFFFFF; font-weight: 700; }
+.rv-cal-dot     { width: 8rpx; height: 8rpx; border-radius: 50%; background: #C8847A; }
+.rv-cal-sel .rv-cal-dot       { background: rgba(255,255,255,0.75); }
+
+/* 总营收卡片 */
+.rv-total-card {
+  text-align: center;
+  padding: 40rpx 32rpx;
+}
+
+.rv-total-label {
+  display: block;
+  font-size: 24rpx;
+  color: #AAAAAA;
+  margin-bottom: 12rpx;
+}
+
+.rv-total-num {
+  display: block;
+  font-size: 64rpx;
+  font-weight: 700;
+  color: #C8847A;
+  line-height: 1;
+  margin-bottom: 12rpx;
+}
+
+.rv-total-sub {
+  display: block;
+  font-size: 22rpx;
+  color: #BBBBBB;
+}
+
+/* 支付方式拆分 */
+.rv-method-card { padding: 24rpx 32rpx; }
+
+.rv-section-title {
+  display: block;
+  font-size: 24rpx;
+  color: #AAAAAA;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+}
+
+.rv-section-title-pad { padding: 8rpx 32rpx 0; }
+
+.rv-method-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #F5EDE9;
+}
+
+.rv-method-row:last-child { border-bottom: none; }
+
+.rv-method-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.rv-method-icon { font-size: 36rpx; }
+
+.rv-method-label {
+  display: block;
+  font-size: 28rpx;
+  color: #2C2C2C;
+  font-weight: 600;
+}
+
+.rv-method-count {
+  display: block;
+  font-size: 22rpx;
+  color: #AAAAAA;
+}
+
+.rv-method-amount {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #C8847A;
+}
+
+/* 对账确认区域 */
+.rv-audit-card { padding: 24rpx 32rpx; }
+
+.rv-audit-row {
+  margin-bottom: 16rpx;
+}
+
+.rv-audit-done {
+  display: block;
+  font-size: 26rpx;
+  color: #27AE60;
+  font-weight: 600;
+  margin-bottom: 6rpx;
+}
+
+.rv-audit-sub {
+  font-size: 22rpx;
+  color: #888888;
+}
+
+.rv-audit-btn {
+  text-align: center;
+  padding: 24rpx 0;
+  border-radius: 50rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  color: #FFFFFF;
+  box-shadow: 0 4rpx 12rpx rgba(200,132,122,0.35);
+}
+
+.rv-audit-btn-secondary {
+  background: #F5F5F5;
+  color: #888888;
+  box-shadow: none;
+}
+
+.rv-audit-hint {
+  font-size: 24rpx;
+  color: #888888;
+  margin-bottom: 20rpx;
+}
+
+/* 订单明细 */
+.rv-booking-card {
+  margin-bottom: 12rpx;
+  padding: 20rpx 28rpx;
+}
+
+.rv-bk-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 10rpx;
+}
+
+.rv-bk-time {
+  font-size: 26rpx;
+  color: #888888;
+  min-width: 80rpx;
+}
+
+.rv-bk-pay-tag {
+  font-size: 20rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 10rpx;
+  font-weight: 600;
+}
+
+.rv-bk-pay-wechat         { background: #E8F5E9; color: #27AE60; }
+.rv-bk-pay-cash           { background: #FFF3E0; color: #E8900A; }
+.rv-bk-pay-card           { background: #E3F2FD; color: #1565C0; }
+.rv-bk-pay-alipay_offline { background: #E8EAF6; color: #3949AB; }
+
+.rv-bk-amount {
+  margin-left: auto;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #C8847A;
+}
+
+.rv-bk-info {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  flex-wrap: wrap;
+}
+
+.rv-bk-name    { font-size: 26rpx; color: #2C2C2C; font-weight: 600; }
+.rv-bk-sep     { font-size: 22rpx; color: #CCCCCC; }
+.rv-bk-service { font-size: 24rpx; color: #666666; }
+.rv-bk-tech    { font-size: 24rpx; color: #888888; }
+
+.rv-bk-note {
+  display: block;
+  font-size: 22rpx;
+  color: #AAAAAA;
+  font-style: italic;
+  margin-top: 8rpx;
+}
+
+.rv-empty-card { text-align: center; padding: 60rpx 0; }
+.rv-empty-text { font-size: 26rpx; color: #CCCCCC; }

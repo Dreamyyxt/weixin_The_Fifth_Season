@@ -1,0 +1,9 @@
+{
+  "name": "confirmRevenueAudit",
+  "version": "1.0.0",
+  "description": "营收对账确认",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

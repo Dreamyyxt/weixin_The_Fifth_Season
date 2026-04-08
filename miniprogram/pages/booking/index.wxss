@@ -1,5 +1,69 @@
 /* 预约页样式 */
 
+/* 报价模式摘要卡片 */
+.quote-mode-card {
+  margin: 0 32rpx 24rpx;
+  background: linear-gradient(135deg, #FDE8E6, #FFF0EE);
+  border-radius: 20rpx;
+  padding: 28rpx 32rpx;
+  border-left: 6rpx solid #C8847A;
+}
+.qmc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+.qmc-badge {
+  font-size: 22rpx;
+  color: #C8847A;
+  background: #FFFFFF;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  font-weight: 600;
+}
+.qmc-price {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #C8847A;
+}
+.qmc-service {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+  margin-bottom: 8rpx;
+}
+.qmc-duration {
+  display: block;
+  font-size: 24rpx;
+  color: #888888;
+  margin-bottom: 6rpx;
+}
+.qmc-note {
+  display: block;
+  font-size: 23rpx;
+  color: #888888;
+  line-height: 1.5;
+}
+
+.vip-notice {
+  margin: 0 32rpx 24rpx;
+  padding: 20rpx 24rpx;
+  background: #FFF8E7;
+  border-radius: 12rpx;
+  border-left: 6rpx solid #F5A623;
+  font-size: 24rpx;
+  color: #7A5C00;
+  line-height: 1.5;
+}
+
+.vip-notice-perk {
+  background: #F0EBF8;
+  border-left-color: #9B59B6;
+  color: #5C2D8A;
+}
+
 /* 步骤条 */
 .steps {
   display: flex;
@@ -73,7 +137,9 @@
   align-items: center;
   justify-content: center;
   font-size: 40rpx;
+  overflow: hidden;
 }
+.tech-avatar-sm-img { width: 80rpx; height: 80rpx; display: block; }
 
 .tech-meta {
   flex: 1;
@@ -99,6 +165,241 @@
   background: #FDE8E6;
   padding: 6rpx 18rpx;
   border-radius: 16rpx;
+}
+
+/* 服务子分类标签 */
+.service-sub-label {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin: 0 30rpx 12rpx;
+}
+
+.sub-label-dot {
+  font-size: 28rpx;
+  color: #C8847A;
+  line-height: 1;
+}
+
+.sub-label-text {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+}
+
+.sub-label-hint {
+  font-size: 22rpx;
+  color: #AAAAAA;
+  margin-left: 4rpx;
+}
+
+/* 专属套餐横向滚动 */
+.pkg-scroll {
+  width: 100%;
+  margin-bottom: 4rpx;
+}
+
+.pkg-scroll-inner {
+  display: flex;
+  padding: 4rpx 30rpx 16rpx;
+  gap: 20rpx;
+}
+
+.pkg-mini-card {
+  flex-shrink: 0;
+  width: 220rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 24rpx 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(200, 132, 122, 0.1);
+  border: 2rpx solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.pkg-mini-selected {
+  border-color: #C8847A;
+  background: #FEF8F7;
+}
+
+.pkg-mini-emoji {
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+.pkg-mini-name {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pkg-mini-price {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #C8847A;
+}
+
+.pkg-mini-dur {
+  font-size: 20rpx;
+  color: #AAAAAA;
+}
+
+.section-loading {
+  margin: 0 30rpx 24rpx;
+  font-size: 26rpx;
+  color: #AAAAAA;
+  text-align: center;
+  padding: 32rpx 0;
+}
+
+.service-empty {
+  padding: 32rpx;
+  font-size: 26rpx;
+  color: #AAAAAA;
+  text-align: center;
+}
+
+/* ── 两列服务选择器 ─────────────────────────────────────────────── */
+.svc-picker {
+  display: flex;
+  margin: 0 0 12rpx;
+  height: 760rpx;
+  background: #FFFFFF;
+  overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(200,132,122,0.06);
+}
+
+.svc-cat-scroll {
+  width: 200rpx;
+  height: 760rpx;
+  background: #FAF7F4;
+  flex-shrink: 0;
+}
+
+.svc-cat-item {
+  padding: 28rpx 16rpx;
+  font-size: 24rpx;
+  color: #555555;
+  border-bottom: 1rpx solid #F0EBE8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8rpx;
+}
+
+.svc-cat-active {
+  background: #FFFFFF;
+  color: #C8847A;
+  font-weight: 600;
+  border-left: 4rpx solid #C8847A;
+}
+
+.svc-cat-name {
+  flex: 1;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+.svc-cat-dot {
+  min-width: 30rpx;
+  height: 30rpx;
+  border-radius: 15rpx;
+  background: #C8847A;
+  color: #FFFFFF;
+  font-size: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0 6rpx;
+}
+
+.svc-item-scroll {
+  flex: 1;
+  height: 760rpx;
+}
+
+.svc-subgroup-label {
+  padding: 14rpx 20rpx 6rpx;
+  font-size: 22rpx;
+  color: #AAAAAA;
+  background: #FAFAFA;
+}
+
+.svc-item {
+  padding: 18rpx 20rpx;
+  border-bottom: 1rpx solid #F5F0ED;
+}
+
+.svc-item-selected {
+  background: #FEF8F7;
+}
+
+.svc-item-top {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-bottom: 8rpx;
+}
+
+.svc-item-name {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #2C2C2C;
+  flex: 1;
+  line-height: 1.3;
+}
+
+.svc-item-quote-tag {
+  font-size: 18rpx;
+  color: #F5A623;
+  background: #FFF3CD;
+  padding: 2rpx 10rpx;
+  border-radius: 10rpx;
+  flex-shrink: 0;
+}
+
+.svc-item-bottom {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.svc-item-price {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #C8847A;
+}
+
+.svc-item-dur {
+  font-size: 20rpx;
+  color: #AAAAAA;
+  flex: 1;
+}
+
+.svc-item-check {
+  width: 34rpx;
+  height: 34rpx;
+  border-radius: 50%;
+  background: #C8847A;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20rpx;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.svc-empty-cat {
+  padding: 60rpx 20rpx;
+  font-size: 24rpx;
+  color: #AAAAAA;
+  text-align: center;
 }
 
 /* 服务列表 */
@@ -151,10 +452,25 @@
   gap: 16rpx;
 }
 
+.service-price-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4rpx;
+}
+
 .service-price {
   font-size: 30rpx;
   font-weight: 600;
   color: #C8847A;
+}
+
+.service-price-discount {
+  font-size: 20rpx;
+  color: #9B59B6;
+  background: #F0EBF8;
+  padding: 2rpx 10rpx;
+  border-radius: 20rpx;
 }
 
 .service-check {
@@ -239,6 +555,33 @@
   color: #AAAAAA;
 }
 
+.time-past-tag {
+  display: block;
+  font-size: 18rpx;
+  color: #BBBBBB;
+  margin-top: 4rpx;
+}
+
+.time-insuf-tag {
+  display: block;
+  font-size: 18rpx;
+  color: #BBBBBB;
+  margin-top: 4rpx;
+}
+
+/* 排班休息日提示 */
+.schedule-off-notice {
+  background: #FFF3F2;
+  border: 1rpx solid #FBBCB8;
+  border-radius: 16rpx;
+  padding: 24rpx 32rpx;
+  margin-bottom: 8rpx;
+}
+.schedule-off-text {
+  font-size: 26rpx;
+  color: #C0392B;
+}
+
 /* 表单 */
 .form-row {
   display: flex;
@@ -319,10 +662,31 @@
   margin-bottom: 0;
 }
 
+.summary-price-group {
+  display: flex;
+  align-items: baseline;
+  gap: 12rpx;
+}
+
+.summary-discount-note {
+  margin: 4rpx 0 12rpx;
+  font-size: 22rpx;
+  color: #9B59B6;
+  line-height: 1.5;
+}
+
 .summary-price {
   font-size: 32rpx;
   font-weight: 700;
   color: #C8847A;
+}
+
+.summary-price-tag {
+  font-size: 22rpx;
+  color: #9B59B6;
+  background: #F0EBF8;
+  padding: 2rpx 12rpx;
+  border-radius: 20rpx;
 }
 
 /* 宠物提示 */
@@ -371,3 +735,205 @@
   flex: 2;
   padding: 24rpx 0;
 }
+
+/* 定金提示 */
+.deposit-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  margin-top: 20rpx;
+  padding: 20rpx 24rpx;
+  background: #FFF8E7;
+  border-radius: 14rpx;
+  border-left: 6rpx solid #E8A83A;
+}
+
+.deposit-notice-icon {
+  font-size: 30rpx;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.deposit-notice-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.deposit-notice-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #7A5C00;
+}
+
+.deposit-notice-desc {
+  font-size: 22rpx;
+  color: #B08020;
+  line-height: 1.5;
+}
+
+/* 已选合计栏 */
+.selected-summary {
+  margin: 0 30rpx 16rpx;
+  padding: 20rpx 28rpx;
+  background: rgba(200, 132, 122, 0.08);
+  border: 1rpx solid rgba(200, 132, 122, 0.3);
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sel-sum-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.sel-sum-count {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #C8847A;
+}
+
+.sel-sum-detail {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.sel-sum-price {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #C8847A;
+}
+
+/* 摘要页多服务列表 */
+.summary-services-row {
+  align-items: flex-start;
+}
+
+.summary-services-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  align-items: flex-end;
+}
+
+.summary-service-item {
+  display: flex;
+  gap: 16rpx;
+  align-items: center;
+}
+
+.summary-service-name {
+  font-size: 26rpx;
+  color: #333;
+}
+
+.summary-service-price {
+  font-size: 24rpx;
+  color: #888;
+}
+
+/* 技师空状态 */
+.tech-no-select { font-size: 36rpx; color: #CCCCCC; }
+.tech-name-empty { color: #AAAAAA; font-weight: 400; }
+
+/* 技师选择弹窗 */
+.tech-pick-mask {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45); z-index: 999;
+  display: flex; align-items: flex-end;
+}
+.tech-pick-sheet {
+  width: 100%; background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 24rpx 0 60rpx;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.tech-pick-handle {
+  width: 64rpx; height: 6rpx; background: #E0DAD6;
+  border-radius: 3rpx; margin: 0 auto 20rpx;
+}
+.tech-pick-title {
+  display: block; font-size: 32rpx; font-weight: 700;
+  color: #2C2C2C; text-align: center; margin-bottom: 8rpx;
+}
+.tech-pick-hint {
+  display: block; font-size: 24rpx; color: #AAAAAA;
+  text-align: center; margin-bottom: 20rpx;
+}
+.tech-pick-list { padding: 0 30rpx; }
+.tech-pick-item {
+  display: flex; align-items: center; gap: 20rpx;
+  padding: 24rpx; border-radius: 16rpx;
+  margin-bottom: 12rpx; background: #FAFAFA;
+  border: 2rpx solid transparent;
+}
+.tech-pick-sel { background: #FEF8F7; border-color: #C8847A; }
+.tech-pick-avatar {
+  width: 80rpx; height: 80rpx; border-radius: 50%;
+  background: linear-gradient(135deg, #F7D9D7, #F2BEB8);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; flex-shrink: 0;
+}
+.tech-pick-avatar-img { width: 80rpx; height: 80rpx; }
+.tech-pick-emoji { font-size: 40rpx; }
+.tech-pick-info { flex: 1; }
+.tech-pick-name { display: block; font-size: 28rpx; font-weight: 600; color: #2C2C2C; margin-bottom: 4rpx; }
+.tech-pick-role { display: block; font-size: 22rpx; color: #888888; }
+.tech-pick-check { font-size: 28rpx; color: #C8847A; font-weight: 700; }
+
+/* 定金支付方式弹窗 */
+.pm-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 999;
+  display: flex;
+  align-items: flex-end;
+}
+.pm-card {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 40rpx 32rpx 60rpx;
+}
+.pm-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2C2C2C;
+  text-align: center;
+  margin-bottom: 8rpx;
+}
+.pm-amount-hint {
+  font-size: 26rpx;
+  color: #C8847A;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+.pm-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 24rpx;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  border: 2rpx solid #F0E8E4;
+  background: #FAFAFA;
+}
+.pm-opt-selected { border-color: #C8847A; background: #FFF6F5; }
+.pm-opt-disabled { opacity: 0.45; }
+.pm-opt-left { display: flex; align-items: center; gap: 20rpx; }
+.pm-opt-icon { font-size: 40rpx; }
+.pm-opt-name { display: block; font-size: 28rpx; font-weight: 600; color: #2C2C2C; margin-bottom: 4rpx; }
+.pm-opt-sub  { font-size: 22rpx; color: #AAAAAA; }
+.pm-sub-warn { color: #E8900A; }
+.pm-opt-check { font-size: 28rpx; color: #C8847A; font-weight: 700; }
+.pm-btns { display: flex; gap: 20rpx; margin-top: 32rpx; }
+.pm-btn { flex: 1; padding: 28rpx 0; border-radius: 50rpx; text-align: center; font-size: 28rpx; font-weight: 600; }
+.pm-btn-cancel  { background: #F5F5F5; color: #888888; }
+.pm-btn-confirm { background: linear-gradient(135deg, #C8847A, #E8A89E); color: #FFFFFF; box-shadow: 0 4rpx 16rpx rgba(200,132,122,0.35); }

@@ -2,9 +2,8 @@
 <view class="container">
 
   <!-- 会员卡 -->
-  <view class="member-card">
+  <view class="member-card" style="{{cardStyle}}">
     <view class="member-top">
-      <!-- 头像：有微信头像则显示图片，否则显示首字母 -->
       <view class="member-avatar">
         <image
           wx:if="{{userInfo.avatarUrl}}"
@@ -12,51 +11,115 @@
           src="{{userInfo.avatarUrl}}"
           mode="aspectFill"
         />
-        <text wx:else class="avatar-text">{{userInfo.nickname ? userInfo.nickname[0] : '我'}}</text>
+        <image wx:else class="avatar-img" src="/images/头像摩卡.jpg" mode="aspectFill" />
       </view>
       <view class="member-info">
         <text class="member-name">{{userInfo.nickname || '点击设置昵称'}}</text>
         <view class="vip-level-badge">
           <text class="vip-star">✦</text>
-          <text class="vip-level">{{userInfo.vipLevel || '普通会员'}}</text>
+          <text class="vip-level">{{currentTier.name}}</text>
         </view>
       </view>
       <view class="member-edit" bindtap="goEdit">编辑</view>
     </view>
 
+    <!-- 升级进度条 -->
+    <view class="tier-progress-wrap" wx:if="{{nextTier}}">
+      <view class="tier-progress-labels">
+        <text class="tier-label-current">{{currentTier.name}}</text>
+        <text class="tier-label-next">{{nextTier.name}}</text>
+      </view>
+      <view class="tier-progress-track">
+        <view class="tier-progress-fill" style="width: {{tierProgress}}%"></view>
+      </view>
+      <text class="tier-progress-hint">距 {{nextTier.name}} 还差 ¥{{nextTierGap}}</text>
+    </view>
+    <view class="tier-max-wrap" wx:else>
+      <text class="tier-max-text">✦ 您已达到最高等级 — 钻石会员</text>
+    </view>
+
     <!-- 数据栏 -->
     <view class="stats-row">
-      <view class="stat-item">
-        <text class="stat-num">{{userInfo.points}}</text>
-        <text class="stat-label">积分</text>
+      <view class="stat-item" bindtap="openTopupHistory">
+        <text class="stat-num">¥{{userInfo.balance || 0}}</text>
+        <text class="stat-label">余额 ›</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item" bindtap="openSpendHistory">
+        <text class="stat-num">¥{{userInfo.totalSpend || 0}}</text>
+        <text class="stat-label">累计消费 ›</text>
       </view>
       <view class="stat-divider"></view>
       <view class="stat-item">
-        <text class="stat-num">¥{{userInfo.balance}}</text>
-        <text class="stat-label">余额</text>
-      </view>
-      <view class="stat-divider"></view>
-      <view class="stat-item">
-        <text class="stat-num">3</text>
-        <text class="stat-label">预约次数</text>
+        <text class="stat-num">{{userInfo.points || 0}}</text>
+        <text class="stat-label">消费积分</text>
       </view>
     </view>
 
-    <!-- 快捷按钮 -->
+    <!-- 品牌水印 -->
+    <image class="card-watermark" src="/images/第五季.png" mode="aspectFit" />
+
+    <!-- 快捷按钮（功能性操作，不与下方 Tab 重复） -->
     <view class="quick-btns">
       <view class="quick-btn-item" bindtap="showRecharge">
         <text class="qb-icon">💳</text>
-        <text class="qb-label">充值</text>
+        <text class="qb-label">充值余额</text>
       </view>
-      <view class="quick-btn-item" bindtap="switchSection" data-sec="booking">
-        <text class="qb-icon">📋</text>
-        <text class="qb-label">预约记录</text>
+      <view class="quick-btn-item" bindtap="goBook">
+        <text class="qb-icon">📅</text>
+        <text class="qb-label">去预约</text>
       </view>
-      <view class="quick-btn-item" bindtap="switchSection" data-sec="points">
-        <text class="qb-icon">✦</text>
-        <text class="qb-label">积分明细</text>
+      <view class="quick-btn-item" bindtap="goShop">
+        <text class="qb-icon">🛍️</text>
+        <text class="qb-label">去商城</text>
       </view>
     </view>
+  </view>
+
+  <!-- 管理后台入口（仅管理员 / 技师可见） -->
+
+  <!-- 普通管理员（无技师身份）：单入口 -->
+  <view class="admin-entry-btn"
+    wx:if="{{userInfo.role === 'admin' && !userInfo.linkedTechId}}"
+    bindtap="goAdmin">
+    <text class="admin-entry-icon">⚙️</text>
+    <view class="admin-entry-text">
+      <text class="admin-entry-title">管理后台</text>
+      <text class="admin-entry-sub">管理预约 · 技师 · 套餐</text>
+    </view>
+    <text class="admin-entry-arrow">›</text>
+  </view>
+
+  <!-- 管理员兼技师：双入口并排 -->
+  <view class="admin-entry-group" wx:if="{{userInfo.role === 'admin' && userInfo.linkedTechId}}">
+    <view class="admin-entry-btn admin-entry-half" bindtap="goAdmin">
+      <text class="admin-entry-icon">⚙️</text>
+      <view class="admin-entry-text">
+        <text class="admin-entry-title">管理后台</text>
+        <text class="admin-entry-sub">管理预约 · 套餐</text>
+      </view>
+      <text class="admin-entry-arrow">›</text>
+    </view>
+    <view class="admin-entry-btn admin-entry-half" bindtap="goTechWorkbench">
+      <text class="admin-entry-icon">📋</text>
+      <view class="admin-entry-text">
+        <text class="admin-entry-title">技师工作台</text>
+        <text class="admin-entry-sub">今日预约 · 档案</text>
+      </view>
+      <text class="admin-entry-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 纯技师：单入口 -->
+  <view class="admin-entry-btn"
+    wx:if="{{userInfo.role === 'technician'}}"
+    bindtap="goTechWorkbench">
+    <text class="admin-entry-icon">📋</text>
+    <view class="admin-entry-text">
+      <text class="admin-entry-title">技师工作台</text>
+      <text class="admin-entry-sub">查看预约 · 编辑资料</text>
+    </view>
+    <text class="admin-entry-arrow">›</text>
   </view>
 
   <!-- 内容切换 Tab -->
@@ -71,36 +134,88 @@
       bindtap="switchSection"
       data-sec="points"
     >积分明细</view>
+    <view
+      class="content-tab {{activeSection === 'benefits' ? 'ct-active' : ''}}"
+      bindtap="showBenefits"
+    >会员权益</view>
   </view>
 
-  <!-- 预约记录 -->
+  <!-- 预约记录（含报价链入口） -->
   <view wx:if="{{activeSection === 'booking'}}">
-    <view class="record-card" wx:for="{{bookingRecords}}" wx:key="id">
-      <view class="record-top">
-        <view class="record-service">
-          <text class="record-name">{{item.service}}</text>
-          <text class="record-tech">技师：{{item.tech}}</text>
+    <block wx:for="{{bookingRecords}}" wx:key="_id">
+
+      <!-- ── 报价类型：pending / quoted ── -->
+      <view wx:if="{{item._type === 'quote'}}"
+        class="record-card record-card-quote"
+        bindtap="goQuoteDetail" data-id="{{item._id}}">
+        <view class="record-top">
+          <view class="record-service">
+            <view class="record-chain-badge">报价中</view>
+            <text class="record-name">{{item.service}}</text>
+            <text class="record-tech" wx:if="{{item.status === 'quote-quoted'}}">推荐技师：{{item.tech}}</text>
+          </view>
+          <view class="record-status status-{{item.status}}">{{item.statusLabel}}</view>
         </view>
-        <view class="record-status status-{{item.status}}">{{item.statusLabel}}</view>
+        <!-- 已报价：左显示预估时长，右显示报价金额 -->
+        <view class="record-bottom record-bottom-spread" wx:if="{{item.status === 'quote-quoted'}}">
+          <view class="record-quote-info">
+            <text class="record-quote-dur" wx:if="{{item.durationDisplay}}">预估 {{item.durationDisplay}}</text>
+            <text class="record-quote-dur" wx:else>时长待定</text>
+            <text class="record-quote-tech">推荐：{{item.tech}}</text>
+          </view>
+          <text class="record-price">¥{{item.price}}</text>
+        </view>
+        <!-- 待报价 / 已放弃：左显示期望时间 -->
+        <view class="record-bottom record-bottom-spread" wx:else>
+          <text class="record-time">{{item.date ? '期望：' + item.date : '时间待定'}}</text>
+        </view>
+        <text class="record-quote-note" wx:if="{{item.adminNote}}">技师备注：{{item.adminNote}}</text>
+        <view class="record-detail-hint" wx:if="{{item.status === 'quote-quoted'}}">点击确认并预约时间 ›</view>
+        <view class="record-detail-hint quote-resubmit-hint" wx:elif="{{item.status === 'quote-rejected'}}">点击查看 · 可重新提交 ›</view>
+        <view class="record-detail-hint" wx:else>查看详情 ›</view>
       </view>
-      <view class="record-bottom">
-        <text class="record-time">{{item.date}} {{item.time}}</text>
-        <text class="record-price">¥{{item.price}}</text>
+
+      <!-- ── 普通预约 ── -->
+      <view wx:else
+        class="record-card"
+        bindtap="goBookingDetail" data-id="{{item._id}}">
+        <view wx:if="{{item.status === 'cancelled'}}" class="cancelled-stamp">CANCELLED</view>
+        <view class="record-top">
+          <view class="record-service">
+            <text class="record-name">{{item.service}}</text>
+            <text class="record-tech">技师：{{item.tech}}</text>
+          </view>
+          <view class="record-status status-{{item.status}}">{{item.statusLabel}}</view>
+        </view>
+        <view class="record-datetime">
+          <text class="record-date">{{item.date}}</text>
+          <text class="record-time-val" wx:if="{{item.time}}">{{item.time}}</text>
+        </view>
+        <view class="record-bottom">
+          <text class="record-price">¥{{item.finalPrice !== undefined ? item.finalPrice : item.price}}</text>
+        </view>
+        <!-- 已取消：只显示退款结果 -->
+        <block wx:if="{{item.status === 'cancelled'}}">
+          <view class="deposit-tag deposit-tag-forfeited" wx:if="{{item.depositRequired && item.depositStatus === 'forfeited'}}">定金 ¥{{item.depositAmount}} 不退</view>
+          <view class="deposit-tag deposit-tag-refunded"  wx:elif="{{item.depositRequired && item.depositStatus === 'refunded'}}">定金 ¥{{item.depositAmount}} 已退</view>
+        </block>
+        <!-- 其他状态：显示完整定金状态 -->
+        <block wx:else>
+          <view class="deposit-tag deposit-tag-pending"   wx:if="{{item.depositRequired && item.depositStatus === 'pending'}}">定金 ¥{{item.depositAmount}} 待收</view>
+          <view class="deposit-tag deposit-tag-paid"      wx:elif="{{item.depositRequired && item.depositStatus === 'paid'}}">定金 ¥{{item.depositAmount}} 已收</view>
+          <view class="deposit-tag deposit-tag-forfeited" wx:elif="{{item.depositRequired && item.depositStatus === 'forfeited'}}">定金 ¥{{item.depositAmount}} 不退</view>
+          <view class="deposit-tag deposit-tag-refunded"  wx:elif="{{item.depositRequired && item.depositStatus === 'refunded'}}">定金 ¥{{item.depositAmount}} 已退</view>
+        </block>
+        <view wx:if="{{item.status === 'done'}}" class="rebook-row">
+          <view class="rebook-btn" catchtap="reBook"
+            data-techid="{{item.techId}}"
+            data-serviceid="{{item.serviceId}}"
+            data-quoteid="{{item.quoteId}}">再做一次 ›</view>
+        </view>
+        <view class="record-detail-hint">查看详情 ›</view>
       </view>
-      <view class="record-duration" wx:if="{{item.duration}}">
-        <text class="duration-label">时长：</text>
-        <text class="duration-value">{{item.duration}}</text>
-      </view>
-      <view class="record-remark" wx:if="{{item.remark}}">
-        <text class="remark-label">备注：</text>
-        <text class="remark-value">{{item.remark}}</text>
-      </view>
-      <view class="record-actions" wx:if="{{item.status === 'pending' || item.status === 'today'}}">
-        <view class="btn-cancel" bindtap="cancelBooking" data-id="{{item.id}}">取消预约</view>
-      </view>
-    </view>
-    
-    <!-- 空状态提示 -->
+
+    </block>
     <view class="empty-state" wx:if="{{bookingRecords.length === 0}}">
       <text class="empty-icon">📋</text>
       <text class="empty-text">暂无预约记录</text>
@@ -109,7 +224,7 @@
 
   <!-- 积分明细 -->
   <view wx:if="{{activeSection === 'points'}}">
-    <view class="points-log-card" wx:for="{{pointsLogs}}" wx:key="id">
+    <view class="points-log-card" wx:for="{{pointsLogs}}" wx:key="_id">
       <view class="log-left">
         <view class="log-dot log-{{item.type}}"></view>
         <view class="log-info">
@@ -119,6 +234,105 @@
       </view>
       <text class="log-points log-pts-{{item.type}}">{{item.points}}</text>
     </view>
+    <view class="empty-state" wx:if="{{pointsLogs.length === 0}}">
+      <text class="empty-icon">✦</text>
+      <text class="empty-text">暂无积分记录</text>
+    </view>
   </view>
 
+  <!-- 会员权益 -->
+  <view wx:if="{{activeSection === 'benefits'}}">
+
+    <!-- 当前权益卡 -->
+    <view class="benefits-current-card" style="{{cardStyle}}">
+      <text class="benefits-current-title">当前等级权益 — {{currentTier.name}}</text>
+      <view class="benefit-item" wx:for="{{currentTierBenefits}}" wx:key="index">
+        <text class="benefit-check">✓</text>
+        <text class="benefit-text">{{item}}</text>
+      </view>
+      <text class="benefits-discount-badge">{{currentTier.discountText}}</text>
+    </view>
+
+    <!-- 等级对照表 -->
+    <view class="tier-table-card">
+      <text class="tier-table-title">等级体系</text>
+      <view class="tier-table-row tier-table-header">
+        <text class="tc-name">等级</text>
+        <text class="tc-spend">累计门槛</text>
+        <text class="tc-discount">折扣</text>
+      </view>
+      <view
+        wx:for="{{memberTiersDisplay}}"
+        wx:key="level"
+        class="tier-table-row {{item.level === currentTier.level ? 'tier-row-active' : ''}}"
+      >
+        <text class="tc-name">{{item.name}}</text>
+        <text class="tc-spend">{{item.minSpendText}}</text>
+        <text class="tc-discount">{{item.discountText}}</text>
+      </view>
+    </view>
+
+    <!-- 升级提示 -->
+    <view class="upgrade-hint-card" wx:if="{{nextTier}}">
+      <text class="upgrade-hint-text">再消费 ¥{{nextTierGap}} 即可升级为 {{nextTier.name}}，享受 {{nextTier.discountText}} 优惠</text>
+      <view class="upgrade-recharge-btn" bindtap="showRecharge">立即充值</view>
+    </view>
+
+  </view>
+
+</view>
+
+<!-- 消费历史底部弹窗 -->
+<view class="spend-mask" wx:if="{{showSpendSheet}}" bindtap="closeSpendSheet">
+  <view class="spend-sheet" catchtap>
+    <view class="spend-handle"></view>
+    <view class="spend-header">
+      <text class="spend-title">消费历史</text>
+      <text class="spend-total">累计 ¥{{userInfo.totalSpend || 0}}</text>
+    </view>
+
+    <scroll-view class="spend-list" scroll-y>
+      <view wx:if="{{spendHistoryAll.length === 0}}" class="spend-empty">暂无消费记录</view>
+      <block wx:else>
+        <view class="spend-item" wx:for="{{spendHistoryDisplay}}" wx:key="_id">
+          <view class="spend-item-left">
+            <text class="spend-item-service">{{item.service}}</text>
+            <text class="spend-item-meta">{{item.date}} · {{item.tech}}</text>
+          </view>
+          <view class="spend-item-right">
+            <text class="spend-item-amount">¥{{item.finalPrice !== undefined ? item.finalPrice : item.price}}</text>
+            <text class="spend-item-method" wx:if="{{item.paymentMethodLabel}}">{{item.paymentMethodLabel}}</text>
+          </view>
+        </view>
+        <view class="spend-pagination" wx:if="{{spendHistoryTotalPages > 1}}">
+          <view class="spend-page-nav {{spendHistoryPage <= 1 ? 'spend-page-disabled' : ''}}" bindtap="spendHistoryPrev">‹ 上一页</view>
+          <text class="spend-page-label">{{spendHistoryPage}} / {{spendHistoryTotalPages}}</text>
+          <view class="spend-page-nav {{spendHistoryPage >= spendHistoryTotalPages ? 'spend-page-disabled' : ''}}" bindtap="spendHistoryNext">下一页 ›</view>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+</view>
+
+<!-- 充值记录底部弹窗 -->
+<view class="spend-mask" wx:if="{{showTopupSheet}}" bindtap="closeTopupSheet">
+  <view class="spend-sheet" catchtap>
+    <view class="spend-handle"></view>
+    <view class="spend-header">
+      <text class="spend-title">充值记录</text>
+      <text class="spend-total">当前余额 ¥{{userInfo.balance || 0}}</text>
+    </view>
+    <scroll-view class="spend-list" scroll-y>
+      <view wx:if="{{topupLogs.length === 0}}" class="spend-empty">暂无充值记录</view>
+      <view class="spend-item" wx:for="{{topupLogs}}" wx:key="_id">
+        <view class="spend-item-left">
+          <text class="spend-item-service">充值余额</text>
+          <text class="spend-item-meta">{{item.time}}</text>
+        </view>
+        <view class="spend-item-right">
+          <text class="spend-item-amount topup-amount">+¥{{item.amount}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
 </view>

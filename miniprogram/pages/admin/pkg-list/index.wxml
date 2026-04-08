@@ -1,0 +1,80 @@
+<!-- 套餐管理 -->
+<view class="admin-page">
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <text class="admin-nav-title">套餐管理</text>
+  </view>
+
+  <view class="pkg-tabs">
+    <view class="p-tab {{activeTab === 'service' ? 'p-tab-active' : ''}}" bindtap="switchTab" data-tab="service">单项服务</view>
+    <view class="p-tab {{activeTab === 'package' ? 'p-tab-active' : ''}}" bindtap="switchTab" data-tab="package">服务套餐</view>
+    <view class="p-tab {{activeTab === 'redeem'  ? 'p-tab-active' : ''}}" bindtap="switchTab" data-tab="redeem">积分兑换</view>
+  </view>
+
+  <view class="admin-loading" wx:if="{{loading}}">加载中...</view>
+
+  <!-- 单项服务列表 -->
+  <view wx:if="{{!loading && activeTab === 'service'}}">
+    <view class="admin-empty" wx:if="{{services.length === 0}}">暂无单项服务</view>
+    <view class="admin-card pkg-item" wx:for="{{services}}" wx:key="_id">
+      <view class="pi-top">
+        <view class="pi-img-placeholder"></view>
+        <view class="pi-info">
+          <view style="display:flex;align-items:center;gap:12rpx;">
+            <text class="pi-name">{{item.name}}</text>
+            <text class="pi-tag pi-tag-vip" wx:if="{{item.isVip}}">VIP</text>
+          </view>
+          <text class="pi-price">¥{{item.price}} · {{item.duration}}</text>
+          <text class="pi-desc">排序 {{item.order}}</text>
+        </view>
+      </view>
+      <view class="action-btn-group">
+        <view class="action-btn action-btn-primary" bindtap="goEdit"    data-id="{{item._id}}">编辑</view>
+        <view class="action-btn action-btn-danger"  bindtap="deletePkg" data-id="{{item._id}}">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 服务套餐列表 -->
+  <view wx:if="{{!loading && activeTab === 'package'}}">
+    <view class="admin-empty" wx:if="{{packages.length === 0}}">暂无服务套餐</view>
+    <view class="admin-card pkg-item" wx:for="{{packages}}" wx:key="_id">
+      <view class="pi-top">
+        <image wx:if="{{item.image}}" class="pi-img" src="{{item.image}}" mode="aspectFill" />
+        <view wx:else class="pi-img-placeholder"></view>
+        <view class="pi-info">
+          <text class="pi-name">{{item.name}}</text>
+          <text class="pi-desc">{{item.desc}}</text>
+          <text class="pi-price">¥{{item.price}} · {{item.duration}}</text>
+        </view>
+        <view class="pi-tag">{{item.tag}}</view>
+      </view>
+      <view class="action-btn-group">
+        <view class="action-btn action-btn-primary" bindtap="goEdit" data-id="{{item._id}}">编辑</view>
+        <view class="action-btn action-btn-danger"  bindtap="deletePkg" data-id="{{item._id}}">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{!loading && activeTab === 'redeem'}}">
+    <view class="admin-empty" wx:if="{{redeemItems.length === 0}}">暂无积分兑换商品</view>
+    <view class="admin-card pkg-item" wx:for="{{redeemItems}}" wx:key="_id">
+      <view class="pi-top">
+        <image wx:if="{{item.image}}" class="pi-img" src="{{item.image}}" mode="aspectFill" />
+        <view wx:else class="pi-img-placeholder"></view>
+        <view class="pi-info">
+          <text class="pi-name">{{item.name}}</text>
+          <text class="pi-desc">{{item.desc}}</text>
+          <text class="pi-pts">{{item.points}} 积分 · 剩余 {{item.stock}}</text>
+        </view>
+        <view class="pi-tag pi-tag-gold">{{item.tag}}</view>
+      </view>
+      <view class="action-btn-group">
+        <view class="action-btn action-btn-primary" bindtap="goEdit"   data-id="{{item._id}}">编辑</view>
+        <view class="action-btn action-btn-danger"  bindtap="deletePkg" data-id="{{item._id}}">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="fab-btn" bindtap="goAdd">+</view>
+</view>

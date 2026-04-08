@@ -1,0 +1,156 @@
+<!-- 套餐编辑 -->
+<view class="admin-page" style="padding-bottom:120rpx;">
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <text class="admin-nav-title">{{isNew ? '新增' : '编辑'}}</text>
+    <view class="admin-nav-action" bindtap="save">保存</view>
+  </view>
+
+  <view class="admin-card" style="margin-top:20rpx;">
+
+    <!-- 类型切换 -->
+    <view class="form-field">
+      <text class="field-label">类型</text>
+      <view class="type-tabs">
+        <view class="type-tab {{form.type === 'service' ? 'type-active' : ''}}" bindtap="onInput" data-field="type" data-value="service">单项服务</view>
+        <view class="type-tab {{form.type === 'package' ? 'type-active' : ''}}" bindtap="onInput" data-field="type" data-value="package">服务套餐</view>
+        <view class="type-tab {{form.type === 'redeem'  ? 'type-active' : ''}}" bindtap="onInput" data-field="type" data-value="redeem">积分兑换</view>
+      </view>
+    </view>
+
+    <view class="form-field">
+      <text class="field-label">名称 *</text>
+      <input class="field-input" value="{{form.name}}" bindinput="onInput" data-field="name" placeholder="服务或套餐名称" />
+    </view>
+
+    <view class="form-field">
+      <text class="field-label">简介</text>
+      <input class="field-input" value="{{form.desc}}" bindinput="onInput" data-field="desc" placeholder="简短描述" />
+    </view>
+
+    <view class="form-field">
+      <text class="field-label">商品图片</text>
+      <view class="img-upload-box" bindtap="chooseImage">
+        <image wx:if="{{form.image}}" class="img-preview" src="{{form.image}}" mode="aspectFill" />
+        <view wx:else class="img-placeholder">
+          <text class="img-plus">+</text>
+          <text class="img-hint-text">上传图片</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-field">
+      <text class="field-label">角标标签</text>
+      <input class="field-input" value="{{form.tag}}" bindinput="onInput" data-field="tag" placeholder="如：热销 / 新品 / VIP" />
+    </view>
+
+    <!-- 单项服务专属字段 -->
+    <block wx:if="{{form.type === 'service'}}">
+      <view class="form-field">
+        <text class="field-label">价格（元）</text>
+        <input class="field-input" type="digit" value="{{form.price}}" bindinput="onInput" data-field="price" placeholder="如：300" />
+      </view>
+      <view class="form-field">
+        <text class="field-label">时长显示</text>
+        <input class="field-input" value="{{form.duration}}" bindinput="onInput" data-field="duration" placeholder="如：90 分钟" />
+      </view>
+      <view class="form-field">
+        <text class="field-label">时长分钟数</text>
+        <input class="field-input" type="number" value="{{form.durationMin}}" bindinput="onInput" data-field="durationMin" placeholder="如：90" />
+      </view>
+      <view class="form-field">
+        <text class="field-label">排序（越小越前）</text>
+        <input class="field-input" type="number" value="{{form.order}}" bindinput="onInput" data-field="order" placeholder="如：1" />
+      </view>
+      <view class="form-field">
+        <text class="field-label">VIP 服务</text>
+        <view class="toggle-row" bindtap="toggleIsVip">
+          <view class="toggle-track {{form.isVip ? 'toggle-on' : ''}}">
+            <view class="toggle-thumb"></view>
+          </view>
+          <text class="toggle-label">{{form.isVip ? '是（需提前 3 天预约）' : '否'}}</text>
+        </view>
+      </view>
+      <!-- 绑定技师 -->
+      <view class="form-field">
+        <text class="field-label">可选技师（多选）</text>
+        <view class="tech-check-list">
+          <view
+            class="tech-check-item {{selectedTechIdsMap[item._id] ? 'tech-checked' : ''}}"
+            wx:for="{{technicians}}"
+            wx:key="_id"
+            bindtap="toggleTechId"
+            data-id="{{item._id}}"
+          >
+            <text>{{item.name}}</text>
+            <text wx:if="{{selectedTechIdsMap[item._id]}}">✓</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 服务套餐专属字段 -->
+    <block wx:if="{{form.type === 'package'}}">
+      <view class="form-field">
+        <text class="field-label">价格（元）</text>
+        <input class="field-input" type="digit" value="{{form.price}}" bindinput="onInput" data-field="price" placeholder="如：299" />
+      </view>
+      <view class="form-field">
+        <text class="field-label">时长显示</text>
+        <input class="field-input" value="{{form.duration}}" bindinput="onInput" data-field="duration" placeholder="如：90 分钟" />
+      </view>
+      <view class="form-field">
+        <text class="field-label">时长分钟数</text>
+        <input class="field-input" type="number" value="{{form.durationMin}}" bindinput="onInput" data-field="durationMin" placeholder="如：90" />
+      </view>
+      <view class="form-field">
+        <text class="field-label">排序（越小越前）</text>
+        <input class="field-input" type="number" value="{{form.order}}" bindinput="onInput" data-field="order" placeholder="如：10" />
+      </view>
+      <!-- 绑定技师 -->
+      <view class="form-field">
+        <text class="field-label">可选技师（多选）</text>
+        <view class="tech-check-list">
+          <view
+            class="tech-check-item {{selectedTechIdsMap[item._id] ? 'tech-checked' : ''}}"
+            wx:for="{{technicians}}"
+            wx:key="_id"
+            bindtap="toggleTechId"
+            data-id="{{item._id}}"
+          >
+            <text>{{item.name}}</text>
+            <text wx:if="{{selectedTechIdsMap[item._id]}}">✓</text>
+          </view>
+        </view>
+      </view>
+      <!-- 套餐内容 -->
+      <view class="form-field">
+        <text class="field-label">套餐内容（逐条添加）</text>
+        <view class="feature-list">
+          <view class="feature-row" wx:for="{{features}}" wx:key="index">
+            <text class="feature-dot">·</text>
+            <text class="feature-text">{{item}}</text>
+            <text class="feature-del" bindtap="removeFeature" data-idx="{{index}}">×</text>
+          </view>
+        </view>
+        <view class="skill-input-row">
+          <input class="field-input skill-input" value="{{featureInput}}" bindinput="onFeatureInput" placeholder="输入一条套餐内容" />
+          <view class="add-skill-btn" bindtap="addFeature">添加</view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 积分兑换专属字段 -->
+    <block wx:if="{{form.type === 'redeem'}}">
+      <view class="form-field">
+        <text class="field-label">所需积分</text>
+        <input class="field-input" type="number" value="{{form.points}}" bindinput="onInput" data-field="points" placeholder="如：500" />
+      </view>
+      <view class="form-field">
+        <text class="field-label">库存数量</text>
+        <input class="field-input" type="number" value="{{form.stock}}" bindinput="onInput" data-field="stock" placeholder="如：50" />
+      </view>
+    </block>
+
+  </view>
+</view>

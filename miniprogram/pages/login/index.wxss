@@ -26,19 +26,20 @@ page {
   width: 120rpx;
   height: 120rpx;
   border-radius: 50%;
-  background: linear-gradient(135deg, #C8847A, #E8A89E);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8rpx;
+  overflow: hidden;
+  margin-bottom: 16rpx;
   box-shadow: 0 8rpx 28rpx rgba(200, 132, 122, 0.4);
 }
 
-.brand-zh {
-  color: #FFFFFF;
-  font-size: 28rpx;
-  font-weight: 700;
-  letter-spacing: 3rpx;
+.brand-logo-img {
+  width: 120rpx;
+  height: 120rpx;
+  display: block;
+}
+
+.brand-name-img {
+  width: 260rpx;
+  height: 88rpx;
 }
 
 .brand-en {
@@ -190,6 +191,37 @@ page {
   font-size: 26rpx;
   color: #666666;
 }
+
+/* label 行（label + 副标题） */
+.input-label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12rpx; }
+.input-label-hint { font-size: 22rpx; color: #C8847A; }
+
+/* 性别选择 */
+.gender-row {
+  display: flex;
+  gap: 16rpx;
+}
+.gender-opt {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  border-radius: 20rpx;
+  border: 2rpx solid #E0D6D4;
+  font-size: 28rpx;
+  color: #888;
+  background: #FAFAFA;
+}
+.gender-selected {
+  border-color: #C8847A;
+  color: #C8847A;
+  background: rgba(200,132,122,0.08);
+  font-weight: 600;
+}
+
+/* 日期选择器占位 */
+.picker-row { padding: 4rpx 0; }
+.picker-val { font-size: 30rpx; color: #333; }
+.picker-placeholder { font-size: 30rpx; color: #BBBBBB; }
 
 /* 提交按钮 */
 .submit-btn {

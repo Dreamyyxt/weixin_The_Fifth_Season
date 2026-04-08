@@ -1,0 +1,99 @@
+<!-- 今日业绩明细 -->
+<view class="perf-page">
+
+  <!-- 导航栏 -->
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <view class="nav-center">
+      <text class="admin-nav-title">业绩明细</text>
+      <text class="nav-date" wx:if="{{dateDisp}}">{{dateDisp}}</text>
+    </view>
+    <view class="nav-right-placeholder"></view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <block wx:if="{{!loading}}">
+
+    <!-- 汇总卡片 -->
+    <view class="summary-card">
+      <view class="summary-title-row">
+        <text class="summary-label">今日总业绩</text>
+        <text class="summary-total">¥{{totals.total}}</text>
+      </view>
+      <view class="summary-breakdown">
+        <view class="summary-item">
+          <text class="summary-item-val">¥{{totals.cashRevenue}}</text>
+          <text class="summary-item-label">现金业绩</text>
+        </view>
+        <view class="summary-divider"></view>
+        <view class="summary-item">
+          <text class="summary-item-val summary-item-val-card">¥{{totals.cardRevenue}}</text>
+          <text class="summary-item-label">耗卡业绩</text>
+        </view>
+        <view class="summary-divider"></view>
+        <view class="summary-item">
+          <text class="summary-item-val summary-item-val-muted">—</text>
+          <text class="summary-item-label">充/续卡</text>
+        </view>
+        <view class="summary-divider"></view>
+        <view class="summary-item">
+          <text class="summary-item-val summary-item-val-muted">—</text>
+          <text class="summary-item-label">产品业绩</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-wrap" wx:if="{{techPerf.length === 0}}">
+      <text class="empty-text">今日暂无已结账订单</text>
+    </view>
+
+    <!-- 技师业绩卡片列表 -->
+    <view wx:for="{{techPerf}}" wx:key="techId" class="tech-card">
+      <!-- 技师标题行 -->
+      <view class="tc-header">
+        <view class="tc-avatar">{{item.techName.slice(0,1)}}</view>
+        <view class="tc-info">
+          <text class="tc-name">{{item.techName}}</text>
+          <text class="tc-count">{{item.bookingCount}} 单已结账</text>
+        </view>
+        <text class="tc-total">¥{{item.cashRevenue + item.cardRevenue}}</text>
+      </view>
+
+      <!-- 指标网格 -->
+      <view class="tc-grid">
+        <view class="tc-metric">
+          <text class="tc-metric-val">¥{{item.cashRevenue}}</text>
+          <text class="tc-metric-label">现金业绩</text>
+        </view>
+        <view class="tc-metric">
+          <text class="tc-metric-val tc-metric-card">¥{{item.cardRevenue}}</text>
+          <text class="tc-metric-label">耗卡业绩</text>
+        </view>
+        <view class="tc-metric tc-metric-pending">
+          <text class="tc-metric-val tc-metric-muted">—</text>
+          <text class="tc-metric-label">充卡业绩</text>
+        </view>
+        <view class="tc-metric tc-metric-pending">
+          <text class="tc-metric-val tc-metric-muted">—</text>
+          <text class="tc-metric-label">续卡业绩</text>
+        </view>
+        <view class="tc-metric tc-metric-pending">
+          <text class="tc-metric-val tc-metric-muted">—</text>
+          <text class="tc-metric-label">产品业绩</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部说明 -->
+    <view class="footnote" wx:if="{{techPerf.length > 0}}">
+      充卡、续卡、产品业绩需在对应操作时记录经办技师后方可统计
+    </view>
+
+  </block>
+
+</view>

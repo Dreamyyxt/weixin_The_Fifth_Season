@@ -1,0 +1,74 @@
+<!-- 技师编辑 -->
+<view class="admin-page" style="padding-bottom:120rpx;">
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <text class="admin-nav-title">{{isNew ? '新增技师' : '编辑技师'}}</text>
+    <view class="admin-nav-action"></view>
+  </view>
+
+  <view class="admin-card" style="margin-top:20rpx;">
+
+    <view class="form-field">
+      <text class="field-label">姓名 *</text>
+      <input class="field-input" value="{{form.name}}" bindinput="onInput" data-field="name" placeholder="技师姓名" />
+    </view>
+
+    <view class="form-field">
+      <text class="field-label">职称</text>
+      <input class="field-input" value="{{form.title}}" bindinput="onInput" data-field="title" placeholder="如：首席美甲师" />
+    </view>
+
+    <view class="form-field">
+      <text class="field-label">头像图片</text>
+      <view class="img-upload-box" bindtap="chooseAvatar">
+        <image wx:if="{{form.avatar}}" class="img-preview" src="{{form.avatar}}" mode="aspectFill" />
+        <view wx:else class="img-placeholder">
+          <text class="img-plus">+</text>
+          <text class="img-hint-text">上传图片</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-field">
+      <text class="field-label">起步价（元）</text>
+      <input class="field-input" type="digit" value="{{form.priceFrom}}" bindinput="onInput" data-field="priceFrom" placeholder="如：300" />
+    </view>
+
+    <view class="form-field">
+      <text class="field-label">标签角标</text>
+      <input class="field-input" value="{{form.badge}}" bindinput="onInput" data-field="badge" placeholder="如：热门 / 新品 / VIP" />
+    </view>
+
+    <view class="form-field">
+      <text class="field-label">排序序号（数字越小越靠前）</text>
+      <input class="field-input" type="number" value="{{form.order}}" bindinput="onInput" data-field="order" placeholder="99" />
+    </view>
+
+    <view class="form-field">
+      <text class="field-label">简介</text>
+      <textarea class="field-textarea" value="{{form.desc}}" bindinput="onInput" data-field="desc" placeholder="技师个人介绍..." />
+    </view>
+
+    <!-- 技能标签 -->
+    <view class="form-field">
+      <text class="field-label">技能标签</text>
+      <view class="skill-tags">
+        <view class="skill-chip" wx:for="{{skills}}" wx:key="*this">
+          <text>{{item}}</text>
+          <text class="skill-remove" bindtap="removeSkill" data-idx="{{index}}">×</text>
+        </view>
+      </view>
+      <view class="skill-input-row">
+        <input class="field-input skill-input" value="{{skillInput}}" bindinput="onSkillInput" placeholder="输入技能后点添加" />
+        <view class="add-skill-btn" bindtap="addSkill">添加</view>
+      </view>
+    </view>
+
+
+  </view>
+
+  <view class="te-save-btn {{saving ? 'te-save-btn-disabled' : ''}}" bindtap="save">
+    <text>{{saving ? '保存中...' : '保 存'}}</text>
+  </view>
+
+</view>

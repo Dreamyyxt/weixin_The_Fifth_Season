@@ -34,7 +34,13 @@
 
   <!-- 服务套餐 -->
   <view class="product-grid" wx:if="{{activeTab === 0}}">
-    <view class="product-card" wx:for="{{packages}}" wx:key="id">
+    <view
+      class="product-card"
+      wx:for="{{packages}}"
+      wx:key="_id"
+      bindtap="goPackageDetail"
+      data-id="{{item._id}}"
+    >
       <view class="product-thumb pkg-bg">
         <text class="product-emoji">{{item.emoji}}</text>
         <view class="product-tag tag-rose">{{item.tag}}</view>
@@ -42,12 +48,16 @@
       <view class="product-body">
         <text class="product-name">{{item.name}}</text>
         <text class="product-desc">{{item.desc}}</text>
+        <view class="pkg-duration" wx:if="{{item.duration}}">
+          <text class="duration-icon">⏱</text>
+          <text class="duration-val">{{item.duration}}</text>
+        </view>
         <view class="product-footer">
           <view class="product-price-row">
             <text class="price-unit">¥</text>
             <text class="price-big">{{item.price}}</text>
           </view>
-          <view class="buy-btn" bindtap="buyPackage" data-item="{{item}}">立即购买</view>
+          <view class="buy-btn">查看详情 ›</view>
         </view>
         <text class="sold-text">已售 {{item.sold}} 件</text>
       </view>
@@ -56,7 +66,7 @@
 
   <!-- 积分兑换 -->
   <view class="product-grid" wx:if="{{activeTab === 1}}">
-    <view class="product-card" wx:for="{{redeemItems}}" wx:key="id">
+    <view class="product-card" wx:for="{{redeemItems}}" wx:key="_id">
       <view class="product-thumb redeem-bg">
         <text class="product-emoji">{{item.emoji}}</text>
         <view class="product-tag tag-gold">{{item.tag}}</view>

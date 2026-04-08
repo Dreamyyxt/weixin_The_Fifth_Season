@@ -1,0 +1,106 @@
+<!-- 服务项目管理 -->
+<view class="page">
+
+  <view class="page-loading" wx:if="{{loading}}"><text>加载中...</text></view>
+
+  <block wx:else>
+    <!-- 新增大类按钮 -->
+    <view class="add-cat-btn" bindtap="openAddCat">＋ 新增大类</view>
+
+    <!-- 大类列表 -->
+    <view wx:for="{{categories}}" wx:key="_id" wx:for-item="cat" class="cat-card">
+      <!-- 大类标题行 -->
+      <view class="cat-header">
+        <text class="cat-name">{{cat.name}}</text>
+        <view class="cat-actions">
+          <view class="cat-act-btn" bindtap="openEditCat" data-cat="{{cat}}">编辑</view>
+          <view class="cat-act-btn cat-act-del" bindtap="deleteCat" data-cat="{{cat}}">删除</view>
+        </view>
+      </view>
+
+      <!-- 该分类下的服务列表 -->
+      <view wx:for="{{services}}" wx:key="_id" wx:for-item="svc"
+            wx:if="{{svc.categoryId === cat._id}}"
+            class="svc-row">
+        <view class="svc-row-info">
+          <view class="svc-row-top">
+            <text class="svc-row-name">{{svc.name}}</text>
+            <text class="svc-row-quote" wx:if="{{svc.isQuote}}">报价制</text>
+          </view>
+          <text class="svc-row-meta">¥{{svc.price}}{{svc.isQuote ? '起' : ''}}  ·  {{svc.durationMin}}分钟{{svc.subgroup ? '  ·  ' + svc.subgroup : ''}}</text>
+        </view>
+        <view class="svc-row-actions">
+          <view class="svc-act-btn" bindtap="openEditSvc" data-svc="{{svc}}">编辑</view>
+          <view class="svc-act-btn svc-act-del" catchtap="deleteSvc" data-svc="{{svc}}">删除</view>
+        </view>
+      </view>
+
+      <!-- 添加服务按钮 -->
+      <view class="add-svc-btn" bindtap="openAddSvc" data-catid="{{cat._id}}">＋ 添加服务项目</view>
+    </view>
+  </block>
+
+  <!-- ── 编辑分类弹窗 ── -->
+  <view class="modal-mask" wx:if="{{showCatModal}}" bindtap="closeCatModal">
+    <view class="modal-box" catchtap="noop">
+      <text class="modal-title">{{editingCat ? '编辑大类' : '新增大类'}}</text>
+      <view class="modal-field">
+        <text class="modal-label">名称</text>
+        <input class="modal-input" value="{{catNameInput}}" bindinput="onCatNameInput" placeholder="例：纯色系列" />
+      </view>
+      <view class="modal-field">
+        <text class="modal-label">排序</text>
+        <input class="modal-input" type="number" value="{{catOrderInput}}" bindinput="onCatOrderInput" placeholder="数字越小越靠前" />
+      </view>
+      <view class="modal-btns">
+        <view class="modal-btn-cancel" bindtap="closeCatModal">取消</view>
+        <view class="modal-btn-save" bindtap="saveCat">保存</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ── 编辑服务底部弹窗 ── -->
+  <view class="sheet-mask" wx:if="{{showSvcSheet}}" bindtap="closeSvcSheet">
+    <view class="sheet-box" catchtap="noop">
+      <view class="sheet-handle"></view>
+      <text class="sheet-title">{{editingSvc ? '编辑服务项目' : '添加服务项目'}}</text>
+
+      <view class="sheet-field">
+        <text class="sheet-label">项目名称</text>
+        <input class="sheet-input" value="{{svcForm.name}}" bindinput="onSvcInput" data-field="name" placeholder="例：精致纯色" />
+      </view>
+      <view class="sheet-row2">
+        <view class="sheet-field sheet-field-half">
+          <text class="sheet-label">价格（元）</text>
+          <input class="sheet-input" type="digit" value="{{svcForm.price}}" bindinput="onSvcInput" data-field="price" placeholder="298" />
+        </view>
+        <view class="sheet-field sheet-field-half">
+          <text class="sheet-label">时长（分钟）</text>
+          <input class="sheet-input" type="number" value="{{svcForm.durationMin}}" bindinput="onSvcInput" data-field="durationMin" placeholder="60" />
+        </view>
+      </view>
+      <view class="sheet-row2">
+        <view class="sheet-field sheet-field-half">
+          <text class="sheet-label">子分组（可选）</text>
+          <input class="sheet-input" value="{{svcForm.subgroup}}" bindinput="onSvcInput" data-field="subgroup" placeholder="例：妈生系列" />
+        </view>
+        <view class="sheet-field sheet-field-half">
+          <text class="sheet-label">排序</text>
+          <input class="sheet-input" type="number" value="{{svcForm.order}}" bindinput="onSvcInput" data-field="order" placeholder="1" />
+        </view>
+      </view>
+      <view class="sheet-toggle-row" bindtap="onSvcIsQuoteChange">
+        <text class="sheet-label">报价制（价格为起步价）</text>
+        <view class="sheet-toggle {{svcForm.isQuote ? 'sheet-toggle-on' : ''}}">
+          <view class="sheet-toggle-thumb"></view>
+        </view>
+      </view>
+
+      <view class="sheet-btns">
+        <view class="sheet-btn-cancel" bindtap="closeSvcSheet">取消</view>
+        <view class="sheet-btn-save" bindtap="saveSvc">保存</view>
+      </view>
+    </view>
+  </view>
+
+</view>

@@ -7,30 +7,33 @@ Page({
       { id: 2, theme: 'summer', title: '夏日渐变款', subtitle: '高定系列 · 从 ¥300 起', tag: '热销' },
       { id: 3, theme: 'vip', title: 'VIP Room 专属', subtitle: '私人定制 · 从 ¥1000 起', tag: 'VIP' },
     ],
-    works: [
-      { id: 1, color: 'pink', emoji: '🌸', label: '樱花白' },
-      { id: 2, color: 'coral', emoji: '🪸', label: '珊瑚橘' },
-      { id: 3, color: 'lavender', emoji: '💜', label: '薰衣草' },
-      { id: 4, color: 'gold', emoji: '✨', label: '复古金' },
-      { id: 5, color: 'green', emoji: '🌿', label: '莫兰迪' },
-      { id: 6, color: 'white', emoji: '🤍', label: '法式白' },
-    ],
     notices: [
       '本店宠物友好，欢迎携带毛孩子',
       'VIP Room 预约请提前3天',
       '发帖晒图可获得积分奖励',
     ],
     noticeIndex: 0,
+    technicians: [],
+    showTechDetail: false,
+    selectedTech: null,
   },
 
   onLoad() {
+    if (!app.globalData.userInfo.isRegistered) {
+      wx.reLaunch({ url: '/pages/login/index' });
+      return;
+    }
     this.startNoticeTimer();
+    this.loadTechnicians();
   },
 
   onShow() {
-    // 未注册时跳转到登录页
     if (!app.globalData.userInfo.isRegistered) {
-      wx.navigateTo({ url: '/pages/login/index' });
+      wx.reLaunch({ url: '/pages/login/index' });
+      return;
+    }
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 });
     }
   },
 
@@ -45,8 +48,41 @@ Page({
     }, 3000);
   },
 
-  goTechnician() {
-    wx.switchTab({ url: '/pages/technician/index' });
+  async loadTechnicians() {
+    try {
+      const db = wx.cloud.database();
+      const res = await db.collection('technicians').orderBy('order', 'asc').get();
+      const technicians = res.data.map(t => ({
+        ...t,
+        avatarIsImg: !!(t.avatar && t.avatar.length > 10),
+      }));
+      this.setData({ technicians });
+    } catch (e) {
+      console.error('loadTechnicians:', e);
+    }
+  },
+
+  openTechDetail(e) {
+    const id = e.currentTarget.dataset.id;
+    const tech = this.data.technicians.find(t => t._id === id);
+    if (tech) this.setData({ showTechDetail: true, selectedTech: tech });
+  },
+
+  closeTechDetail() {
+    this.setData({ showTechDetail: false, selectedTech: null });
+  },
+
+  goBookingFromDetail() {
+    const tech = this.data.selectedTech;
+    this.setData({ showTechDetail: false });
+    getApp().globalData.pendingBooking = { techId: tech._id };
+    wx.switchTab({ url: '/pages/booking-tab/index' });
+  },
+
+  noop() {},
+
+  goBooking() {
+    wx.switchTab({ url: '/pages/booking-tab/index' });
   },
 
   goShop() {

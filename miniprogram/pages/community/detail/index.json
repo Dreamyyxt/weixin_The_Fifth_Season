@@ -2,6 +2,5 @@
   "navigationBarTitleText": "帖子详情",
   "navigationBarBackgroundColor": "#FAF7F4",
   "navigationBarTextStyle": "black",
-  "enableShareAppMessage": true,
   "usingComponents": {}
 }

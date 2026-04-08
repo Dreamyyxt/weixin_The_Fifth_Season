@@ -1,0 +1,91 @@
+<!-- 套餐详情页 -->
+<view class="container" wx:if="{{!loading && pkg}}">
+
+  <!-- 头部横幅 -->
+  <view class="pkg-hero">
+    <text class="pkg-emoji">{{pkg.emoji}}</text>
+    <view class="pkg-tag-badge">{{pkg.tag}}</view>
+  </view>
+
+  <!-- 套餐信息 -->
+  <view class="pkg-info-card">
+    <view class="pkg-title-row">
+      <text class="pkg-name">{{pkg.name}}</text>
+      <view class="pkg-price-box">
+        <text class="pkg-price-unit">¥</text>
+        <text class="pkg-price-num">{{pkg.price}}</text>
+      </view>
+    </view>
+    <text class="pkg-desc">{{pkg.desc}}</text>
+
+    <!-- 时长 + 已售 -->
+    <view class="pkg-meta-row">
+      <view class="pkg-meta-item">
+        <text class="meta-icon">⏱</text>
+        <text class="meta-text">预计 {{pkg.duration}}</text>
+      </view>
+      <view class="pkg-meta-item">
+        <text class="meta-icon">✓</text>
+        <text class="meta-text">已售 {{pkg.sold}} 件</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 套餐内容 -->
+  <view class="section-card">
+    <text class="section-title">套餐内容</text>
+    <view class="feature-item" wx:for="{{pkg.features}}" wx:key="index" wx:for-item="feat">
+      <text class="feature-dot">·</text>
+      <text class="feature-text">{{feat}}</text>
+    </view>
+  </view>
+
+  <!-- 选择技师 -->
+  <view class="section-card">
+    <text class="section-title">选择技师</text>
+    <view
+      class="tech-row {{item._id === selectedTechId ? 'tech-selected' : ''}} {{!item.available ? 'tech-unavailable' : ''}}"
+      wx:for="{{technicians}}"
+      wx:key="_id"
+      bindtap="selectTech"
+      data-id="{{item._id}}"
+    >
+      <view class="tech-avatar-sm">
+        <image wx:if="{{item.avatarIsImg}}" src="{{item.avatar}}" mode="aspectFill" class="tech-avatar-sm-img" />
+        <text wx:else>{{item.avatar}}</text>
+      </view>
+      <view class="tech-info">
+        <view class="tech-name-row">
+          <text class="tech-name">{{item.name}}</text>
+          <text class="tech-title-sm">{{item.title}}</text>
+        </view>
+      </view>
+      <view class="tech-status">
+        <text wx:if="{{item.available}}" class="status-ok">可约</text>
+        <text wx:else class="status-full">约满</text>
+      </view>
+      <view class="tech-check-icon" wx:if="{{item._id === selectedTechId}}">✓</view>
+    </view>
+    <view class="empty-tech" wx:if="{{technicians.length === 0}}">
+      <text>暂无可选技师</text>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar">
+    <view class="bottom-price">
+      <text class="bottom-price-label">套餐价</text>
+      <text class="bottom-price-val">¥{{pkg.price}}</text>
+    </view>
+    <view
+      class="book-btn {{selectedTechId ? '' : 'book-btn-disabled'}}"
+      bindtap="goBooking"
+    >选好技师，去预约</view>
+  </view>
+
+</view>
+
+<!-- 加载中 -->
+<view class="loading-wrap" wx:if="{{loading}}">
+  <text class="loading-text">加载中...</text>
+</view>

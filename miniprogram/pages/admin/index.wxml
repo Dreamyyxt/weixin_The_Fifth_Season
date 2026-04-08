@@ -1,0 +1,1117 @@
+<!-- 管理后台 / 技师工作台 -->
+<view class="admin-page admin-page-tabbed" wx:if="{{!loading}}">
+
+  <!-- 顶部导航栏 -->
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <text class="admin-nav-title">{{role === 'admin' ? '管理后台' : '技师工作台'}}</text>
+  </view>
+
+  <!-- ═══════════════════════════════ 管理员视图 ═══════════════════════════════ -->
+  <block wx:if="{{role === 'admin'}}">
+
+    <!-- ─────────────────── 概览 Tab ─────────────────── -->
+    <block wx:if="{{adminTab === 'overview'}}">
+
+      <view class="dash-header">
+        <text class="dash-title">数据概览</text>
+        <text class="dash-date">{{todayDateStr}}</text>
+      </view>
+
+      <!-- ── 1. 营业数据 ── -->
+      <text class="admin-section-title">营业数据</text>
+
+      <view class="overview-revenue-hero" bindtap="goDayPerf">
+        <view>
+          <text class="overview-revenue-label">今日营业额</text>
+          <text class="overview-revenue-num">¥{{todayRevenue}}</text>
+        </view>
+        <text class="overview-revenue-tap">查看详情 ›</text>
+      </view>
+
+      <view class="admin-card overview-entry-card" bindtap="goRevenue">
+        <view class="nav-tile" style="border-bottom:none;">
+          <view class="nav-tile-icon" style="background:#E8F5E9;">📊</view>
+          <view class="nav-tile-info">
+            <text class="nav-tile-title">营收报表</text>
+            <text class="nav-tile-sub">每日收款汇总 · 对账确认</text>
+          </view>
+          <text class="nav-tile-arrow">›</text>
+        </view>
+      </view>
+
+      <view class="chart-full-card">
+        <text class="chart-card-title">营业额比例</text>
+        <canvas type="2d" id="pie-revenue" class="chart-canvas-pie"></canvas>
+      </view>
+
+      <!-- ── 2. 预约总览 ── -->
+      <text class="admin-section-title">预约总览</text>
+
+      <view class="stats-row-big">
+        <view class="stat-card-big stat-big-pink">
+          <view class="stat-big-top">
+            <text class="stat-big-icon">📅</text>
+            <text class="stat-big-num">{{todayCount}}</text>
+          </view>
+          <text class="stat-big-label">今日预约总量</text>
+        </view>
+        <view class="stat-card-big stat-big-orange" bindtap="goAllPending">
+          <view class="stat-big-top">
+            <text class="stat-big-icon">⏳</text>
+            <text class="stat-big-num">{{pendingCount}}</text>
+          </view>
+          <text class="stat-big-label">所有待确认</text>
+          <text class="stat-big-tap">查看全部 ›</text>
+        </view>
+      </view>
+
+      <view class="stats-row-small">
+        <view class="stat-card-sm stat-sm-orange" bindtap="goBookingsWithStatus" data-status="pending">
+          <text class="stat-sm-num">{{todayPendingCount}}</text>
+          <text class="stat-sm-label">今日待确认</text>
+        </view>
+        <view class="stat-card-sm stat-sm-blue" bindtap="goBookingsWithStatus" data-status="confirmed">
+          <text class="stat-sm-num">{{todayConfirmed}}</text>
+          <text class="stat-sm-label">今日已确认</text>
+        </view>
+        <view class="stat-card-sm stat-sm-green" bindtap="goBookingsWithStatus" data-status="completed">
+          <text class="stat-sm-num">{{todayCompleted}}</text>
+          <text class="stat-sm-label">今日已完成</text>
+        </view>
+        <view class="stat-card-sm stat-sm-grey" bindtap="goBookingsWithStatus" data-status="cancelled">
+          <text class="stat-sm-num">{{todayCancelled}}</text>
+          <text class="stat-sm-label">今日已取消</text>
+        </view>
+      </view>
+
+      <view class="chart-full-card">
+        <text class="chart-card-title">预约比例</text>
+        <canvas type="2d" id="pie-bookings" class="chart-canvas-pie"></canvas>
+      </view>
+
+      <!-- ── 3. 用户概览 ── -->
+      <text class="admin-section-title">用户概览</text>
+
+      <view class="stats-row-big">
+        <view class="stat-card-big stat-big-blue">
+          <view class="stat-big-top">
+            <text class="stat-big-icon">👥</text>
+            <text class="stat-big-num">{{userCount}}</text>
+          </view>
+          <text class="stat-big-label">用户总量</text>
+        </view>
+        <view class="stat-card-big stat-big-teal">
+          <view class="stat-big-top">
+            <text class="stat-big-icon">✨</text>
+            <text class="stat-big-num">{{newUserCount}}</text>
+          </view>
+          <text class="stat-big-label">今日新增用户</text>
+        </view>
+      </view>
+
+      <!-- ── 4. 曲线图表 ── -->
+      <text class="admin-section-title">曲线图表</text>
+
+      <view class="chart-full-card" bindtap="goChartDetail" data-type="revenue">
+        <view class="chart-card-header">
+          <text class="chart-card-title">营业额曲线</text>
+          <text class="chart-card-hint">近7天 ›</text>
+        </view>
+        <canvas type="2d" id="line-revenue" class="chart-canvas-line"></canvas>
+      </view>
+
+      <view class="chart-full-card" bindtap="goChartDetail" data-type="bookings">
+        <view class="chart-card-header">
+          <text class="chart-card-title">预约量曲线</text>
+          <text class="chart-card-hint">近7天 ›</text>
+        </view>
+        <canvas type="2d" id="line-bookings" class="chart-canvas-line"></canvas>
+      </view>
+
+      <view class="chart-full-card" bindtap="goChartDetail" data-type="avg">
+        <view class="chart-card-header">
+          <text class="chart-card-title">平均客单价曲线</text>
+          <text class="chart-card-hint">近7天 ›</text>
+        </view>
+        <canvas type="2d" id="line-avg" class="chart-canvas-line"></canvas>
+      </view>
+
+    </block>
+
+    <!-- ─────────────────── 预约 Tab ─────────────────── -->
+    <block wx:elif="{{adminTab === 'schedule'}}">
+
+      <!-- 报价请求（折叠面板） -->
+      <view class="sch-quotes-header" bindtap="toggleQuotesSection">
+        <view class="sch-quotes-left">
+          <text class="sch-quotes-title">报价请求</text>
+          <view class="sch-quotes-badge" wx:if="{{quotePendingCount > 0}}">{{quotePendingCount}}</view>
+          <text class="sch-quotes-subtitle" wx:elif="{{!showQuotesSection}}">暂无待处理</text>
+        </view>
+        <text class="sch-quotes-arrow">{{showQuotesSection ? '▲' : '▼'}}</text>
+      </view>
+
+      <block wx:if="{{showQuotesSection}}">
+        <view class="q-admin-filter">
+          <view class="qaf-chip {{quoteFilter==='active'?'qaf-act':''}}" bindtap="setQuoteFilter" data-f="active">
+            待处理
+            <text class="qaf-count" wx:if="{{quotePendingCount > 0}}"> ({{quotePendingCount}})</text>
+          </view>
+          <view class="qaf-chip {{quoteFilter==='quoted'?'qaf-act':''}}" bindtap="setQuoteFilter" data-f="quoted">已报价（等待客人）</view>
+        </view>
+        <view class="q-admin-loading" wx:if="{{quotesLoading}}"><text>加载中...</text></view>
+        <view class="q-admin-empty" wx:elif="{{filteredQuotes.length === 0}}">
+          <text wx:if="{{quoteFilter==='active'}}">暂无待处理的报价请求</text>
+          <text wx:else>暂无等待客人确认的报价</text>
+        </view>
+        <view class="q-admin-list" wx:else>
+          <view class="q-admin-card" wx:for="{{filteredQuotes}}" wx:key="_id"
+            bindtap="openQuoteSheet" data-id="{{item._id}}">
+            <image wx:if="{{item.images && item.images.length}}" src="{{item.images[0]}}" mode="aspectFill" class="q-admin-thumb" />
+            <view class="q-admin-thumb q-admin-thumb-empty" wx:else><text>📸</text></view>
+            <view class="q-admin-info">
+              <view class="q-admin-name-row">
+                <text class="q-admin-name">{{item.name}}</text>
+                <view class="q-admin-status q-sts-{{item.status}}">
+                  {{item.status==='pending'?'待报价':'已报价'}}
+                </view>
+              </view>
+              <text class="q-admin-phone">{{item.phone}}</text>
+              <text class="q-admin-meta">
+                {{item.preferredDate ? item.preferredDate + ' ' : ''}}{{item.preferredTimeRange}}
+                {{item.needsRemoval ? ' · 卸甲' : ''}}{{item.needsExtension ? ' · 延甲' : ''}}
+              </text>
+              <text class="q-admin-imgs">{{item.images ? item.images.length : 0}} 张参考图</text>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <view class="sch-quotes-divider"></view>
+
+      <view class="sch-toolbar sch-toolbar-month">
+        <text class="sch-toolbar-title">预约月历</text>
+        <view class="sch-all-btn" bindtap="goBookings">全部预约 ›</view>
+      </view>
+
+      <view class="mth-header">
+        <view class="mth-nav-btn" bindtap="prevMonth">‹</view>
+        <text class="mth-title">{{scheduleMonthLabel}}</text>
+        <view class="mth-nav-btn" bindtap="nextMonth">›</view>
+      </view>
+
+      <view class="admin-loading" wx:if="{{monthLoading}}">加载中...</view>
+
+      <view class="mth-cal" wx:else>
+        <view class="mth-weekrow">
+          <text class="mth-wlabel" wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="*this">{{item}}</text>
+        </view>
+        <view class="mth-grid">
+          <view
+            wx:for="{{monthDays}}" wx:key="index"
+            class="mth-cell {{item.empty ? 'mth-cell-empty' : ''}} {{item.isToday ? 'mth-cell-today' : ''}} {{scheduleDate === item.dateStr ? 'mth-cell-sel' : ''}}"
+            bindtap="onMonthDayTap" data-date="{{item.dateStr}}"
+          >
+            <text class="mth-day" wx:if="{{!item.empty}}">{{item.day}}</text>
+            <view class="mth-cell-badge" wx:if="{{!item.empty && item.pendingCount > 0}}">{{item.pendingCount}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="sel-day-bar">
+        <text class="sel-day-title">{{scheduleDate}} 日程</text>
+        <view class="sch-add-btn" bindtap="goCreateBooking">＋ 新增预约</view>
+      </view>
+
+      <view class="admin-loading" wx:if="{{ganttLoading}}">加载中...</view>
+      <view class="cal-empty" wx:elif="{{ganttTechs.length === 0}}"><text>暂无技师数据</text></view>
+
+      <view class="gantt-wrapper" wx:else>
+        <view class="time-col">
+          <view class="time-ph"></view>
+          <view
+            wx:for="{{timeSlots}}" wx:key="*this"
+            class="time-cell {{item.endsWith(':00') ? 'time-cell-hour' : ''}}"
+          ><text>{{item}}</text></view>
+          <view class="time-end"><text>23:00</text></view>
+        </view>
+        <scroll-view scroll-x class="gantt-scroll" style="width:{{ganttScrollW}}px;">
+          <view class="gantt-inner">
+            <view
+              wx:for="{{ganttTechs}}" wx:key="_id" wx:for-item="tech"
+              class="cal-tech-col"
+            >
+              <view class="cal-tech-hdr">
+                <view class="cal-tech-dot" style="background:{{tech.color}};"></view>
+                <text class="cal-tech-name">{{tech.name}}</text>
+              </view>
+              <view class="cal-tech-body">
+                <view wx:for="{{timeSlots}}" wx:key="*this" wx:for-item="ts" class="cal-slot"></view>
+                <view class="cal-grid-lines">
+                  <view
+                    wx:for="{{gridLines}}" wx:key="top" wx:for-item="line"
+                    class="cal-grid-line {{line.isHour ? 'cal-grid-line-hour' : ''}}"
+                    style="top:{{line.top}}rpx;"
+                  ></view>
+                </view>
+                <view
+                  wx:for="{{tech.bookings}}" wx:key="_id" wx:for-item="bk"
+                  class="cal-bk cal-bk-{{bk.status}}"
+                  style="top:{{bk.ganttTop}}rpx; height:{{bk.ganttHeight}}rpx;"
+                  catchtap="onGanttCardTap" data-id="{{bk._id}}"
+                >
+                  <text class="cal-bk-name">{{bk.name}}</text>
+                  <text class="cal-bk-svc" wx:if="{{bk.status !== 'cancelled'}}">{{bk.serviceName}}</text>
+                  <text class="cal-bk-cxl" wx:else>✕ 已取消</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+    </block>
+
+    <!-- ─────────────────── 店员 Tab ─────────────────── -->
+    <block wx:elif="{{adminTab === 'staff'}}">
+
+      <!-- 标题 + 说明 + 视图切换 -->
+      <view class="staff-header-row">
+        <view class="staff-header-info">
+          <text class="staff-header-title">排班管理</text>
+          <text class="staff-header-desc">查看、设置技师各日工作时段；点击任意日期可编辑排班</text>
+        </view>
+        <view class="staff-view-switcher">
+          <view class="staff-vtab {{staffView === 'day'   ? 'staff-vtab-act' : ''}}" bindtap="switchStaffView" data-view="day">日</view>
+          <view class="staff-vtab {{staffView === 'week'  ? 'staff-vtab-act' : ''}}" bindtap="switchStaffView" data-view="week">周</view>
+          <view class="staff-vtab {{staffView === 'month' ? 'staff-vtab-act' : ''}}" bindtap="switchStaffView" data-view="month">月</view>
+        </view>
+      </view>
+
+      <!-- ── 日视图 ── -->
+      <block wx:if="{{staffView === 'day'}}">
+        <view class="staff-date-bar">
+          <view class="staff-nav-btn" bindtap="prevStaffDate">‹</view>
+          <view class="staff-date-mid">
+            <text class="staff-date-label">{{staffDateLabel}}</text>
+            <view class="staff-today-tag" wx:if="{{staffIsToday}}">今天</view>
+          </view>
+          <view class="staff-nav-btn" bindtap="nextStaffDate">›</view>
+        </view>
+        <view class="staff-chart admin-card">
+          <view class="staff-head-row">
+            <view class="staff-name-ph"></view>
+            <view class="staff-axis-wrap">
+              <text wx:for="{{staffTimeMarkers}}" wx:key="label"
+                class="staff-axis-lbl {{item.isFirst ? 'staff-axis-lbl-first' : item.isLast ? 'staff-axis-lbl-last' : ''}}"
+                style="left:{{item.left}};">{{item.label}}</text>
+            </view>
+          </view>
+          <view class="staff-chart-loading" wx:if="{{staffLoading}}">加载中...</view>
+          <view wx:else>
+            <view class="staff-empty" wx:if="{{staffRows.length === 0}}">暂无技师</view>
+            <view class="staff-row" wx:for="{{staffRows}}" wx:key="techId"
+              bindtap="goTechSchedule" data-id="{{item.techId}}" data-name="{{item.name}}">
+              <view class="staff-name-col">
+                <view class="staff-av">
+                  <image wx:if="{{item.avatar}}" src="{{item.avatar}}" mode="aspectFill" class="staff-av-img"/>
+                  <text wx:else class="staff-av-init">{{item.nameInitial}}</text>
+                </view>
+                <text class="staff-rname {{item.state === 'off' ? 'staff-rname-dim' : ''}}">{{item.name}}</text>
+              </view>
+              <view class="staff-bar-col">
+                <view wx:for="{{staffTimeMarkers}}" wx:key="label" wx:for-item="m" class="staff-vline" style="left:{{m.left}};"></view>
+                <view wx:if="{{item.state === 'working'}}" class="staff-bar" style="left:{{item.barLeft}};width:{{item.barWidth}};">
+                  <text class="staff-bar-txt">{{item.workStart}}–{{item.workEnd}} · {{item.hours}}h</text>
+                </view>
+                <view wx:elif="{{item.state === 'off'}}" class="staff-off-band"><text class="staff-off-txt">休息</text></view>
+                <view wx:else class="staff-unset-band"><text class="staff-unset-txt">未设置</text></view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!-- ── 周视图 ── -->
+      <block wx:elif="{{staffView === 'week'}}">
+        <view class="staff-date-bar">
+          <view class="staff-nav-btn" bindtap="prevStaffWeek">‹</view>
+          <text class="staff-date-label">{{staffWeekLabel}}</text>
+          <view class="staff-nav-btn" bindtap="nextStaffWeek">›</view>
+        </view>
+        <view class="staff-chart admin-card">
+          <!-- 列标题 -->
+          <view class="staff-wk-head">
+            <view class="staff-wk-namecell"></view>
+            <view class="staff-wk-daycell {{col.isToday ? 'staff-wk-today-col' : ''}}"
+              wx:for="{{staffWeekCols}}" wx:key="dateStr" wx:for-item="col"
+              bindtap="onStaffWeekDayTap" data-date="{{col.dateStr}}">
+              <text class="staff-wk-daylbl">{{col.dayLabel}}</text>
+              <text class="staff-wk-daynum {{col.isToday ? 'staff-wk-today-num' : ''}}">{{col.dayNum}}</text>
+            </view>
+          </view>
+          <view class="staff-chart-loading" wx:if="{{staffWeekLoading}}">加载中...</view>
+          <view wx:else>
+            <view class="staff-empty" wx:if="{{staffWeekRows.length === 0}}">暂无技师</view>
+            <view class="staff-wk-row" wx:for="{{staffWeekRows}}" wx:key="techId">
+              <view class="staff-wk-namecell">
+                <view class="staff-av">
+                  <image wx:if="{{item.avatar}}" src="{{item.avatar}}" mode="aspectFill" class="staff-av-img"/>
+                  <text wx:else class="staff-av-init">{{item.nameInitial}}</text>
+                </view>
+                <text class="staff-rname">{{item.name}}</text>
+              </view>
+              <view class="staff-wk-daycell"
+                wx:for="{{item.cells}}" wx:key="index" wx:for-item="cell"
+                bindtap="onStaffWeekDayTap" data-date="{{staffWeekCols[index].dateStr}}">
+                <view wx:if="{{cell.state === 'working'}}" class="staff-wk-time-col">
+                  <text class="staff-wk-time">{{cell.workStart}}</text>
+                  <view class="staff-wk-connector"></view>
+                  <text class="staff-wk-time">{{cell.workEnd}}</text>
+                </view>
+                <view wx:elif="{{cell.state === 'off'}}" class="staff-wk-pill staff-wk-pill-off">
+                  <text class="staff-wk-pill-txt">休</text>
+                </view>
+                <text wx:else class="staff-wk-dash">–</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!-- ── 月视图 ── -->
+      <block wx:elif="{{staffView === 'month'}}">
+        <view class="staff-date-bar">
+          <view class="staff-nav-btn" bindtap="prevStaffMonth">‹</view>
+          <text class="staff-date-label">{{staffMonthLabel}}</text>
+          <view class="staff-nav-btn" bindtap="nextStaffMonth">›</view>
+        </view>
+        <view class="staff-chart admin-card" style="padding-bottom:20rpx;">
+          <view class="staff-mo-weekrow">
+            <text class="staff-mo-wlbl" wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="*this">{{item}}</text>
+          </view>
+          <view class="staff-chart-loading" wx:if="{{staffMonthLoading}}">加载中...</view>
+          <view class="staff-mo-grid" wx:else>
+            <view wx:for="{{staffMonthDays}}" wx:key="index"
+              class="staff-mo-cell {{item.empty ? 'staff-mo-cell-empty' : ''}} {{item.isToday ? 'staff-mo-cell-today' : ''}}"
+              bindtap="onStaffMonthDayTap" data-date="{{item.dateStr}}">
+              <text class="staff-mo-daynum" wx:if="{{!item.empty}}">{{item.day}}</text>
+              <view class="staff-mo-badge staff-mo-badge-work" wx:if="{{!item.empty && item.workingCount > 0}}">
+                <text>{{item.workingCount}}人</text>
+              </view>
+              <view class="staff-mo-badge staff-mo-badge-off" wx:elif="{{!item.empty && item.offCount > 0}}">
+                <text>休</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!-- 人员管理入口 -->
+      <text class="admin-section-title">人员管理</text>
+      <view class="admin-card" style="padding: 8rpx 16rpx;">
+        <view class="nav-tile" bindtap="goTechList">
+          <view class="nav-tile-icon" style="background:#E8F5E9;">👩‍🎨</view>
+          <view class="nav-tile-info">
+            <text class="nav-tile-title">技师管理</text>
+            <text class="nav-tile-sub">添加 · 编辑 · 上下线技师</text>
+          </view>
+          <text class="nav-tile-arrow">›</text>
+        </view>
+        <view class="nav-tile" bindtap="goRoles" style="border-bottom:none;">
+          <view class="nav-tile-icon" style="background:#EDE7F6;">🔑</view>
+          <view class="nav-tile-info">
+            <text class="nav-tile-title">角色分配</text>
+            <text class="nav-tile-sub">设置管理员 · 绑定技师账号</text>
+          </view>
+          <text class="nav-tile-arrow">›</text>
+        </view>
+      </view>
+
+    </block>
+
+    <!-- ─────────────────── 产品 Tab ─────────────────── -->
+    <block wx:elif="{{adminTab === 'products'}}">
+
+      <text class="admin-section-title">产品 &amp; 套餐</text>
+      <view class="admin-card" style="padding: 8rpx 16rpx;">
+        <view class="nav-tile" bindtap="goPkgList" style="border-bottom:none;">
+          <view class="nav-tile-icon" style="background:#FFF3E0;">🛍️</view>
+          <view class="nav-tile-info">
+            <text class="nav-tile-title">套餐管理</text>
+            <text class="nav-tile-sub">添加 · 编辑 · 删除套餐</text>
+          </view>
+          <text class="nav-tile-arrow">›</text>
+        </view>
+      </view>
+
+    </block>
+
+    <!-- ─────────────────── 客户 Tab ─────────────────── -->
+    <!-- ─────────────────── 客户 + 客情合并 tab ─────────────────── -->
+    <block wx:elif="{{adminTab === 'customers'}}">
+
+      <!-- 搜索栏 -->
+      <view class="cust-search-bar">
+        <view class="cust-search-wrap">
+          <text class="cust-search-icon">🔍</text>
+          <input
+            class="cust-search-input"
+            placeholder="搜索姓名或手机号"
+            value="{{customerSearch}}"
+            bindinput="onCustomerSearchInput"
+            confirm-type="search"
+          />
+        </view>
+        <view class="cust-refresh-btn" bindtap="loadCrm">刷新</view>
+      </view>
+
+      <!-- 筛选 chips -->
+      <scroll-view scroll-x class="crm-filter-scroll" enable-flex>
+        <view class="crm-filter-bar">
+          <view class="crm-chip {{crmFilter==='all'?'crm-chip-act':''}}"         bindtap="setCrmFilter" data-f="all">全部</view>
+          <view class="crm-chip {{crmFilter==='birthday'?'crm-chip-act':''}}"    bindtap="setCrmFilter" data-f="birthday">🎂 生日</view>
+          <view class="crm-chip {{crmFilter==='followup'?'crm-chip-act':''}}"    bindtap="setCrmFilter" data-f="followup">💬 回访</view>
+          <view class="crm-chip {{crmFilter==='lash_refill'?'crm-chip-act':''}}" bindtap="setCrmFilter" data-f="lash_refill">👁️ 睫毛</view>
+          <view class="crm-chip {{crmFilter==='nail_refill'?'crm-chip-act':''}}" bindtap="setCrmFilter" data-f="nail_refill">💅 美甲</view>
+          <view class="crm-chip {{crmFilter==='pedi_refill'?'crm-chip-act':''}}" bindtap="setCrmFilter" data-f="pedi_refill">🦶 美脚</view>
+          <view class="crm-chip {{crmFilter==='lapsing'?'crm-chip-act':''}}"     bindtap="setCrmFilter" data-f="lapsing">⚠️ 流失</view>
+          <view class="crm-chip {{crmFilter==='dormant'?'crm-chip-act':''}}"     bindtap="setCrmFilter" data-f="dormant">😴 沉睡</view>
+        </view>
+      </scroll-view>
+
+      <!-- 当前筛选条件说明 -->
+      <view class="crm-filter-hint">{{crmFilterHint}}</view>
+
+      <view class="admin-loading" wx:if="{{crmLoading}}">加载中...</view>
+
+      <view class="admin-empty" wx:elif="{{filteredCrmCustomers.length === 0}}">
+        <text>暂无符合条件的客户</text>
+      </view>
+
+      <view class="crm-list" wx:else>
+        <view
+          class="crm-card"
+          wx:for="{{filteredCrmCustomers}}"
+          wx:key="_id"
+          bindtap="openCrmDetail"
+          data-idx="{{index}}"
+        >
+          <view class="crm-card-top">
+            <view class="crm-avatar">
+              <image wx:if="{{item.avatarUrl}}" src="{{item.avatarUrl}}" mode="aspectFill" class="crm-avatar-img" />
+              <text wx:else>{{item.nickname.slice(0,1)}}</text>
+            </view>
+            <view class="crm-info">
+              <view class="crm-name-row">
+                <text class="crm-name">{{item.nickname}}</text>
+                <text class="crm-tier">{{item.vipLevel}}</text>
+              </view>
+              <text class="crm-visit" wx:if="{{item.lastVisitDate}}">上次到店 {{item.daysSinceVisit}} 天前</text>
+              <text class="crm-visit crm-visit-none" wx:else>暂无到店记录</text>
+            </view>
+            <view class="crm-alert-dot" wx:if="{{item.alerts && item.alerts.length > 0}}">{{item.alerts.length}}</view>
+          </view>
+
+          <view class="crm-chips-row" wx:if="{{(item.alerts && item.alerts.length > 0) || (item.tags && item.tags.length > 0)}}">
+            <view class="crm-alert-chip" wx:for="{{item.alerts}}" wx:key="type" wx:for-item="al">{{al.label}}</view>
+            <view class="crm-tag-chip"   wx:for="{{item.tags}}"   wx:key="*this" wx:for-item="tag">{{tag}}</view>
+          </view>
+
+          <view class="crm-bottom-row">
+            <text class="crm-fav" wx:if="{{item.favoriteService}}">偏好：{{item.favoriteService}}</text>
+            <text class="crm-fav crm-fav-none" wx:else>暂无偏好记录</text>
+            <text class="crm-spend">累消 ¥{{item.totalSpend}}</text>
+          </view>
+        </view>
+      </view>
+
+    </block>
+
+    <!-- ─────────────────── 固定底部 Tab Bar ─────────────────── -->
+    <view class="admin-tab-bar">
+      <view class="atb-item {{adminTab === 'overview'   ? 'atb-act' : ''}}" bindtap="switchAdminTab" data-tab="overview">
+        <text class="atb-lbl">数据概览</text>
+      </view>
+      <view class="atb-item {{adminTab === 'schedule'  ? 'atb-act' : ''}}" bindtap="switchAdminTab" data-tab="schedule">
+        <text class="atb-lbl">预约管理</text>
+        <view class="atb-badge" wx:if="{{quotePendingCount + pendingCount > 0}}">{{quotePendingCount + pendingCount}}</view>
+      </view>
+      <view class="atb-item {{adminTab === 'staff'     ? 'atb-act' : ''}}" bindtap="switchAdminTab" data-tab="staff">
+        <text class="atb-lbl">店员管理</text>
+      </view>
+      <view class="atb-item {{adminTab === 'products'  ? 'atb-act' : ''}}" bindtap="switchAdminTab" data-tab="products">
+        <text class="atb-lbl">产品管理</text>
+      </view>
+      <view class="atb-item {{adminTab === 'customers' ? 'atb-act' : ''}}" bindtap="switchAdminTab" data-tab="customers">
+        <text class="atb-lbl">客户管理</text>
+      </view>
+    </view>
+
+  </block>
+
+  <!-- ════════════ 报价处理弹窗 ════════════ -->
+  <view class="qsheet-mask" wx:if="{{showQuoteSheet}}" bindtap="closeQuoteSheet">
+    <view class="qsheet" catchtap="noop">
+      <view class="qsheet-handle"></view>
+      <text class="qsheet-title">处理报价</text>
+
+      <!-- 参考图 -->
+      <scroll-view scroll-x class="qsheet-imgs" enhanced="{{true}}">
+        <view class="qsheet-img-list">
+          <image wx:for="{{activeQuote.images}}" wx:key="index" src="{{item}}" mode="aspectFill" class="qsheet-img" />
+        </view>
+      </scroll-view>
+
+      <!-- 客户信息 -->
+      <view class="qsheet-cust">
+        <text class="qsheet-cust-name">{{activeQuote.name}} · {{activeQuote.phone}}</text>
+        <text class="qsheet-cust-meta">
+          {{activeQuote.preferredDate ? activeQuote.preferredDate + ' ' : '时间不限 '}}
+          {{activeQuote.preferredTimeRange}}
+          {{activeQuote.needsRemoval ? ' · 卸甲' : ''}}{{activeQuote.needsExtension ? ' · 延甲' : ''}}
+        </text>
+        <text class="qsheet-remark" wx:if="{{activeQuote.remark}}">备注：{{activeQuote.remark}}</text>
+      </view>
+
+      <!-- 报价表单 -->
+      <view class="qsheet-form">
+
+        <!-- 服务大类（单选，从数据库加载） -->
+        <view class="qsheet-row qsheet-row-col">
+          <text class="qsheet-label">服务大类</text>
+          <view class="qsheet-chips qsheet-chips-wrap">
+            <view
+              wx:for="{{quoteCategories}}" wx:key="_id"
+              class="qsheet-chip {{quoteForm.categoryId===item._id?'qsc-act':''}}"
+              bindtap="setQuoteMainService" data-cat="{{item}}"
+            >{{item.name}}</view>
+          </view>
+        </view>
+
+        <!-- 服务小类（单选，大类选定后显示） -->
+        <view class="qsheet-row qsheet-row-col" wx:if="{{quoteServices.length}}">
+          <text class="qsheet-label">服务小类</text>
+          <view class="qsheet-chips qsheet-chips-wrap">
+            <view
+              wx:for="{{quoteServices}}" wx:key="_id"
+              class="qsheet-chip {{quoteForm.serviceId===item._id?'qsc-act':''}}"
+              bindtap="setQuoteService" data-svc="{{item}}"
+            >{{item.name}}</view>
+          </view>
+        </view>
+
+        <!-- 附加小项（多选） -->
+        <view class="qsheet-row qsheet-row-col">
+          <text class="qsheet-label">附加小项（可多选）</text>
+          <view class="qsheet-chips qsheet-chips-wrap">
+            <view
+              wx:for="{{quoteAddons}}" wx:key="*this"
+              class="qsheet-chip {{quoteForm.addonsMap[item]?'qsc-act':''}}"
+              bindtap="toggleQuoteAddon" data-tag="{{item}}"
+            >{{item}}</view>
+          </view>
+        </view>
+
+        <view class="qsheet-row">
+          <text class="qsheet-label">预估时长（分钟）</text>
+          <input class="qsheet-input" type="number" value="{{quoteForm.durationMin}}" bindinput="onQuoteInput" data-field="durationMin" placeholder="如：90" />
+        </view>
+        <view class="qsheet-row">
+          <text class="qsheet-label">报价金额（元）</text>
+          <input class="qsheet-input" type="digit" value="{{quoteForm.price}}" bindinput="onQuoteInput" data-field="price" placeholder="如：300" />
+        </view>
+        <view class="qsheet-row qsheet-row-col">
+          <text class="qsheet-label">推荐技师</text>
+          <view class="qsheet-chips qsheet-chips-wrap">
+            <view
+              wx:for="{{technicians}}" wx:key="_id"
+              class="qsheet-chip {{quoteForm.techId===item._id?'qsc-act':''}}"
+              bindtap="setQuoteTech" data-id="{{item._id}}" data-name="{{item.name}}"
+            >{{item.name}}</view>
+          </view>
+        </view>
+        <view class="qsheet-row qsheet-row-col">
+          <text class="qsheet-label">技师备注（可选）</text>
+          <textarea class="qsheet-textarea" value="{{quoteForm.adminNote}}" bindinput="onQuoteInput" data-field="adminNote" placeholder="可以写款式建议、注意事项等..." maxlength="200" />
+        </view>
+      </view>
+
+      <view class="qsheet-btn" bindtap="submitQuote">发送报价给客户</view>
+    </view>
+  </view>
+
+  <!-- ═══════════════════════════════ 技师工作台视图 ═══════════════════════════ -->
+  <block wx:if="{{role !== 'admin'}}">
+
+    <!-- 营业额卡片 -->
+    <view class="tech-revenue-card" bindtap="goTechDayPerf">
+      <text class="tech-revenue-label">今日营业额 ›</text>
+      <text class="tech-revenue-num">¥{{techRevenue}}</text>
+    </view>
+
+    <!-- Lark 风格个人日历 -->
+    <view class="tech-lark-cal">
+
+      <!-- 月份导航 -->
+      <view class="tech-cal-mth-bar">
+        <view class="tech-cal-nav-btn" bindtap="prevTechMonth">‹</view>
+        <text class="tech-cal-mth-label">{{techCalMonthLabel}}</text>
+        <view class="tech-cal-nav-btn" bindtap="nextTechMonth">›</view>
+      </view>
+
+      <!-- 星期标题行 -->
+      <view class="tech-cal-weekrow">
+        <text class="tech-cal-wlabel" wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="*this">{{item}}</text>
+      </view>
+
+      <!-- 日期格 -->
+      <view class="tech-cal-grid">
+        <view
+          wx:for="{{techMonthDays}}" wx:key="index"
+          class="tech-cal-cell {{item.isToday ? 'tech-cal-today' : ''}} {{techCalDate === item.dateStr ? 'tech-cal-sel' : ''}} {{item.isOff ? 'tech-cal-off' : ''}}"
+          bindtap="onTechCalDayTap" data-date="{{item.dateStr}}"
+        >
+          <text class="tech-cal-day-num" wx:if="{{!item.empty}}">{{item.day}}</text>
+          <view class="tech-cal-dots" wx:if="{{!item.empty && item.count > 0}}">
+            <view class="tech-cal-dot"></view>
+            <view class="tech-cal-dot" wx:if="{{item.count > 1}}"></view>
+            <view class="tech-cal-dot" wx:if="{{item.count > 2}}"></view>
+          </view>
+          <view class="mth-cell-badge" wx:if="{{!item.empty && item.pendingCount > 0}}">{{item.pendingCount}}</view>
+        </view>
+      </view>
+
+    </view>
+
+    <!-- 选中日期标题 -->
+    <view class="tech-day-label-row">
+      <text class="tech-day-label">{{techCalDateLabel}} 的预约</text>
+      <view class="tech-add-btn" bindtap="goCreateBooking">+ 新增预约</view>
+    </view>
+
+    <!-- 当日甘特 -->
+    <view class="admin-loading" wx:if="{{techDayLoading}}">加载中...</view>
+    <view class="admin-empty" wx:elif="{{techDayGantt.length === 0}}">当天暂无预约</view>
+    <view class="gantt-wrapper" wx:else>
+      <view class="time-col">
+        <view class="time-ph"></view>
+        <view
+          wx:for="{{timeSlots}}" wx:key="*this"
+          class="time-cell {{item.endsWith(':00') ? 'time-cell-hour' : ''}}"
+        ><text>{{item}}</text></view>
+        <view class="time-end"><text>23:00</text></view>
+      </view>
+      <view class="gantt-tech-single">
+        <view class="cal-tech-hdr cal-tech-hdr-single">
+          <text class="cal-tech-name">预约安排</text>
+        </view>
+        <view class="cal-tech-body">
+          <view wx:for="{{timeSlots}}" wx:key="*this" wx:for-item="ts" class="cal-slot"></view>
+          <view class="cal-grid-lines">
+            <view
+              wx:for="{{gridLines}}" wx:key="top" wx:for-item="line"
+              class="cal-grid-line {{line.isHour ? 'cal-grid-line-hour' : ''}}"
+              style="top:{{line.top}}rpx;"
+            ></view>
+          </view>
+          <view
+            wx:for="{{techDayGantt}}" wx:key="_id" wx:for-item="bk"
+            class="cal-bk cal-bk-{{bk.status}}"
+            style="top:{{bk.ganttTop}}rpx; height:{{bk.ganttHeight}}rpx;"
+            catchtap="onGanttCardTap" data-id="{{bk._id}}"
+          >
+            <text class="cal-bk-name">{{bk.name}}</text>
+            <text class="cal-bk-svc" wx:if="{{bk.status !== 'cancelled'}}">{{bk.serviceName}}</text>
+            <text class="cal-bk-cxl" wx:else>✕ 已取消</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 固定底部 Tab Bar -->
+    <view class="tech-tab-bar">
+      <view class="tech-tab-item" bindtap="goBookings">
+        <text class="tech-tab-icon">📅</text>
+        <text class="tech-tab-label">全部预约</text>
+      </view>
+      <view class="tech-tab-item" bindtap="goMySchedule">
+        <text class="tech-tab-icon">🗓️</text>
+        <text class="tech-tab-label">我的排班</text>
+      </view>
+      <view class="tech-tab-item" bindtap="goTechProfile">
+        <text class="tech-tab-icon">👤</text>
+        <text class="tech-tab-label">我的资料</text>
+      </view>
+    </view>
+
+  </block>
+
+</view>
+
+<!-- 加载中 -->
+<view class="admin-loading" wx:if="{{loading}}">
+  <text>加载中...</text>
+</view>
+
+<!-- ═══ 预约详情底部弹窗 ═══ -->
+<view class="bk-mask" wx:if="{{showBookingDetail}}" bindtap="closeBookingDetail">
+  <view class="bk-sheet" catchtap="noop">
+    <view class="bk-handle"></view>
+
+    <!-- 状态 + 定金徽标 -->
+    <view class="bc-header">
+      <view class="status-badge status-{{detailBooking.status}}">{{detailBooking.statusLabel}}</view>
+      <view class="deposit-badge deposit-badge-pending"
+        wx:if="{{detailBooking.depositRequired && detailBooking.depositStatus === 'pending'}}">定金待收</view>
+      <view class="deposit-badge deposit-badge-paid"
+        wx:elif="{{detailBooking.depositRequired && detailBooking.depositStatus === 'paid'}}">定金已收</view>
+      <view class="deposit-badge deposit-badge-forfeited"
+        wx:elif="{{detailBooking.depositRequired && detailBooking.depositStatus === 'forfeited'}}">定金不退</view>
+      <text class="bc-datetime">{{detailBooking.date}} {{detailBooking.time}}</text>
+    </view>
+
+    <view class="bc-row">
+      <text class="bc-label">客户</text>
+      <text class="bc-val">{{detailBooking.name}}（{{detailBooking.phone}}）</text>
+    </view>
+    <view class="bc-row">
+      <text class="bc-label">服务</text>
+      <text class="bc-val">{{detailBooking.serviceName}} · {{detailBooking.duration}}</text>
+    </view>
+    <view class="bc-row">
+      <text class="bc-label">技师</text>
+      <text class="bc-val">{{detailBooking.techName}}</text>
+    </view>
+    <view class="bc-row">
+      <text class="bc-label">金额</text>
+      <view class="bc-price-wrap">
+        <text class="bc-price">¥{{detailBooking.finalPrice !== undefined ? detailBooking.finalPrice : detailBooking.price}}</text>
+        <text class="bc-ref-price"
+          wx:if="{{detailBooking.finalPrice !== undefined && detailBooking.finalPrice !== detailBooking.price}}">参考 ¥{{detailBooking.price}}</text>
+      </view>
+    </view>
+    <view class="bc-row" wx:if="{{detailBooking.status === 'completed'}}">
+      <text class="bc-label">收款</text>
+      <view class="bc-pay-wrap">
+        <text class="bc-val {{detailBooking.paymentStatus === 'paid' ? 'bc-paid' : 'bc-unpaid'}}">
+          {{detailBooking.paymentStatus === 'paid' ? '已收款' : '待支付'}}
+        </text>
+        <text class="bc-pay-method" wx:if="{{detailBooking.paymentMethod}}">
+          {{detailBooking.paymentMethod === 'wechat' ? '微信支付' : detailBooking.paymentMethod === 'cash' ? '现金' : detailBooking.paymentMethod === 'card' ? '刷卡' : '支付宝'}}
+        </text>
+      </view>
+    </view>
+    <view class="bc-row" wx:if="{{detailBooking.remark}}">
+      <text class="bc-label">备注</text>
+      <text class="bc-val">{{detailBooking.remark}}</text>
+    </view>
+    <view class="bc-row" wx:if="{{detailBooking.adminNote}}">
+      <text class="bc-label">记录</text>
+      <text class="bc-val bc-note">{{detailBooking.adminNote}}</text>
+    </view>
+
+    <!-- 关联会员（仅游客订单显示） -->
+    <view class="bk-link-row" wx:if="{{detailBooking.isGuest && !detailBooking.userId}}" bindtap="openLinkMemberModal">
+      <text class="bk-link-label">游客订单</text>
+      <text class="bk-link-btn">关联会员 →</text>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-btn-group" wx:if="{{detailBooking.status === 'pending'}}">
+      <view class="action-btn action-btn-confirm"
+        bindtap="updateStatus" data-id="{{detailBooking._id}}" data-status="confirmed">确认预约</view>
+      <view class="action-btn action-btn-deposit"
+        wx:if="{{detailBooking.depositRequired && detailBooking.depositStatus === 'pending'}}"
+        bindtap="markDepositPaid" data-id="{{detailBooking._id}}">已收定金</view>
+      <view class="action-btn action-btn-cancel"
+        bindtap="updateStatus" data-id="{{detailBooking._id}}" data-status="cancelled">取消</view>
+    </view>
+    <view class="action-btn-group" wx:elif="{{detailBooking.status === 'confirmed'}}">
+      <view class="action-btn action-btn-complete"
+        bindtap="updateStatus" data-id="{{detailBooking._id}}" data-status="completed">标记完成</view>
+      <view class="action-btn action-btn-deposit"
+        wx:if="{{detailBooking.depositRequired && detailBooking.depositStatus === 'pending'}}"
+        bindtap="markDepositPaid" data-id="{{detailBooking._id}}">已收定金</view>
+      <view class="action-btn action-btn-cancel"
+        bindtap="updateStatus" data-id="{{detailBooking._id}}" data-status="cancelled">取消</view>
+    </view>
+    <view class="action-btn-group"
+      wx:elif="{{detailBooking.status === 'completed' && detailBooking.paymentStatus !== 'paid'}}">
+      <view class="action-btn action-btn-pay"
+        bindtap="openPayModal" data-id="{{detailBooking._id}}">确认收款</view>
+    </view>
+
+  </view>
+</view>
+
+<!-- ═══ 确认收款弹窗 ═══ -->
+<view class="cm-mask" wx:if="{{showPayModal}}" bindtap="closePayModal">
+  <view class="cm-card" catchtap="noop">
+    <view class="cm-title">确认收款</view>
+    <view class="cm-subtitle">{{payingBooking.name}} · ¥{{payingBooking.finalPrice !== undefined ? payingBooking.finalPrice : payingBooking.price}}</view>
+    <view class="cm-pay-label">收款方式</view>
+    <view class="cm-pay-methods">
+      <view class="cm-pay-btn {{selectedPayMethod === 'cash' ? 'cm-pay-sel' : ''}}"
+        bindtap="onSelectPayMethod" data-method="cash">现金</view>
+      <view class="cm-pay-btn {{selectedPayMethod === 'card' ? 'cm-pay-sel' : ''}}"
+        bindtap="onSelectPayMethod" data-method="card">刷卡</view>
+      <view class="cm-pay-btn {{selectedPayMethod === 'alipay_offline' ? 'cm-pay-sel' : ''}}"
+        bindtap="onSelectPayMethod" data-method="alipay_offline">支付宝</view>
+      <view class="cm-pay-btn {{selectedPayMethod === 'wechat' ? 'cm-pay-sel' : ''}}"
+        bindtap="onSelectPayMethod" data-method="wechat">微信支付</view>
+    </view>
+    <view class="cm-btns">
+      <view class="cm-btn cm-btn-cancel" bindtap="closePayModal">取消</view>
+      <view class="cm-btn cm-btn-confirm" bindtap="confirmPayment">确认已收款</view>
+    </view>
+  </view>
+</view>
+
+<!-- ═══ 标记完成弹窗 ═══ -->
+<view class="cm-mask" wx:if="{{showCompleteModal}}" bindtap="cancelCompleteModal">
+  <view class="cm-card" catchtap="noop">
+    <view class="cm-title">标记完成</view>
+    <view class="cm-subtitle">{{completingBooking.serviceName}} · {{completingBooking.name}}</view>
+    <view class="cm-row">
+      <text class="cm-label">门市参考价</text>
+      <text class="cm-ref">¥{{completingBooking.price}}</text>
+    </view>
+    <view class="cm-input-row">
+      <text class="cm-label">实际价格</text>
+      <view class="cm-input-wrap">
+        <text class="cm-currency">¥</text>
+        <input class="cm-input" type="digit" value="{{completePriceInput}}"
+          bindinput="onCompletePriceInput" placeholder="输入金额" focus />
+      </view>
+    </view>
+    <view class="cm-result-card" wx:if="{{completePriceInput}}">
+      <view class="cm-result-row"
+        wx:if="{{completingBooking.discountRate && completingBooking.discountRate < 1}}">
+        <text class="cm-result-label">会员折扣</text>
+        <text class="cm-discount-hint">× {{completingBooking.discountRate * 10}}折</text>
+      </view>
+      <view class="cm-result-row">
+        <text class="cm-result-label">实际收款</text>
+        <text class="cm-result-val">¥{{completeFinalPrice}}</text>
+      </view>
+      <view class="cm-result-row"
+        wx:if="{{completingBooking.depositRequired && completingBooking.depositStatus === 'paid'}}">
+        <text class="cm-result-label">已收定金</text>
+        <text class="cm-result-deduct">－¥{{completingBooking.depositAmount}}</text>
+      </view>
+      <view class="cm-result-row"
+        wx:if="{{completingBooking.depositRequired && completingBooking.depositStatus === 'paid'}}">
+        <text class="cm-result-label">客户需付</text>
+        <text class="cm-result-due-val">¥{{completeRemainder}}</text>
+      </view>
+    </view>
+    <view class="cm-btns">
+      <view class="cm-btn cm-btn-cancel" bindtap="cancelCompleteModal">取消</view>
+      <view class="cm-btn cm-btn-confirm" bindtap="confirmComplete">确认完成</view>
+    </view>
+  </view>
+</view>
+
+<!-- ═══ 客情详情底部弹窗 ═══ -->
+<view class="crm-mask" wx:if="{{showCrmDetail}}" bindtap="closeCrmDetail">
+  <view class="crm-sheet" catchtap="noop">
+    <view class="crm-sheet-handle"></view>
+
+    <!-- 顶部：头像 + 姓名 + 数据 -->
+    <view class="crm-detail-header">
+      <view class="crm-detail-avatar">
+        <image wx:if="{{crmCustomer.avatarUrl}}" src="{{crmCustomer.avatarUrl}}" mode="aspectFill" class="crm-detail-avatar-img" />
+        <text wx:else>{{crmCustomer.nickname.slice(0,1)}}</text>
+      </view>
+      <view class="crm-detail-meta">
+        <text class="crm-detail-name">{{crmCustomer.nickname}}</text>
+        <text class="crm-detail-sub">{{crmCustomer.vipLevel}} · {{crmCustomer.phone || '未填手机'}} · {{crmCustomer.memberNo}}</text>
+        <text class="crm-detail-sub" wx:if="{{crmCustomer.birthday}}">🎂 {{crmCustomer.birthday}}{{crmCustomer.birthdayDays === 0 ? '（今天生日🎉）' : crmCustomer.birthdayDays > 0 && crmCustomer.birthdayDays <= 7 ? '（' + crmCustomer.birthdayDays + '天后）' : ''}}</text>
+      </view>
+    </view>
+
+    <!-- 数据栏 -->
+    <view class="crm-stat-row">
+      <view class="crm-stat">
+        <text class="crm-stat-num">¥{{crmCustomer.totalSpend}}</text>
+        <text class="crm-stat-lbl">累计消费</text>
+      </view>
+      <view class="crm-stat">
+        <text class="crm-stat-num">{{crmCustomer.bookingCount}}</text>
+        <text class="crm-stat-lbl">到店次数</text>
+      </view>
+      <view class="crm-stat">
+        <text class="crm-stat-num">¥{{crmCustomer.balance}}</text>
+        <text class="crm-stat-lbl">余额</text>
+      </view>
+      <view class="crm-stat">
+        <text class="crm-stat-num">{{crmCustomer.points}}</text>
+        <text class="crm-stat-lbl">积分</text>
+      </view>
+    </view>
+
+    <!-- 预警 chips -->
+    <view class="crm-alerts-wrap" wx:if="{{crmCustomer.alerts && crmCustomer.alerts.length > 0}}">
+      <view class="crm-alert-chip" wx:for="{{crmCustomer.alerts}}" wx:key="type" wx:for-item="al">{{al.label}}</view>
+    </view>
+
+    <!-- tab 切换 -->
+    <view class="crm-detail-tabs">
+      <view class="crm-dtab {{crmDetailTab==='profile'?'crm-dtab-act':''}}" bindtap="setCrmDetailTab" data-tab="profile">档案</view>
+      <view class="crm-dtab {{crmDetailTab==='logs'?'crm-dtab-act':''}}"    bindtap="setCrmDetailTab" data-tab="logs">互动记录</view>
+      <view class="crm-dtab {{crmDetailTab==='history'?'crm-dtab-act':''}}" bindtap="setCrmDetailTab" data-tab="history">消费历史</view>
+    </view>
+
+    <!-- ── 档案 tab ── -->
+    <block wx:if="{{crmDetailTab === 'profile'}}">
+
+      <view class="crm-section-title">风格偏好</view>
+      <view class="crm-tags-edit">
+        <view
+          class="crm-tag-chip crm-tag-toggle {{crmStyleMap[item] ? 'crm-tag-on' : ''}}"
+          wx:for="{{crmStyleOptions}}"
+          wx:key="*this" bindtap="toggleStylePref" data-tag="{{item}}"
+        >{{item}}</view>
+      </view>
+
+      <view class="crm-section-title">客户特征</view>
+      <view class="crm-trait-row">
+        <view class="crm-trait-group">
+          <text class="crm-trait-label">价格敏感度</text>
+          <view class="crm-trait-opts">
+            <view class="crm-trait-opt {{crmCustomer.priceSensitivity==='low'?'crm-trait-on':''}}"  bindtap="setPriceSensitivity" data-v="low">低</view>
+            <view class="crm-trait-opt {{crmCustomer.priceSensitivity==='mid'?'crm-trait-on':''}}"  bindtap="setPriceSensitivity" data-v="mid">中</view>
+            <view class="crm-trait-opt {{crmCustomer.priceSensitivity==='high'?'crm-trait-on':''}}" bindtap="setPriceSensitivity" data-v="high">高</view>
+          </view>
+        </view>
+        <view class="crm-trait-group">
+          <text class="crm-trait-label">时间偏好</text>
+          <view class="crm-trait-opts">
+            <view class="crm-trait-opt {{crmCustomer.timePreference==='weekday'?'crm-trait-on':''}}" bindtap="setTimePreference" data-v="weekday">工作日</view>
+            <view class="crm-trait-opt {{crmCustomer.timePreference==='weekend'?'crm-trait-on':''}}" bindtap="setTimePreference" data-v="weekend">周末</view>
+            <view class="crm-trait-opt {{crmCustomer.timePreference==='evening'?'crm-trait-on':''}}" bindtap="setTimePreference" data-v="evening">晚上</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="crm-section-title">自定义标签</view>
+      <view class="crm-tags-edit">
+        <view
+          class="crm-tag-chip crm-tag-toggle {{crmTagsMap[item] ? 'crm-tag-on' : ''}}"
+          wx:for="{{crmTagOptions}}" wx:key="*this"
+          bindtap="toggleCrmTag" data-tag="{{item}}"
+        >{{item}}</view>
+      </view>
+      <view class="crm-custom-tag-row">
+        <input class="crm-custom-tag-input" placeholder="自定义标签..." value="{{crmCustomTagInput}}"
+          bindinput="onCrmCustomTagInput" confirm-type="done" bindconfirm="addCustomTag" maxlength="8" />
+        <view class="crm-custom-tag-btn" bindtap="addCustomTag">+ 添加</view>
+      </view>
+
+      <view class="crm-section-title">备注</view>
+      <textarea class="crm-notes-input" placeholder="过敏史、特殊要求、客户喜好..." value="{{crmNotesDraft}}" bindinput="onCrmNotesInput" maxlength="500" />
+
+      <view class="crm-save-btn" bindtap="saveCrmDetail">保存档案</view>
+      <view class="crm-recalc-btn" bindtap="recalcUserStats">重新计算消费总额与等级</view>
+    </block>
+
+    <!-- ── 互动记录 tab ── -->
+    <block wx:elif="{{crmDetailTab === 'logs'}}">
+
+      <!-- 添加记录 -->
+      <view class="crm-log-add">
+        <view class="crm-section-title" style="padding-top:0;">记录本次互动</view>
+        <view class="crm-mood-row">
+          <view class="crm-mood-opt {{crmLogMood==='happy'?'crm-mood-on':''}}"   bindtap="setCrmLogMood" data-m="happy">😊 开心</view>
+          <view class="crm-mood-opt {{crmLogMood==='normal'?'crm-mood-on':''}}"  bindtap="setCrmLogMood" data-m="normal">😐 普通</view>
+          <view class="crm-mood-opt {{crmLogMood==='unhappy'?'crm-mood-on':''}}" bindtap="setCrmLogMood" data-m="unhappy">😞 抱怨</view>
+        </view>
+        <textarea class="crm-notes-input" placeholder="今天聊了什么、沟通内容、客户情绪..." value="{{crmLogContent}}" bindinput="onCrmLogContentInput" maxlength="300" />
+        <view class="crm-save-btn" style="margin-top:20rpx;" bindtap="submitCrmLog">保存记录</view>
+      </view>
+
+      <!-- 历史记录列表 -->
+      <view class="crm-log-list" wx:if="{{crmLogs.length > 0}}">
+        <view class="crm-log-item" wx:for="{{crmLogs}}" wx:key="_id">
+          <view class="crm-log-top">
+            <text class="crm-log-mood">{{item.mood === 'happy' ? '😊' : item.mood === 'unhappy' ? '😞' : '😐'}}</text>
+            <text class="crm-log-date">{{item.dateStr}}</text>
+            <text class="crm-log-staff">{{item.staffName}}</text>
+          </view>
+          <text class="crm-log-content">{{item.content}}</text>
+          <text class="crm-log-prefs" wx:if="{{item.preferences}}">偏好：{{item.preferences}}</text>
+        </view>
+      </view>
+      <view class="admin-empty" wx:else><text>暂无互动记录</text></view>
+
+    </block>
+
+    <!-- ── 消费历史 tab ── -->
+    <block wx:elif="{{crmDetailTab === 'history'}}">
+      <block wx:if="{{crmHistoryAll.length > 0}}">
+        <view class="crm-history-list">
+          <view
+            class="crm-history-item {{item.type === 'topup' ? 'crm-history-topup' : ''}}"
+            wx:for="{{crmBookingHistory}}" wx:key="_id"
+          >
+            <view class="crm-history-top">
+              <text class="crm-history-date">{{item.date}}</text>
+              <text class="crm-history-status {{item.type === 'topup' ? 'crm-history-status-topup' : ''}}">{{item.statusLabel}}</text>
+            </view>
+            <text class="crm-history-service">{{item.title}}</text>
+            <view class="crm-history-bottom" wx:if="{{item.subtitle || item.amount}}">
+              <text class="crm-history-tech">{{item.subtitle}}</text>
+              <text class="crm-history-price {{item.type === 'topup' ? 'crm-history-price-topup' : ''}}">
+                {{item.type === 'topup' ? '+' : ''}}¥{{item.amount}}
+              </text>
+            </view>
+          </view>
+        </view>
+        <view class="crm-history-pagination" wx:if="{{crmHistoryTotalPages > 1}}">
+          <view class="crm-hist-nav {{crmHistoryPage <= 1 ? 'crm-hist-nav-disabled' : ''}}" bindtap="crmHistoryPrev">‹ 上一页</view>
+          <text class="crm-hist-page-label">{{crmHistoryPage}} / {{crmHistoryTotalPages}}</text>
+          <view class="crm-hist-nav {{crmHistoryPage >= crmHistoryTotalPages ? 'crm-hist-nav-disabled' : ''}}" bindtap="crmHistoryNext">下一页 ›</view>
+        </view>
+      </block>
+      <view class="admin-empty" wx:else><text>暂无记录</text></view>
+    </block>
+
+  </view>
+</view>
+
+<!-- ═══ 关联会员弹窗 ═══ -->
+<view class="cm-mask" wx:if="{{showLinkMemberModal}}" bindtap="closeLinkMemberModal">
+  <view class="cm-card lm-card" catchtap="noop">
+    <view class="cm-title">关联会员</view>
+    <view class="cm-subtitle">将此游客订单关联到已注册会员</view>
+
+    <view class="lm-search-row">
+      <input class="lm-input" value="{{linkQuery}}" bindinput="onLinkQueryInput"
+        placeholder="输入手机号或会员号" type="number" />
+      <view class="lm-search-btn" bindtap="searchMemberForLink">
+        <text wx:if="{{!linkSearchLoading}}">搜索</text>
+        <text wx:else>...</text>
+      </view>
+    </view>
+
+    <!-- 搜索结果预览 -->
+    <view class="lm-result" wx:if="{{linkSearchResult}}">
+      <view class="lm-result-row">
+        <text class="lm-result-name">{{linkSearchResult.nickname}}</text>
+        <text class="lm-result-vip">{{linkSearchResult.vipLevel}}</text>
+      </view>
+      <view class="lm-result-row lm-result-sub">
+        <text wx:if="{{linkSearchResult.phone}}">{{linkSearchResult.phone}}</text>
+        <text wx:if="{{linkSearchResult.memberNo}}"> · 会员号 {{linkSearchResult.memberNo}}</text>
+      </view>
+    </view>
+
+    <view class="cm-btns">
+      <view class="cm-btn cm-btn-cancel" bindtap="closeLinkMemberModal">取消</view>
+      <view class="cm-btn cm-btn-confirm {{!linkSearchResult ? 'lm-btn-disabled' : ''}}"
+        bindtap="confirmLinkMember">确认关联</view>
+    </view>
+  </view>
+</view>

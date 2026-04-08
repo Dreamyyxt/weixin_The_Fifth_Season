@@ -2,40 +2,45 @@
   "pages": [
     "pages/index/index",
     "pages/login/index",
+    "pages/welcome/index",
     "pages/technician/index",
     "pages/booking/index",
+    "pages/booking-tab/index",
     "pages/shop/index",
     "pages/community/index",
     "pages/community/detail/index",
     "pages/post/index",
-    "pages/profile/index"
+    "pages/profile/index",
+    "pages/profile/booking-detail/index",
+    "pages/packageDetail/index",
+    "pages/admin/index",
+    "pages/admin/bookings/index",
+    "pages/admin/tech-list/index",
+    "pages/admin/tech-edit/index",
+    "pages/admin/tech-schedule/index",
+    "pages/admin/pkg-list/index",
+    "pages/admin/pkg-edit/index",
+    "pages/admin/roles/index",
+    "pages/admin/chart-detail/index",
+    "pages/admin/day-perf/index",
+    "pages/admin/revenue/index",
+    "pages/admin/create-booking/index",
+    "pages/admin/services/index",
+    "pages/quote/index",
+    "pages/quote-detail/index"
   ],
   "tabBar": {
+    "custom": true,
     "color": "#AAAAAA",
     "selectedColor": "#C8847A",
     "backgroundColor": "#FFFFFF",
     "borderStyle": "white",
     "list": [
-      {
-        "pagePath": "pages/index/index",
-        "text": "首页"
-      },
-      {
-        "pagePath": "pages/technician/index",
-        "text": "技师"
-      },
-      {
-        "pagePath": "pages/shop/index",
-        "text": "商城"
-      },
-      {
-        "pagePath": "pages/community/index",
-        "text": "社区"
-      },
-      {
-        "pagePath": "pages/profile/index",
-        "text": "我的"
-      }
+      { "pagePath": "pages/index/index",       "text": "首页" },
+      { "pagePath": "pages/shop/index",        "text": "商城" },
+      { "pagePath": "pages/booking-tab/index", "text": "预约" },
+      { "pagePath": "pages/community/index",   "text": "社区" },
+      { "pagePath": "pages/profile/index",     "text": "我的" }
     ]
   },
   "window": {

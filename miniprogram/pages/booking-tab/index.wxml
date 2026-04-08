@@ -1,0 +1,274 @@
+<!-- 预约页（一体化：技师 + 项目 + 时间） -->
+<view class="bk-page">
+
+  <!-- ════ STEP 1 ════ -->
+  <block wx:if="{{step === 1}}">
+    <!-- 报价入口 -->
+    <view class="quote-entry" bindtap="goQuote" wx:if="{{!isQuoteBooking}}">
+      <text class="qe-icon">📸</text>
+      <text class="qe-text">不知道选什么？有参考图？来图报价！</text>
+      <text class="qe-arrow">›</text>
+    </view>
+    <!-- ── 选择技师 ── -->
+    <view class="section-hd">
+      <text class="section-title">选择技师</text>
+    </view>
+    <view class="techs-loading" wx:if="{{techsLoading}}">加载中...</view>
+    <scroll-view class="tech-scroll" scroll-x enable-flex wx:else>
+      <view class="tech-scroll-inner">
+        <view
+          wx:for="{{technicians}}" wx:key="_id"
+          class="tech-chip {{techId === item._id ? 'tech-chip-sel' : ''}}"
+          bindtap="selectTech"
+          data-tech="{{item}}"
+        >
+          <view class="tc-avatar-wrap">
+            <view class="tc-avatar">
+              <image wx:if="{{item.avatarIsImg}}" src="{{item.avatar}}" mode="aspectFill" class="tc-avatar-img" />
+              <text wx:else class="tc-emoji">{{item.avatar}}</text>
+            </view>
+            <view class="tc-avail-dot tc-avail-{{item.available===null?'loading':item.available?'on':'off'}}"></view>
+          </view>
+          <text class="tc-name">{{item.name}}</text>
+          <text class="tc-title">{{item.title}}</text>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- ── 选择服务 ── -->
+    <!-- 报价单模式：固定服务卡片 -->
+    <view class="quote-svc-fixed" wx:if="{{isQuoteBooking}}">
+      <text class="quote-svc-name">美甲款式 -- 报价单</text>
+      <text class="quote-svc-price">¥{{totalPrice}}</text>
+    </view>
+
+    <block wx:if="{{!isQuoteBooking}}">
+    <view class="section-hd" style="margin-top:28rpx;">
+      <text class="section-title">选择服务</text>
+      <text class="section-hint">可多选</text>
+    </view>
+
+    <!-- 专属套餐 -->
+    <block wx:if="{{techPackages.length > 0}}">
+      <view class="sub-label">
+        <text class="sub-label-dot">▍</text>
+        <text class="sub-label-text">专属套餐</text>
+      </view>
+      <scroll-view class="pkg-scroll" scroll-x enable-flex>
+        <view class="pkg-scroll-inner">
+          <view
+            class="pkg-mini-card {{selectedPackageId === item._id ? 'pkg-mini-sel' : ''}}"
+            wx:for="{{techPackages}}" wx:key="_id"
+            bindtap="selectPackage" data-pkg="{{item}}"
+          >
+            <text class="pkg-mini-emoji">{{item.emoji}}</text>
+            <text class="pkg-mini-name">{{item.name}}</text>
+            <text class="pkg-mini-price">¥{{item.price}}</text>
+            <text class="pkg-mini-dur">{{item.duration}}</text>
+          </view>
+        </view>
+      </scroll-view>
+    </block>
+
+    <view class="svc-loading" wx:if="{{servicesLoading}}">加载项目中...</view>
+    <view class="svc-picker" wx:elif="{{categories.length > 0}}">
+      <!-- 左：大类 -->
+      <scroll-view class="svc-cat-scroll" scroll-y>
+        <view
+          wx:for="{{categories}}" wx:key="_id"
+          class="svc-cat-item {{selectedCategoryId === item._id ? 'svc-cat-active' : ''}}"
+          bindtap="selectCategory" data-id="{{item._id}}"
+        >
+          <text class="svc-cat-name">{{item.name}}</text>
+          <view class="svc-cat-dot" wx:if="{{selectedCategoryServiceCount[item._id] > 0}}">{{selectedCategoryServiceCount[item._id]}}</view>
+        </view>
+      </scroll-view>
+      <!-- 右：服务项 -->
+      <scroll-view class="svc-item-scroll" scroll-y>
+        <view wx:if="{{displayServiceGroups.length === 0}}" class="svc-empty-cat">暂无服务项目</view>
+        <block wx:for="{{displayServiceGroups}}" wx:key="subgroup" wx:for-item="group">
+          <view class="svc-subgroup-label" wx:if="{{group.subgroup}}">{{group.subgroup}}</view>
+          <view
+            wx:for="{{group.services}}" wx:key="_id"
+            class="svc-item {{selectedServiceIds[item._id] ? 'svc-item-sel' : ''}}"
+            bindtap="selectService" data-service="{{item}}"
+          >
+            <view class="svc-item-top">
+              <text class="svc-item-name">{{item.name}}</text>
+              <text class="svc-quote-tag" wx:if="{{item.isQuote}}">报价制</text>
+            </view>
+            <view class="svc-item-bottom">
+              <text class="svc-item-dur">{{item.durationMin}}分钟</text>
+              <text class="svc-item-price">¥{{item.price}}{{item.isQuote ? '起' : ''}}</text>
+              <view class="svc-item-check" wx:if="{{selectedServiceIds[item._id]}}">✓</view>
+            </view>
+          </view>
+        </block>
+      </scroll-view>
+    </view>
+
+    <!-- 已选合计栏 -->
+    <view class="sel-summary" wx:if="{{selectedServices.length > 0}}">
+      <view class="sel-left">
+        <text class="sel-count">已选 {{selectedServices.length}} 项</text>
+        <text class="sel-dur">{{totalDuration}}</text>
+      </view>
+      <text class="sel-price">参考 ¥{{totalPrice}}</text>
+    </view>
+    </block><!-- end !isQuoteBooking -->
+
+    <!-- VIP 提示 -->
+    <view class="vip-notice" wx:if="{{hasVipService && !userPerks.noVipAdvanceLimit}}">
+      <text>📌 VIP 高定全套需提前 {{VIP_ADVANCE_DAYS}} 天预约，日期已自动调整</text>
+    </view>
+
+    <!-- ── 选择日期 ── -->
+    <view class="section-hd" style="margin-top:28rpx;">
+      <text class="section-title">选择日期</text>
+    </view>
+    <view class="form-card">
+      <picker mode="date" value="{{selectedDate}}" start="{{minDate}}" bindchange="onDateChange">
+        <view class="picker-row">
+          <text class="picker-label">预约日期</text>
+          <text class="picker-value">{{selectedDate}} ›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- ── 选择时间 ── -->
+    <view class="section-hd" style="margin-top:20rpx;">
+      <text class="section-title">选择时间</text>
+      <text class="section-hint" wx:if="{{loadingSlots}}">加载中...</text>
+      <text class="section-hint" wx:elif="{{totalDuration}}">需要 {{totalDuration}}</text>
+      <text class="section-hint" wx:elif="{{!techId}}">请先选择技师</text>
+    </view>
+    <view class="schedule-off-notice" wx:if="{{scheduleOff}}">
+      <text class="schedule-off-text">技师当天休息，请选择其他日期</text>
+    </view>
+    <view class="time-grid" wx:if="{{!scheduleOff}}">
+      <view
+        class="time-slot {{item.disabled ? 'time-disabled' : ''}} {{selectedTime === item.time ? 'time-selected' : ''}}"
+        wx:for="{{timeSlots}}" wx:key="time" wx:for-item="item"
+        bindtap="selectTime" data-timeinfo="{{item}}"
+      >
+        {{item.time}}
+        <text wx:if="{{item.booked}}"  class="time-tag">已约</text>
+        <text wx:elif="{{item.past}}"  class="time-tag">已过</text>
+        <text wx:elif="{{item.disabled}}" class="time-tag">不足</text>
+      </view>
+    </view>
+
+    <view class="submit-wrap">
+      <view class="btn-primary" bindtap="nextStep">下一步 · 填写信息</view>
+    </view>
+
+  </block>
+
+  <!-- ════ STEP 2 ════ -->
+  <block wx:if="{{step === 2}}">
+
+    <!-- 预约摘要 -->
+    <view class="summary-card">
+      <text class="summary-title">预约摘要</text>
+      <view class="summary-row summary-svc-row">
+        <text class="summary-label">服务项目</text>
+        <view class="summary-svcs">
+          <view class="summary-svc-item" wx:for="{{selectedServices}}" wx:key="_id">
+            <text class="summary-svc-name">{{item.name}}</text>
+            <text class="summary-svc-price">¥{{item.price}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="summary-row">
+        <text class="summary-label">技师</text>
+        <text class="summary-value">{{tech.name}}</text>
+      </view>
+      <view class="summary-row">
+        <text class="summary-label">预约时间</text>
+        <text class="summary-value">{{selectedDate}} {{selectedTime}}</text>
+      </view>
+      <view class="summary-row">
+        <text class="summary-label">合计时长</text>
+        <text class="summary-value">{{totalDuration}}</text>
+      </view>
+      <view class="summary-row summary-price-row">
+        <text class="summary-label">参考总价</text>
+        <view class="summary-price-group">
+          <text class="summary-price">¥{{totalPrice}}</text>
+          <text class="summary-price-tag" wx:if="{{userDiscount < 1}}">{{userDiscountText}}会员</text>
+        </view>
+      </view>
+      <view class="deposit-notice" wx:if="{{depositRequired}}">
+        <text class="deposit-icon">💰</text>
+        <view class="deposit-body">
+          <text class="deposit-title">需支付定金 ¥{{depositAmount}}</text>
+          <text class="deposit-desc">技师确认前可全额退还；确认后取消定金不退</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 联系信息 -->
+    <view class="section-hd">
+      <text class="section-title">联系信息</text>
+    </view>
+    <view class="form-card">
+      <view class="form-row">
+        <text class="form-label">姓名</text>
+        <input class="form-input" placeholder="请输入您的姓名" value="{{name}}" bindinput="onNameInput" />
+      </view>
+      <view class="form-divider"></view>
+      <view class="form-row">
+        <text class="form-label">手机号</text>
+        <input class="form-input" type="number" placeholder="请输入手机号" value="{{phone}}" bindinput="onPhoneInput" maxlength="11" />
+      </view>
+      <view class="form-divider"></view>
+      <view class="form-row form-row-col">
+        <text class="form-label">备注</text>
+        <textarea class="form-textarea" placeholder="可以告诉我们您的想法、款式偏好或携带宠物..." value="{{remark}}" bindinput="onRemarkInput" maxlength="200" />
+      </view>
+    </view>
+
+    <view class="pet-tip">
+      <text class="pet-icon">🐾</text>
+      <text class="pet-text">本店宠物友好，欢迎携带您的毛孩子！</text>
+    </view>
+
+    <view class="btn-group">
+      <view class="btn-back" bindtap="prevStep">返回修改</view>
+      <view class="btn-primary btn-submit" bindtap="submitBooking">确认预约</view>
+    </view>
+
+  </block>
+
+</view>
+
+<!-- 定金支付弹窗 -->
+<view class="pm-mask" wx:if="{{showDepositModal}}" bindtap="cancelDepositModal">
+  <view class="pm-card" catchtap="noop">
+    <view class="pm-title">支付定金</view>
+    <view class="pm-amount">定金金额：¥{{depositAmount}}</view>
+    <view class="pm-option {{depositPayMethod==='balance'?'pm-sel':''}} {{!depBalanceSufficient?'pm-dis':''}}"
+      bindtap="selectDepositPayMethod" data-method="balance">
+      <view class="pm-opt-left">
+        <text class="pm-opt-icon">💳</text>
+        <view>
+          <text class="pm-opt-name">余额支付</text>
+          <text class="pm-opt-sub {{!depBalanceSufficient?'pm-warn':''}}">当前余额 ¥{{userBalance}}{{!depBalanceSufficient?'（余额不足）':''}}</text>
+        </view>
+      </view>
+      <view class="pm-check" wx:if="{{depositPayMethod==='balance'}}">✓</view>
+    </view>
+    <view class="pm-option {{depositPayMethod==='wechat'?'pm-sel':''}}"
+      bindtap="selectDepositPayMethod" data-method="wechat">
+      <view class="pm-opt-left">
+        <text class="pm-opt-icon">💚</text>
+        <text class="pm-opt-name">微信支付</text>
+      </view>
+      <view class="pm-check" wx:if="{{depositPayMethod==='wechat'}}">✓</view>
+    </view>
+    <view class="pm-btns">
+      <view class="pm-btn pm-cancel" bindtap="cancelDepositModal">稍后支付</view>
+      <view class="pm-btn pm-confirm" bindtap="confirmDepositPay">确认支付</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,39 @@
+<!-- 技师管理 -->
+<view class="admin-page">
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <text class="admin-nav-title">技师管理</text>
+  </view>
+
+  <view class="admin-loading" wx:if="{{loading}}">加载中...</view>
+
+  <view wx:if="{{!loading}}">
+    <view class="admin-empty" wx:if="{{technicians.length === 0}}">暂无技师，点击 + 添加</view>
+
+    <view class="admin-card tech-item" wx:for="{{technicians}}" wx:key="_id">
+      <view class="tech-left">
+        <view class="tech-avatar">
+          <image wx:if="{{item.avatar}}" src="{{item.avatar}}" mode="aspectFill" class="tech-avatar-img" />
+          <text wx:else>👤</text>
+        </view>
+        <view class="tech-info">
+          <view class="tech-name-row">
+            <text class="tech-name">{{item.name}}</text>
+            <text class="tech-title-sm">{{item.title}}</text>
+          </view>
+          <view class="tech-skills">
+            <text class="skill-tag" wx:for="{{item.skills}}" wx:key="*this" wx:for-item="skill">{{skill}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="tech-actions">
+        <view class="schedule-btn" bindtap="goSchedule" data-id="{{item._id}}" data-name="{{item.name}}">排班</view>
+        <view class="edit-btn" bindtap="goEdit" data-id="{{item._id}}">编辑</view>
+        <view class="del-btn" bindtap="deleteTech" data-id="{{item._id}}">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 新增按钮 -->
+  <view class="fab-btn" bindtap="goAdd">+</view>
+</view>

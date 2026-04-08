@@ -10,7 +10,7 @@ page {
 .container {
   min-height: 100vh;
   background-color: #FAF7F4;
-  padding-bottom: 40rpx;
+  padding-bottom: calc(160rpx + env(safe-area-inset-bottom)); /* 自定义 tabBar 圆形按钮 + 安全区 */
 }
 
 /* 卡片 */
@@ -34,6 +34,11 @@ page {
   font-size: 34rpx;
   font-weight: 600;
   color: #2C2C2C;
+}
+
+.section-hint {
+  font-size: 22rpx;
+  color: #AAAAAA;
 }
 
 .section-more {

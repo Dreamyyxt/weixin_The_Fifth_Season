@@ -1,0 +1,131 @@
+<!-- 营收报表 -->
+<view class="admin-page">
+
+  <!-- 导航栏 -->
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <text class="admin-nav-title">营收报表</text>
+    <view class="nav-right-placeholder"></view>
+  </view>
+
+  <!-- 日历选择器 -->
+  <view class="rv-cal">
+    <view class="rv-cal-month-bar">
+      <view class="rv-cal-nav" bindtap="prevCalMonth">‹</view>
+      <text class="rv-cal-month-label">{{calMonthLabel}}</text>
+      <view class="rv-cal-nav" bindtap="nextCalMonth">›</view>
+    </view>
+    <view class="rv-cal-weekrow">
+      <text class="rv-cal-wlbl" wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="*this">{{item}}</text>
+    </view>
+    <view class="rv-cal-grid">
+      <view
+        wx:for="{{calDays}}" wx:key="index"
+        class="rv-cal-cell {{item.empty ? 'rv-cal-empty' : ''}} {{item.isToday ? 'rv-cal-today' : ''}} {{item.isSel ? 'rv-cal-sel' : ''}}"
+        bindtap="onCalDayTap" data-date="{{item.dateStr}}"
+      >
+        <text class="rv-cal-daynum" wx:if="{{!item.empty}}">{{item.day}}</text>
+        <view class="rv-cal-dot" wx:if="{{!item.empty && item.hasRevenue}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-loading" wx:if="{{loading}}">加载中...</view>
+
+  <view wx:if="{{!loading}}">
+
+    <!-- 总营收卡片 -->
+    <view class="admin-card rv-total-card">
+      <text class="rv-total-label">{{date}} · 收款汇总</text>
+      <text class="rv-total-num">¥{{summary ? summary.total : 0}}</text>
+      <text class="rv-total-sub">{{bookings.length}} 笔已完成订单</text>
+    </view>
+
+    <!-- 支付方式拆分 -->
+    <view class="admin-card rv-method-card" wx:if="{{methodRows.length > 0}}">
+      <text class="rv-section-title">按支付方式</text>
+      <view class="rv-method-row" wx:for="{{methodRows}}" wx:key="key">
+        <view class="rv-method-left">
+          <text class="rv-method-icon">{{item.icon}}</text>
+          <view>
+            <text class="rv-method-label">{{item.label}}</text>
+            <text class="rv-method-count">{{item.count}} 笔</text>
+          </view>
+        </view>
+        <text class="rv-method-amount">¥{{item.amount}}</text>
+      </view>
+    </view>
+
+    <view class="admin-card rv-empty-card" wx:elif="{{bookings.length === 0}}">
+      <text class="rv-empty-text">当日暂无已完成订单</text>
+    </view>
+
+    <!-- 对账确认区域 -->
+    <view class="admin-card rv-audit-card" wx:if="{{bookings.length > 0}}">
+      <view class="rv-audit-row" wx:if="{{auditConfirmed}}">
+        <text class="rv-audit-done">✓ 已对账确认</text>
+        <view>
+          <text class="rv-audit-sub">现金实收 ¥{{auditConfirmed.cashActual}}</text>
+          <text class="rv-audit-sub" wx:if="{{auditConfirmed.note}}"> · {{auditConfirmed.note}}</text>
+        </view>
+      </view>
+      <view class="rv-audit-btn {{auditConfirmed ? 'rv-audit-btn-secondary' : ''}}" bindtap="openAuditModal">
+        {{auditConfirmed ? '修改对账记录' : '确认今日对账'}}
+      </view>
+    </view>
+
+    <!-- 订单明细 -->
+    <view wx:if="{{bookings.length > 0}}">
+      <text class="rv-section-title rv-section-title-pad">订单明细</text>
+      <view class="admin-card rv-booking-card" wx:for="{{bookings}}" wx:key="_id">
+        <view class="rv-bk-header">
+          <text class="rv-bk-time">{{item.time}}</text>
+          <view class="rv-bk-pay-tag rv-bk-pay-{{item.paymentMethod || 'cash'}}">
+            {{item.paymentMethod === 'wechat' ? '微信' : item.paymentMethod === 'card' ? '刷卡' : item.paymentMethod === 'alipay_offline' ? '支付宝' : '现金'}}
+          </view>
+          <text class="rv-bk-amount">¥{{item.finalPrice !== undefined ? item.finalPrice : item.price}}</text>
+        </view>
+        <view class="rv-bk-info">
+          <text class="rv-bk-name">{{item.name}}</text>
+          <text class="rv-bk-sep">·</text>
+          <text class="rv-bk-service">{{item.serviceName}}</text>
+          <text class="rv-bk-sep">·</text>
+          <text class="rv-bk-tech">{{item.techName}}</text>
+        </view>
+        <text class="rv-bk-note" wx:if="{{item.paymentNote}}">备注：{{item.paymentNote}}</text>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- 对账确认弹窗 -->
+  <view class="cm-mask" wx:if="{{showAuditModal}}" bindtap="closeAuditModal">
+    <view class="cm-card" catchtap>
+      <view class="cm-title">每日对账确认</view>
+      <view class="cm-subtitle">{{date}}</view>
+
+      <view class="rv-audit-hint">系统现金记录：¥{{summary.byMethod.cash ? summary.byMethod.cash.amount : 0}}</view>
+      <view class="cm-input-row">
+        <text class="cm-label">现金实收</text>
+        <view class="cm-input-wrap">
+          <text class="cm-currency">¥</text>
+          <input class="cm-input" type="digit" value="{{auditCashInput}}"
+            bindinput="onAuditCashInput" placeholder="实际清点金额" focus />
+        </view>
+      </view>
+      <view class="cm-note-row">
+        <text class="cm-label">备注</text>
+        <input class="cm-note-input" value="{{auditNote}}"
+          bindinput="onAuditNoteInput" placeholder="如有差异请说明原因（可选）" />
+      </view>
+
+      <view class="cm-btns">
+        <view class="cm-btn cm-btn-cancel" bindtap="closeAuditModal">取消</view>
+        <view class="cm-btn cm-btn-confirm {{auditSaving ? 'cm-btn-disabled' : ''}}" bindtap="confirmAudit">
+          {{auditSaving ? '保存中...' : '确认对账'}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

@@ -1,0 +1,121 @@
+<!-- 图片预约 -->
+<view class="container">
+
+  <!-- Hero -->
+  <view class="q-hero">
+    <text class="q-hero-icon">📸</text>
+    <text class="q-hero-title">发图报价</text>
+    <text class="q-hero-sub">上传参考图，技师评估后 24 小时内为您报价</text>
+  </view>
+
+  <!-- 上传参考图 -->
+  <view class="section-header">
+    <text class="section-title">参考图片 <text class="req-star">*</text></text>
+    <text class="section-hint">最多 4 张，至少 1 张</text>
+  </view>
+  <view class="q-img-grid">
+    <view class="q-img-item" wx:for="{{images}}" wx:key="index">
+      <image src="{{item}}" mode="aspectFill" class="q-img-thumb" />
+      <view class="q-img-del" bindtap="removeImage" data-idx="{{index}}">×</view>
+    </view>
+    <view class="q-img-add" wx:if="{{images.length < 4}}" bindtap="chooseImages">
+      <text class="q-img-add-icon">+</text>
+      <text class="q-img-add-hint">添加图片</text>
+    </view>
+  </view>
+  <text class="q-img-tip">可上传网络图、截图或自己的旧款</text>
+
+  <!-- 偏好时间 -->
+  <view class="section-header">
+    <text class="section-title">期望时间</text>
+    <text class="section-hint">可不填</text>
+  </view>
+  <view class="q-card">
+    <picker mode="date" value="{{preferredDate}}" start="{{minDate}}" bindchange="onDateChange">
+      <view class="q-row">
+        <text class="q-label">期望日期</text>
+        <text class="q-val {{preferredDate ? '' : 'q-placeholder'}}">{{preferredDate || '不限 ›'}}</text>
+      </view>
+    </picker>
+    <view class="q-divider"></view>
+    <view class="q-row q-row-wrap">
+      <text class="q-label">时段偏好</text>
+      <view class="q-chips">
+        <view
+          class="q-chip {{selectedTimeRange === index ? 'q-chip-active' : ''}}"
+          wx:for="{{timeRanges}}"
+          wx:key="index"
+          wx:for-item="item"
+          bindtap="selectTimeRange"
+          data-idx="{{index}}"
+        >{{item}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 附加项目 -->
+  <view class="section-header">
+    <text class="section-title">附加项目</text>
+  </view>
+  <view class="q-card">
+    <view class="q-check-row" bindtap="toggleRemoval">
+      <view class="q-check-box {{needsRemoval ? 'q-checked' : ''}}">
+        <text wx:if="{{needsRemoval}}" class="q-check-tick">✓</text>
+      </view>
+      <view class="q-check-info">
+        <text class="q-check-label">需要卸甲</text>
+        <text class="q-check-sub">将旧甲卸除后再做新款，加收卸甲费</text>
+      </view>
+    </view>
+    <view class="q-divider"></view>
+    <view class="q-check-row" bindtap="toggleExtension">
+      <view class="q-check-box {{needsExtension ? 'q-checked' : ''}}">
+        <text wx:if="{{needsExtension}}" class="q-check-tick">✓</text>
+      </view>
+      <view class="q-check-info">
+        <text class="q-check-label">需要延甲</text>
+        <text class="q-check-sub">需要甲片延长，会影响时长和价格</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 联系信息 -->
+  <view class="section-header">
+    <text class="section-title">联系信息 <text class="req-star">*</text></text>
+  </view>
+  <view class="q-card">
+    <view class="q-row">
+      <text class="q-label">姓名</text>
+      <input class="q-input" value="{{name}}" bindinput="onNameInput" placeholder="请输入姓名" />
+    </view>
+    <view class="q-divider"></view>
+    <view class="q-row">
+      <text class="q-label">手机号</text>
+      <input class="q-input" type="number" maxlength="11" value="{{phone}}" bindinput="onPhoneInput" placeholder="请输入手机号" />
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="section-header">
+    <text class="section-title">备注</text>
+    <text class="section-hint">可不填</text>
+  </view>
+  <view class="q-card">
+    <textarea
+      class="q-textarea"
+      value="{{remark}}"
+      bindinput="onRemarkInput"
+      placeholder="如：颜色偏好、是否过敏、宠物同行、其他特殊要求..."
+      maxlength="200"
+    />
+  </view>
+
+  <!-- 提交 -->
+  <view class="q-submit-wrap">
+    <view class="btn-primary {{submitting ? 'q-btn-disabled' : ''}}" bindtap="submit">
+      {{submitting ? '提交中...' : '提交报价申请'}}
+    </view>
+    <text class="q-submit-note">提交后技师将在 24 小时内评估并报价</text>
+  </view>
+
+</view>

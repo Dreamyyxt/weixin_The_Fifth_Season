@@ -53,7 +53,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
+.tech-avatar-img { width: 108rpx; height: 108rpx; display: block; }
 
 .tech-emoji {
   font-size: 52rpx;
@@ -69,8 +71,9 @@
   border: 3rpx solid #FFFFFF;
 }
 
-.avail-on { background: #6BBF6B; }
-.avail-off { background: #CCCCCC; }
+.avail-on      { background: #6BBF6B; }
+.avail-off     { background: #CCCCCC; }
+.avail-loading { background: #E0E0E0; }
 
 .tech-info {
   flex: 1;
@@ -188,6 +191,11 @@
   color: #CCCCCC;
 }
 
+.avail-text-loading {
+  font-size: 24rpx;
+  color: #CCCCCC;
+}
+
 .book-btn {
   padding: 18rpx 52rpx;
   border-radius: 40rpx;
@@ -204,4 +212,10 @@
 .book-disabled {
   background: #F0EDED;
   color: #CCCCCC;
+}
+
+.book-other {
+  background: #FFFFFF;
+  color: #C8847A;
+  border: 2rpx solid #C8847A;
 }

@@ -44,14 +44,20 @@
     "disableSWC": true
   },
   "compileType": "miniprogram",
+  "cloudfunctionRoot": "cloudfunctions/",
   "libVersion": "3.14.3",
   "appid": "wxbb2fcebb0404f8e0",
   "projectname": "the-fifth-season",
   "condition": {},
   "simulatorPluginLibVersion": {},
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "type": "file", "value": "images/头像白.jpg" },
+      { "type": "file", "value": "images/第五季.jpg" },
+      { "type": "file", "value": "images/第五季1.jpg" }
+    ],
     "include": []
   },
-  "editorSetting": {}
+  "editorSetting": {},
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
 }

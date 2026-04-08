@@ -4,9 +4,8 @@
   <!-- 顶部品牌 -->
   <view class="brand">
     <view class="brand-logo">
-      <text class="brand-zh">第五季</text>
+      <image class="brand-logo-img" src="/images/头像摩卡.jpg" mode="aspectFill" />
     </view>
-    <text class="brand-en">The Fifth Season</text>
     <text class="brand-slogan">在春夏秋冬之外，遇见宠物、花卉与美丽</text>
   </view>
 
@@ -30,7 +29,6 @@
         />
         <view wx:else class="avatar-placeholder">
           <text class="avatar-icon">📷</text>
-          <text class="avatar-hint">点击选择头像</text>
         </view>
       </button>
       <text class="avatar-label">点击更换微信头像</text>
@@ -49,6 +47,50 @@
           maxlength="20"
         />
       </view>
+    </view>
+
+    <view class="input-group">
+      <text class="input-label">手机号</text>
+      <view class="input-wrap">
+        <input
+          class="nickname-input"
+          type="number"
+          placeholder="请输入手机号"
+          value="{{phone}}"
+          bindinput="onPhoneInput"
+          maxlength="11"
+        />
+      </view>
+    </view>
+
+    <view class="input-group">
+      <text class="input-label">性别</text>
+      <view class="gender-row">
+        <view
+          class="gender-opt {{gender === 'female' ? 'gender-selected' : ''}}"
+          bindtap="onGenderTap" data-val="female"
+        >女</view>
+        <view
+          class="gender-opt {{gender === 'male' ? 'gender-selected' : ''}}"
+          bindtap="onGenderTap" data-val="male"
+        >男</view>
+        <view
+          class="gender-opt {{gender === '' ? 'gender-selected' : ''}}"
+          bindtap="onGenderTap" data-val=""
+        >不填</view>
+      </view>
+    </view>
+
+    <view class="input-group">
+      <view class="input-label-row">
+        <text class="input-label">生日</text>
+        <text class="input-label-hint">🎁 生日月享专属优惠</text>
+      </view>
+      <picker mode="date" value="{{birthday}}" start="1950-01-01" end="2015-12-31" bindchange="onBirthdayChange">
+        <view class="input-wrap picker-row">
+          <text class="{{birthday ? 'picker-val' : 'picker-placeholder'}}">{{birthday || '选择生日（可不填）'}}</text>
+        </view>
+      </picker>
     </view>
 
     <!-- 新用户提示 -->

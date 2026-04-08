@@ -1,0 +1,625 @@
+@import '../admin-common.wxss';
+
+/* 导航栏中部（标题+条数） */
+.nav-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rpx;
+}
+
+.nav-count {
+  font-size: 20rpx;
+  color: #AAAAAA;
+  line-height: 1;
+}
+
+.nav-right-placeholder {
+  width: 48rpx;
+}
+
+/* 内嵌日历 */
+.cal-wrap {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  margin: 16rpx 24rpx 0;
+  padding: 24rpx 20rpx 8rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.cal-nav-btn {
+  font-size: 44rpx;
+  color: #C8847A;
+  padding: 0 20rpx;
+  line-height: 1;
+}
+
+.cal-month-label {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #2C2C2C;
+}
+
+.cal-weekdays {
+  display: flex;
+  margin-bottom: 6rpx;
+}
+
+.cal-wd {
+  flex: 1;
+  text-align: center;
+  font-size: 22rpx;
+  color: #BBBBBB;
+  padding: 6rpx 0;
+}
+
+.cal-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cal-cell {
+  position: relative;
+  width: 14.2857%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7rpx 0;
+}
+
+.cal-pending-badge {
+  position: absolute;
+  top: 2rpx;
+  right: 2rpx;
+  min-width: 28rpx;
+  height: 28rpx;
+  border-radius: 14rpx;
+  background: #E74C3C;
+  color: #FFFFFF;
+  font-size: 16rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6rpx;
+}
+
+.cal-day-num {
+  width: 60rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 26rpx;
+  color: #2C2C2C;
+}
+
+.cal-today .cal-day-num {
+  color: #C8847A;
+  font-weight: 700;
+  border: 2rpx solid #C8847A;
+}
+
+.cal-sel .cal-day-num {
+  background: #C8847A;
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.cal-other-month .cal-day-num {
+  color: #DDDDDD;
+}
+
+.cal-past .cal-day-num {
+  color: #CCCCCC;
+}
+
+.cal-sel.cal-past .cal-day-num {
+  background: #C8C0BD;
+}
+
+.cal-clear-row {
+  border-top: 1rpx solid #F5EDE9;
+  margin-top: 8rpx;
+  padding: 16rpx 0 8rpx;
+  text-align: center;
+}
+
+.cal-clear-text {
+  font-size: 24rpx;
+  color: #C8847A;
+}
+
+/* 状态 Tab 栏 */
+.status-tabs {
+  padding: 16rpx 24rpx 20rpx;
+  white-space: nowrap;
+}
+
+.tab-track {
+  display: inline-flex;
+  align-items: center;
+  background: #F0E8E4;
+  border-radius: 50rpx;
+  padding: 6rpx;
+  gap: 0;
+}
+
+.s-tab {
+  display: inline-block;
+  padding: 14rpx 32rpx;
+  border-radius: 44rpx;
+  font-size: 26rpx;
+  color: #A07870;
+  flex-shrink: 0;
+}
+
+.s-tab-active {
+  background: #FFFFFF;
+  color: #C8847A;
+  font-weight: 700;
+  box-shadow: 0 2rpx 12rpx rgba(200,132,122,0.22);
+}
+
+/* 预约卡片 */
+.booking-card {
+  margin-bottom: 16rpx;
+}
+
+.bc-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-bottom: 16rpx;
+  min-width: 0;
+}
+
+.bc-datetime {
+  font-size: 24rpx;
+  color: #888888;
+  margin-left: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bc-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  margin-bottom: 10rpx;
+  min-width: 0;
+}
+
+.bc-label {
+  font-size: 24rpx;
+  color: #AAAAAA;
+  width: 60rpx;
+  flex-shrink: 0;
+}
+
+.bc-val {
+  flex: 1;
+  min-width: 0;
+  font-size: 26rpx;
+  color: #444444;
+  word-break: break-all;
+}
+
+.bc-price {
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #C8847A;
+}
+
+.bc-note {
+  color: #888888;
+  font-style: italic;
+}
+
+/* 定金徽标 */
+.deposit-badge {
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+}
+
+.deposit-badge-pending {
+  background: #FFF3CD;
+  color: #7A5C00;
+}
+
+.deposit-badge-paid {
+  background: #D4EDDA;
+  color: #155724;
+}
+
+.deposit-badge-forfeited {
+  background: #F8D7DA;
+  color: #721C24;
+}
+
+/* 已收定金按钮 */
+.action-btn-deposit {
+  background: #5BBCAA;
+  color: #FFFFFF;
+}
+
+/* 确认收款按钮 */
+.action-btn-pay {
+  background: #E8900A;
+  color: #FFFFFF;
+}
+
+/* 金额行 */
+.bc-price-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 12rpx;
+  flex: 1;
+}
+
+.bc-ref-price {
+  font-size: 22rpx;
+  color: #BBBBBB;
+  text-decoration: line-through;
+}
+
+.bc-paid {
+  color: #3D8B37;
+  font-weight: 600;
+}
+
+.bc-unpaid {
+  color: #E8900A;
+  font-weight: 600;
+}
+
+/* 标记完成弹窗 */
+.cm-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx 0;
+  box-sizing: border-box;
+}
+
+.cm-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 40rpx 36rpx 32rpx;
+  width: 580rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.15);
+  max-height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.cm-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2C2C2C;
+  margin-bottom: 8rpx;
+}
+
+.cm-subtitle {
+  font-size: 24rpx;
+  color: #888888;
+  margin-bottom: 28rpx;
+}
+
+.cm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.cm-label {
+  font-size: 26rpx;
+  color: #666666;
+}
+
+.cm-ref {
+  font-size: 26rpx;
+  color: #888888;
+}
+
+.cm-discount-hint {
+  font-size: 26rpx;
+  color: #C8847A;
+  font-weight: 600;
+}
+
+.cm-input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.cm-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: #FAF7F4;
+  border-radius: 12rpx;
+  padding: 12rpx 20rpx;
+  flex: 1;
+  max-width: 280rpx;
+}
+
+.cm-currency {
+  font-size: 26rpx;
+  color: #C8847A;
+  font-weight: 600;
+}
+
+.cm-input {
+  flex: 1;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #2C2C2C;
+}
+
+/* 折算结果卡片（取代原 cm-deposit-note） */
+.cm-result-card {
+  background: #FAF7F4;
+  border-radius: 12rpx;
+  padding: 8rpx 18rpx;
+  margin-bottom: 24rpx;
+}
+
+.cm-result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10rpx 0;
+  border-bottom: 1rpx solid #F0EAE7;
+}
+
+.cm-result-row:last-child {
+  border-bottom: none;
+}
+
+.cm-result-label {
+  font-size: 24rpx;
+  color: #888888;
+}
+
+.cm-result-val {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #C8847A;
+}
+
+.cm-result-deduct {
+  font-size: 24rpx;
+  color: #5BBCAA;
+}
+
+.cm-result-due-val {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #E8900A;
+}
+
+.cm-btns {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 28rpx;
+}
+
+.cm-btn {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx 0;
+  border-radius: 50rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.cm-btn-cancel {
+  background: #F5F5F5;
+  color: #888888;
+}
+
+.cm-btn-confirm {
+  background: linear-gradient(135deg, #C8847A, #E8A89E);
+  color: #FFFFFF;
+  box-shadow: 0 4rpx 12rpx rgba(200,132,122,0.4);
+}
+
+/* 支付方式选择器 */
+.cm-pay-label {
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 16rpx;
+}
+
+.cm-pay-methods {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+  flex-wrap: wrap;
+}
+
+.cm-pay-btn {
+  flex: 1;
+  min-width: 110rpx;
+  text-align: center;
+  padding: 16rpx 0;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  color: #888888;
+  background: #F5F5F5;
+  border: 2rpx solid transparent;
+}
+
+.cm-pay-sel {
+  background: #FEF0EE;
+  color: #C8847A;
+  border-color: #C8847A;
+  font-weight: 600;
+}
+
+/* 差异备注输入 */
+.cm-note-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.cm-note-input {
+  flex: 1;
+  font-size: 24rpx;
+  color: #2C2C2C;
+  background: #FAF7F4;
+  border-radius: 10rpx;
+  padding: 14rpx 16rpx;
+}
+
+/* 支付方式标签（预约卡片） */
+.bc-pay-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  flex: 1;
+}
+
+.bc-pay-method {
+  font-size: 22rpx;
+  color: #888888;
+  background: #F5F5F5;
+  padding: 4rpx 14rpx;
+  border-radius: 10rpx;
+}
+
+/* ─── 新增预约入口行 ──────────────────────────────── */
+.add-booking-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  margin: 12rpx 24rpx;
+  padding: 22rpx 0;
+  background: #FEF0EE;
+  border: 2rpx dashed #C8847A;
+  border-radius: 16rpx;
+}
+.add-booking-icon {
+  font-size: 32rpx;
+  color: #C8847A;
+  line-height: 1;
+}
+.add-booking-label {
+  font-size: 28rpx;
+  color: #C8847A;
+  font-weight: 500;
+}
+
+/* ─── 来源角标 ───────────────────────────────────── */
+.source-badge {
+  font-size: 20rpx;
+  color: #6B8CBA;
+  background: #EBF2FA;
+  padding: 2rpx 12rpx;
+  border-radius: 10rpx;
+}
+
+/* ─── 手动创建预约底部弹窗 ──────────────────────────── */
+.sheet-handle {
+  width: 72rpx;
+  height: 8rpx;
+  background: #E0D8D4;
+  border-radius: 4rpx;
+  margin: 0 auto 16rpx;
+}
+.sheet-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.create-sheet {
+  width: 100%;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 16rpx 0 40rpx;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+.create-form-scroll {
+  flex: 1;
+  padding: 0 32rpx;
+  overflow: hidden;
+}
+.cf-row {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #F0EDED;
+  gap: 16rpx;
+}
+.cf-row-tall { align-items: flex-start; padding-top: 20rpx; }
+.cf-label {
+  font-size: 28rpx;
+  color: #555;
+  width: 140rpx;
+  flex-shrink: 0;
+}
+.cf-picker {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  text-align: right;
+}
+.cf-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  text-align: right;
+}
+.cf-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4rpx;
+}
+.cf-currency { font-size: 28rpx; color: #555; }
+.cf-price-input {
+  font-size: 28rpx;
+  color: #333;
+  width: 120rpx;
+  text-align: right;
+}
+.cf-textarea {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  min-height: 80rpx;
+  text-align: right;
+}
+.cf-picker-loading { color: #AAAAAA; }

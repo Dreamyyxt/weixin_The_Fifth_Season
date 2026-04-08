@@ -7,15 +7,16 @@
   </view>
 
   <view class="tech-list">
-    <view class="tech-card" wx:for="{{technicians}}" wx:key="id">
+    <view class="tech-card" wx:for="{{technicians}}" wx:key="_id">
 
       <!-- 头部：头像 + 基本信息 -->
       <view class="tech-top">
         <view class="tech-avatar-wrap">
           <view class="tech-avatar">
-            <text class="tech-emoji">{{item.avatar}}</text>
+            <image wx:if="{{item.avatarIsImg}}" src="{{item.avatar}}" mode="aspectFill" class="tech-avatar-img" />
+            <text wx:else class="tech-emoji">{{item.avatar}}</text>
           </view>
-          <view class="avail-dot avail-{{item.available ? 'on' : 'off'}}"></view>
+          <view class="avail-dot avail-{{item.available === null ? 'loading' : item.available ? 'on' : 'off'}}"></view>
         </view>
 
         <view class="tech-info">
@@ -24,11 +25,6 @@
             <view class="tech-badge" wx:if="{{item.badge}}">{{item.badge}}</view>
           </view>
           <text class="tech-title">{{item.title}}</text>
-          <view class="tech-rating">
-            <text class="star-icon">★</text>
-            <text class="rating-score">{{item.ratingText}}</text>
-            <text class="rating-reviews">({{item.reviews}} 条评价)</text>
-          </view>
         </view>
 
         <view class="tech-price">
@@ -49,19 +45,17 @@
 
       <!-- 预约按钮 -->
       <view class="tech-footer">
-        <view class="avail-label avail-text-{{item.available ? 'on' : 'off'}}">
-          {{item.available ? '● 今日可约' : '○ 暂不可约'}}
-        </view>
+        <view wx:if="{{item.available === null}}" class="avail-label avail-text-loading">○ 查询中...</view>
+        <view wx:elif="{{item.available}}" class="avail-label avail-text-on">● 今日可约</view>
+        <view wx:else class="avail-label avail-text-off">○ 今天不可约</view>
+
+        <view class="book-btn book-disabled" wx:if="{{item.available === null}}">查询中...</view>
         <view
-          class="book-btn {{item.available ? 'book-active' : 'book-disabled'}}"
-          bindtap="goBooking"
-          data-id="{{item.id}}"
-          wx:if="{{item.available}}"
-        >立即预约</view>
-        <view
-          class="book-btn book-disabled"
           wx:else
-        >{{item.badge ? '暂不可约' : '已约满'}}</view>
+          class="book-btn {{item.available ? 'book-active' : 'book-other'}}"
+          bindtap="goBooking"
+          data-id="{{item._id}}"
+        >{{item.available ? '立即预约' : '预约其他日期'}}</view>
       </view>
 
     </view>

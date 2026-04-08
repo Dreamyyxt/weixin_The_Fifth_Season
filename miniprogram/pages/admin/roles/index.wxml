@@ -1,0 +1,65 @@
+<!-- 角色分配 -->
+<view class="admin-page" style="padding-bottom:120rpx;">
+  <view class="admin-nav" style="padding-top:{{navTopPadding}}px;">
+    <view class="admin-back" bindtap="goBack">‹</view>
+    <text class="admin-nav-title">角色分配</text>
+  </view>
+
+  <view class="admin-card" style="margin-top:20rpx;">
+
+    <view class="tip-box">
+      <text class="tip-title">如何获取用户 openId？</text>
+      <text class="tip-text">在云开发控制台 → 数据库 → users 集合，找到该用户的文档 _id（即 openId）。</text>
+    </view>
+
+    <view class="form-field">
+      <text class="field-label">用户 openId *</text>
+      <input
+        class="field-input"
+        value="{{targetOpenId}}"
+        bindinput="onOpenIdInput"
+        placeholder="粘贴目标用户的 openId"
+      />
+      <view class="lookup-btn" bindtap="lookupUser">查询当前角色</view>
+    </view>
+
+    <view class="form-field">
+      <text class="field-label">分配角色</text>
+      <picker range="{{roleLabels}}" value="{{selectedRoleIdx}}" bindchange="onRoleChange">
+        <view class="field-input">{{roleLabels[selectedRoleIdx]}} ›</view>
+      </picker>
+    </view>
+
+    <!-- 绑定技师档案（技师 & 管理员均可关联） -->
+    <view class="form-field" wx:if="{{role === 'technician' || role === 'admin'}}">
+      <text class="field-label">关联技师档案（可选）</text>
+
+      <!-- 正常选择状态 -->
+      <block wx:if="{{!clearTechLink}}">
+        <picker range="{{technicians}}" range-key="name" value="{{linkedTechId}}" bindchange="selectTech">
+          <view class="field-input">
+            {{linkedTechId !== '' ? technicians[linkedTechId].name : '选择关联的技师档案'}} ›
+          </view>
+        </picker>
+        <view class="unlink-btn" bindtap="clearTech">取消关联（清除已有绑定）</view>
+      </block>
+
+      <!-- 已标记取消关联 -->
+      <block wx:else>
+        <view class="unlink-hint-row">
+          <text class="unlink-hint-text">提交后将清除该用户的技师关联</text>
+          <text class="unlink-undo" bindtap="undoClearTech">撤销</text>
+        </view>
+      </block>
+
+      <text class="field-hint">管理员关联技师档案后，不会失去管理员权限</text>
+    </view>
+
+    <view
+      class="action-btn action-btn-primary"
+      style="margin-top:32rpx;"
+      bindtap="submit"
+    >确认设置</view>
+
+  </view>
+</view>

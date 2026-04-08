@@ -1,0 +1,113 @@
+<!-- 报价详情 -->
+<view class="container">
+
+  <view class="qd-loading" wx:if="{{loading}}">
+    <text class="qd-loading-text">加载中...</text>
+  </view>
+
+  <block wx:elif="{{quote}}">
+
+    <!-- 状态横幅 -->
+    <view class="qd-status-bar qd-s-{{quote.status}}">
+      <text class="qd-s-icon">
+        {{quote.status === 'pending' ? '⏳' : quote.status === 'quoted' ? '💬' : quote.status === 'confirmed' ? '✅' : '❌'}}
+      </text>
+      <view class="qd-s-info">
+        <text class="qd-s-title">
+          {{quote.status === 'pending' ? '等待技师评估' :
+            quote.status === 'quoted'  ? '报价已出炉！' :
+            quote.status === 'confirmed' ? '已确认预约' : '已放弃'}}
+        </text>
+        <text class="qd-s-sub">
+          {{quote.status === 'pending' ? '技师将在 24 小时内查看并报价' :
+            quote.status === 'quoted'  ? '请查看报价，确认后即可完成预约' : ''}}
+        </text>
+      </view>
+    </view>
+
+    <!-- 参考图片 -->
+    <view class="section-header">
+      <text class="section-title">参考图片</text>
+    </view>
+    <scroll-view class="qd-img-scroll" scroll-x enhanced="{{true}}">
+      <view class="qd-img-list">
+        <image wx:for="{{quote.images}}" wx:key="index" src="{{item}}" mode="aspectFill" class="qd-img" />
+      </view>
+    </scroll-view>
+
+    <!-- 需求信息 -->
+    <view class="section-header">
+      <text class="section-title">需求信息</text>
+    </view>
+    <view class="qd-card">
+      <view class="qd-row" wx:if="{{quote.preferredDate}}">
+        <text class="qd-label">期望日期</text>
+        <text class="qd-val">{{quote.preferredDate}}</text>
+      </view>
+      <view class="qd-row" wx:if="{{quote.preferredTimeRange}}">
+        <text class="qd-label">时段偏好</text>
+        <text class="qd-val">{{quote.preferredTimeRange}}</text>
+      </view>
+      <view class="qd-row" wx:if="{{quote.needsRemoval || quote.needsExtension}}">
+        <text class="qd-label">附加项目</text>
+        <text class="qd-val qd-val-tags">
+          <text wx:if="{{quote.needsRemoval}}" class="qd-tag">卸甲</text>
+          <text wx:if="{{quote.needsExtension}}" class="qd-tag">延甲</text>
+        </text>
+      </view>
+      <view class="qd-row" wx:if="{{quote.remark}}">
+        <text class="qd-label">备注</text>
+        <text class="qd-val qd-val-remark">{{quote.remark}}</text>
+      </view>
+    </view>
+
+    <!-- 技师报价（quoted / confirmed 才显示）-->
+    <block wx:if="{{quote.status === 'quoted' || quote.status === 'confirmed'}}">
+      <view class="section-header">
+        <text class="section-title">技师报价</text>
+      </view>
+      <view class="qd-quote-card">
+        <view class="qd-price-row">
+          <view class="qd-price-left">
+            <text class="qd-price-label">参考报价</text>
+            <text class="qd-price-duration" wx:if="{{quote.durationDisplay}}">约 {{quote.durationDisplay}}</text>
+          </view>
+          <text class="qd-price">¥{{quote.price}}</text>
+        </view>
+        <view class="qd-quote-rows">
+          <view class="qd-qrow">
+            <text class="qd-ql">推荐技师</text>
+            <text class="qd-qv">{{quote.recommendedTechName}}</text>
+          </view>
+          <view class="qd-qrow" wx:if="{{quote.difficultyLabel}}">
+            <text class="qd-ql">款式难度</text>
+            <text class="qd-qv">{{quote.difficultyLabel}}</text>
+          </view>
+          <view class="qd-qrow" wx:if="{{quote.adminNote}}">
+            <text class="qd-ql">技师备注</text>
+            <text class="qd-qv qd-note">{{quote.adminNote}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 操作按钮（仅 quoted 状态） -->
+      <view class="qd-actions" wx:if="{{quote.status === 'quoted'}}">
+        <view class="qd-btn-book" bindtap="goBook">去预约时间 →</view>
+        <view class="qd-btn-reject" bindtap="reject">暂不预约</view>
+      </view>
+
+      <!-- 已确认提示 -->
+      <view class="qd-confirmed-tip" wx:if="{{quote.status === 'confirmed'}}">
+        <text>✅ 您已确认报价，预约正在处理中</text>
+      </view>
+    </block>
+
+    <!-- 已放弃：可重提 -->
+    <view class="qd-rejected-section" wx:if="{{quote.status === 'rejected'}}">
+      <text class="qd-rejected-tip">您已放弃本次报价。参考图片仍保留，可直接重新发起。</text>
+      <view class="qd-btn-resubmit" bindtap="resubmit">重新提交报价申请</view>
+    </view>
+
+  </block>
+
+</view>

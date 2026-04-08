@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sips -Z 400 头像摩卡.jpg 头像白.jpg)",
+      "Bash(sips -Z 800 第五季.jpg 第五季1.jpg)",
+      "Bash(head -20 grep -n \"rating\\\\|评分\\\\|评价\\\\|review\" /Users/sg01161ml/Projects/The_Fifth_Season/miniprogram/pages/admin/tech-edit/index.wxml)",
+      "Bash(node --check /Users/sg01161ml/Projects/The_Fifth_Season/miniprogram/pages/booking-tab/index.js)",
+      "Bash(npx --yes acorn --ecma2020 --module /Users/sg01161ml/Projects/The_Fifth_Season/miniprogram/pages/booking-tab/index.js)",
+      "Bash(npx acorn:*)",
+      "Bash(python3 -c \"import sys; line=sys.stdin.read\\(\\); print\\(repr\\(line\\)\\)\")",
+      "Bash(python3 -c ':*)"
+    ]
+  }
+}

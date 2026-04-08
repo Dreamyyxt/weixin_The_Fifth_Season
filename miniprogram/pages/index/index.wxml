@@ -5,7 +5,7 @@
   <view class="hero">
     <view class="hero-logo">
       <view class="logo-circle">
-        <text class="logo-zh">第五季</text>
+        <image class="logo-img" src="/images/头像摩卡.jpg" mode="aspectFill" />
       </view>
     </view>
     <view class="hero-text">
@@ -21,24 +21,24 @@
         <view class="banner-tag">{{item.tag}}</view>
         <text class="banner-title">{{item.title}}</text>
         <text class="banner-sub">{{item.subtitle}}</text>
-        <view class="banner-btn" bindtap="goTechnician">立即预约</view>
+        <view class="banner-btn" bindtap="goBooking">立即预约</view>
       </view>
     </swiper-item>
   </swiper>
 
   <!-- 快捷入口 -->
   <view class="quick-grid">
-    <view class="quick-item" bindtap="goTechnician">
+    <view class="quick-item" bindtap="goBooking">
       <view class="quick-icon q-rose">
         <text class="quick-emoji">💅</text>
       </view>
-      <text class="quick-label">预约技师</text>
+      <text class="quick-label">立即预约</text>
     </view>
     <view class="quick-item" bindtap="goShop">
       <view class="quick-icon q-gold">
         <text class="quick-emoji">🎁</text>
       </view>
-      <text class="quick-label">积分商城</text>
+      <text class="quick-label">商城</text>
     </view>
     <view class="quick-item" bindtap="goCommunity">
       <view class="quick-icon q-green">
@@ -54,18 +54,56 @@
     </view>
   </view>
 
+  <!-- 店员简介 -->
+  <view class="section-header">
+    <text class="section-title">店员简介</text>
+  </view>
+  <scroll-view class="staff-scroll" scroll-x="{{true}}" enhanced="{{true}}">
+    <view class="staff-list">
+      <view class="staff-card" wx:for="{{technicians}}" wx:key="_id"
+        bindtap="openTechDetail" data-id="{{item._id}}">
+        <view class="staff-avatar">
+          <image wx:if="{{item.avatarIsImg}}" src="{{item.avatar}}" mode="aspectFill" class="staff-avatar-img" />
+          <text wx:else class="staff-emoji">{{item.avatar}}</text>
+        </view>
+        <view class="staff-badge" wx:if="{{item.badge}}">{{item.badge}}</view>
+        <text class="staff-name">{{item.name}}</text>
+        <text class="staff-title">{{item.title}}</text>
+        <view class="staff-book-btn">查看详情</view>
+      </view>
+    </view>
+  </scroll-view>
+
   <!-- 精选作品 -->
   <view class="section-header">
     <text class="section-title">精选作品</text>
-    <text class="section-more" bindtap="goCommunity">查看全部 ›</text>
+    <text class="section-more" bindtap="goCommunity">查看更多 ›</text>
   </view>
   <scroll-view class="works-scroll" scroll-x="{{true}}" enhanced="{{true}}">
     <view class="works-list">
-      <view class="work-card" wx:for="{{works}}" wx:key="id">
-        <view class="work-thumb work-{{item.color}}">
-          <text class="work-emoji">{{item.emoji}}</text>
-        </view>
-        <text class="work-label">{{item.label}}</text>
+      <view class="work-card" bindtap="goCommunity">
+        <view class="work-thumb work-pink"><text class="work-emoji">💅</text></view>
+        <text class="work-label">日式凝胶</text>
+      </view>
+      <view class="work-card" bindtap="goCommunity">
+        <view class="work-thumb work-coral"><text class="work-emoji">🌸</text></view>
+        <text class="work-label">春日樱花</text>
+      </view>
+      <view class="work-card" bindtap="goCommunity">
+        <view class="work-thumb work-lavender"><text class="work-emoji">💜</text></view>
+        <text class="work-label">紫色渐变</text>
+      </view>
+      <view class="work-card" bindtap="goCommunity">
+        <view class="work-thumb work-gold"><text class="work-emoji">✨</text></view>
+        <text class="work-label">高定金箔</text>
+      </view>
+      <view class="work-card" bindtap="goCommunity">
+        <view class="work-thumb work-green"><text class="work-emoji">🌿</text></view>
+        <text class="work-label">清新法式</text>
+      </view>
+      <view class="work-card" bindtap="goCommunity">
+        <view class="work-thumb work-white"><text class="work-emoji">🤍</text></view>
+        <text class="work-label">简约纯色</text>
       </view>
     </view>
   </scroll-view>
@@ -113,4 +151,34 @@
     </view>
   </view>
 
+</view>
+
+<!-- ═══ 店员详情弹窗 ═══ -->
+<view class="tech-mask" wx:if="{{showTechDetail}}" bindtap="closeTechDetail">
+  <view class="tech-sheet" catchtap="noop">
+    <view class="tech-sheet-handle"></view>
+
+    <view class="tech-sheet-top">
+      <view class="tech-sheet-avatar">
+        <image wx:if="{{selectedTech.avatarIsImg}}" src="{{selectedTech.avatar}}" mode="aspectFill" class="tech-sheet-avatar-img" />
+        <text wx:else class="tech-sheet-emoji">{{selectedTech.avatar}}</text>
+      </view>
+      <view class="tech-sheet-meta">
+        <view class="tech-sheet-name-row">
+          <text class="tech-sheet-name">{{selectedTech.name}}</text>
+          <view class="tech-sheet-badge" wx:if="{{selectedTech.badge}}">{{selectedTech.badge}}</view>
+        </view>
+        <text class="tech-sheet-role">{{selectedTech.title}}</text>
+        <text class="tech-sheet-price">起价 ¥{{selectedTech.priceFrom}}</text>
+      </view>
+    </view>
+
+    <text class="tech-sheet-desc">{{selectedTech.desc}}</text>
+
+    <view class="tech-sheet-skills">
+      <view class="skill-tag" wx:for="{{selectedTech.skills}}" wx:key="*this" wx:for-item="s">{{s}}</view>
+    </view>
+
+    <view class="tech-sheet-book-btn" bindtap="goBookingFromDetail">立即预约 →</view>
+  </view>
 </view>

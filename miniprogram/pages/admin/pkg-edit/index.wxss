@@ -1,0 +1,43 @@
+@import '../admin-common.wxss';
+
+.type-tabs { display: flex; background: #F8F5F2; border-radius: 12rpx; padding: 6rpx; }
+.type-tab  { flex: 1; text-align: center; padding: 18rpx 0; font-size: 26rpx; color: #888888; border-radius: 8rpx; }
+.type-active { background: #C8847A; color: #FFFFFF; font-weight: 600; }
+
+.tech-check-list { display: flex; flex-direction: column; gap: 10rpx; margin-bottom: 8rpx; }
+.tech-check-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18rpx 24rpx; border-radius: 12rpx;
+  background: #F8F5F2; font-size: 26rpx; color: #555555;
+}
+.tech-checked { background: #FDE8E6; color: #C8847A; font-weight: 600; }
+
+.feature-list { margin-bottom: 12rpx; }
+.feature-row  { display: flex; align-items: center; gap: 8rpx; padding: 8rpx 0; border-bottom: 1rpx solid #F5F0ED; }
+.feature-dot  { color: #C8847A; font-size: 28rpx; }
+.feature-text { flex: 1; font-size: 24rpx; color: #444444; }
+.feature-del  { color: #CCCCCC; font-size: 32rpx; padding: 0 8rpx; }
+
+.skill-input-row { display: flex; gap: 12rpx; align-items: center; }
+.skill-input    { flex: 1; }
+.add-skill-btn  {
+  background: #C8847A; color: #FFFFFF;
+  font-size: 24rpx; padding: 18rpx 28rpx; border-radius: 12rpx; flex-shrink: 0;
+}
+
+/* VIP toggle 开关 */
+.toggle-row   { display: flex; align-items: center; gap: 20rpx; }
+.toggle-track {
+  width: 96rpx; height: 52rpx; border-radius: 26rpx;
+  background: #DDDDDD; position: relative; transition: background 0.2s;
+  flex-shrink: 0;
+}
+.toggle-on { background: #C8847A; }
+.toggle-thumb {
+  position: absolute; top: 6rpx; left: 6rpx;
+  width: 40rpx; height: 40rpx; border-radius: 50%;
+  background: #FFFFFF; transition: left 0.2s;
+  box-shadow: 0 2rpx 6rpx rgba(0,0,0,0.15);
+}
+.toggle-on .toggle-thumb { left: 50rpx; }
+.toggle-label { font-size: 26rpx; color: #555555; }

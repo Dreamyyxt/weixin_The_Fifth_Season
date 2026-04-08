@@ -1,0 +1,47 @@
+@import '../admin-common.wxss';
+
+.tech-item { margin-bottom: 16rpx; }
+
+.tech-left {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.tech-avatar {
+  width: 80rpx; height: 80rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FDE8E6, #F5D0CD);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40rpx; flex-shrink: 0; overflow: hidden;
+}
+.tech-avatar-img { width: 80rpx; height: 80rpx; display: block; }
+
+.tech-name-row { display: flex; align-items: center; gap: 10rpx; margin-bottom: 6rpx; }
+.tech-name     { font-size: 28rpx; font-weight: 600; color: #2C2C2C; }
+.tech-title-sm { font-size: 22rpx; color: #AAAAAA; }
+
+.tech-skills { display: flex; flex-wrap: wrap; gap: 8rpx; }
+.skill-tag   { font-size: 20rpx; color: #C8847A; background: #FDE8E6; padding: 4rpx 14rpx; border-radius: 12rpx; }
+
+.tech-actions {
+  display: flex;
+  gap: 12rpx;
+  align-items: center;
+}
+
+.edit-btn {
+  font-size: 22rpx; color: #2980B9;
+  background: #E8F4FD; padding: 8rpx 20rpx; border-radius: 12rpx;
+}
+
+.schedule-btn {
+  font-size: 22rpx; color: #27AE60;
+  background: #E8F5E9; padding: 8rpx 20rpx; border-radius: 12rpx;
+}
+
+.del-btn {
+  font-size: 22rpx; color: #C0392B;
+  background: #FEE9E7; padding: 8rpx 20rpx; border-radius: 12rpx;
+}

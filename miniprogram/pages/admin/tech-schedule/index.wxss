@@ -1,0 +1,207 @@
+@import '../admin-common.wxss';
+
+/* ── 图例 ─────────────────────────────────────────────────────────────────── */
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx 28rpx;
+  padding: 20rpx 32rpx 0;
+}
+.legend-item { display: flex; align-items: center; gap: 10rpx; }
+.legend-dot  { width: 18rpx; height: 18rpx; border-radius: 50%; }
+.legend-working { background: #27AE60; }
+.legend-off     { background: #E74C3C; }
+.legend-default { background: #DDDDDD; border: 1rpx solid #CCCCCC; }
+.legend-label   { font-size: 22rpx; color: #888888; }
+
+/* ── 月份导航 ─────────────────────────────────────────────────────────────── */
+.sc-month-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16rpx 24rpx 20rpx;
+}
+.sc-nav-btn   { font-size: 44rpx; color: #C8847A; padding: 0 16rpx; line-height: 1; }
+.sc-month-label { font-size: 32rpx; font-weight: 700; color: #2C2C2C; }
+
+/* ── 星期行 ───────────────────────────────────────────────────────────────── */
+.sc-weekrow {
+  display: flex;
+  padding: 0 8rpx 12rpx;
+}
+.sc-wlabel { flex: 1; text-align: center; font-size: 22rpx; color: #AAAAAA; }
+
+/* ── 日历网格 ─────────────────────────────────────────────────────────────── */
+.sc-grid { display: flex; flex-wrap: wrap; padding: 0 8rpx 8rpx; }
+.sc-cell {
+  width: calc(100% / 7);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+  position: relative;
+  margin-bottom: 4rpx;
+}
+.sc-cell-empty { pointer-events: none; }
+.sc-cell-today .sc-day-num { color: #C8847A; font-weight: 700; border: 2rpx solid #C8847A; }
+.sc-cell-off   { background: rgba(231,76,60,0.06); }
+.sc-cell-off .sc-day-num { color: #CCCCCC; }
+
+.sc-day-num {
+  font-size: 28rpx; color: #2C2C2C;
+  width: 52rpx; height: 52rpx;
+  line-height: 52rpx; text-align: center;
+  border-radius: 50%; border: 2rpx solid transparent;
+}
+
+/* 徽标 */
+.sc-day-badge {
+  font-size: 18rpx;
+  border-radius: 8rpx;
+  padding: 1rpx 6rpx;
+  margin-top: 3rpx;
+  line-height: 1.4;
+}
+.sc-badge-off     { background: #FDECEA; color: #E74C3C; }
+.sc-badge-working { background: #E8F5E9; color: #27AE60; }
+
+/* ── 提示 ─────────────────────────────────────────────────────────────────── */
+.sc-hint {
+  display: block;
+  font-size: 22rpx; color: #AAAAAA;
+  text-align: center;
+  padding: 24rpx 32rpx 0;
+  line-height: 1.6;
+}
+
+/* ══════════ 排班弹窗 ══════════════════════════════════════════════════════ */
+.sheet-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+}
+.sheet-card {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 0 0 40rpx;
+  max-height: 88vh;
+  overflow-y: auto;
+}
+.sheet-handle {
+  width: 72rpx; height: 8rpx;
+  background: #E0E0E0; border-radius: 4rpx;
+  margin: 20rpx auto 0;
+}
+.sheet-header {
+  padding: 24rpx 40rpx 16rpx;
+  border-bottom: 1rpx solid #F5F0ED;
+}
+.sheet-title { font-size: 32rpx; font-weight: 700; color: #2C2C2C; }
+
+/* ── 快捷按钮 ─────────────────────────────────────────────────────────────── */
+.sheet-quick-row {
+  display: flex; gap: 20rpx;
+  padding: 24rpx 40rpx 16rpx;
+}
+.sheet-quick-btn {
+  flex: 1; text-align: center;
+  padding: 18rpx 0;
+  border-radius: 16rpx;
+  font-size: 26rpx; font-weight: 500;
+}
+.sheet-quick-all {
+  background: #E8F5E9; color: #27AE60;
+  border: 1rpx solid rgba(39,174,96,0.3);
+}
+.sheet-quick-off {
+  background: #F5F5F5; color: #888888;
+  border: 1rpx solid #E8E8E8;
+}
+.sheet-quick-off-active {
+  background: #FDECEA; color: #E74C3C;
+  border-color: rgba(231,76,60,0.3);
+}
+
+/* ── 休息日提示 ───────────────────────────────────────────────────────────── */
+.sheet-off-notice {
+  margin: 0 40rpx 20rpx;
+  background: #FDECEA; border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+}
+.sheet-off-text { font-size: 26rpx; color: #E74C3C; }
+
+/* ── 时间段选择器 ─────────────────────────────────────────────────────────── */
+.sheet-time-section {
+  margin: 8rpx 40rpx 0;
+  background: #F8F6F5;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+.sheet-time-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 32rpx;
+}
+.sheet-time-divider {
+  height: 1rpx;
+  background: #EDE8E6;
+  margin: 0 32rpx;
+}
+.sheet-time-label {
+  font-size: 28rpx;
+  color: #2C2C2C;
+  font-weight: 500;
+}
+.sheet-time-picker {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+.sheet-time-value {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #C8847A;
+}
+.sheet-time-arrow {
+  font-size: 28rpx;
+  color: #C8847A;
+  line-height: 1;
+}
+
+/* ── 统计 ─────────────────────────────────────────────────────────────────── */
+.sheet-summary {
+  padding: 24rpx 40rpx 8rpx;
+  text-align: center;
+}
+.sheet-summary-text {
+  font-size: 26rpx; color: #27AE60; font-weight: 500;
+}
+
+/* ── 底部按钮 ─────────────────────────────────────────────────────────────── */
+.sheet-btns {
+  display: flex; gap: 20rpx;
+  padding: 24rpx 40rpx 0;
+}
+.sheet-btn {
+  flex: 1; text-align: center;
+  padding: 28rpx 0;
+  border-radius: 20rpx;
+  font-size: 30rpx; font-weight: 600;
+}
+.sheet-btn-cancel {
+  background: #F5F0ED; color: #888888;
+}
+.sheet-btn-save {
+  background: linear-gradient(135deg, #C8847A, #D4968C);
+  color: #FFFFFF;
+  box-shadow: 0 6rpx 24rpx rgba(200,132,122,0.4);
+}
+.sheet-btn-disabled {
+  background: #CCCCCC;
+  box-shadow: none;
+}

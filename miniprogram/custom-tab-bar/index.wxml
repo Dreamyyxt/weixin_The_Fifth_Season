@@ -1,0 +1,35 @@
+<view class="tab-bar">
+
+  <!-- 首页 -->
+  <view class="tab-item {{selected===0?'tab-active':''}}" bindtap="switchTo" data-index="0">
+    <text class="tab-icon">⌂</text>
+    <text class="tab-label">首页</text>
+  </view>
+
+  <!-- 商城 -->
+  <view class="tab-item {{selected===1?'tab-active':''}}" bindtap="switchTo" data-index="1">
+    <text class="tab-icon">🛍</text>
+    <text class="tab-label">商城</text>
+  </view>
+
+  <!-- 预约（中央凸起按钮） -->
+  <view class="tab-center" bindtap="switchTo" data-index="2">
+    <view class="tab-center-btn {{selected===2?'tab-center-sel':''}}">
+      <text class="tab-center-icon">💅</text>
+      <text class="tab-center-label">预约</text>
+    </view>
+  </view>
+
+  <!-- 社区 -->
+  <view class="tab-item {{selected===3?'tab-active':''}}" bindtap="switchTo" data-index="3">
+    <text class="tab-icon">✦</text>
+    <text class="tab-label">社区</text>
+  </view>
+
+  <!-- 我的 -->
+  <view class="tab-item {{selected===4?'tab-active':''}}" bindtap="switchTo" data-index="4">
+    <text class="tab-icon">◎</text>
+    <text class="tab-label">我的</text>
+  </view>
+
+</view>

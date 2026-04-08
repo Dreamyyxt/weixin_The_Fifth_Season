@@ -1,0 +1,65 @@
+<view class="page">
+
+  <!-- 飘落花瓣层 -->
+  <view class="petals-layer">
+    <view
+      wx:for="{{petals}}"
+      wx:key="id"
+      class="petal petal-t{{item.type}}"
+      style="left:{{item.left}}%;width:{{item.size}}rpx;height:{{item.size}}rpx;animation-duration:{{item.duration}}ms;animation-delay:{{item.delay}}ms"
+    ></view>
+  </view>
+
+  <!-- 背景装饰光晕 -->
+  <view class="bg-glow bg-glow-top"></view>
+  <view class="bg-glow bg-glow-bottom"></view>
+
+  <!-- 品牌区 -->
+  <view class="brand-section {{showBrand ? 'show' : ''}}">
+    <image class="brand-logo-img" src="/images/第五季.png" mode="aspectFit" />
+    <text class="brand-en">THE FIFTH SEASON</text>
+    <view class="brand-divider"></view>
+  </view>
+
+  <!-- 头像区 -->
+  <view class="avatar-section {{showAvatar ? 'show' : ''}}">
+    <view class="avatar-ring">
+      <image
+        wx:if="{{avatarUrl}}"
+        class="avatar-img"
+        src="{{avatarUrl}}"
+        mode="aspectFill"
+      />
+      <image wx:else class="avatar-img" src="/images/头像摩卡.jpg" mode="aspectFill" />
+    </view>
+  </view>
+
+  <!-- 欢迎语 + 昵称 -->
+  <view class="user-section {{showInfo ? 'show' : ''}}">
+    <text class="welcome-greeting">欢迎光临</text>
+    <text class="user-nickname">{{nickname}}</text>
+  </view>
+
+  <!-- 会员卡 -->
+  <view class="member-card {{showCard ? 'show' : ''}}">
+    <view class="member-card-body">
+      <view class="member-left">
+        <text class="member-label">会员编号</text>
+        <text class="member-no">{{memberNo}}</text>
+      </view>
+      <view class="member-right">
+        <text class="member-level-badge">{{vipLevel}}</text>
+      </view>
+    </view>
+    <view class="member-card-shine"></view>
+  </view>
+
+  <!-- 进入按钮 -->
+  <view class="btn-section {{showBtn ? 'show' : ''}}">
+    <view class="enter-btn" bindtap="enterApp">
+      <text class="enter-btn-text">进入第五季</text>
+      <text class="enter-btn-arrow">›</text>
+    </view>
+  </view>
+
+</view>

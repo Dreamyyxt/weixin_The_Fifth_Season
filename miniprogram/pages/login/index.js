@@ -4,7 +4,10 @@ Page({
   data: {
     avatarUrl: '',
     nickname: '',
-    isEdit: false,   // true 时为"编辑资料"模式，false 时为"首次注册"模式
+    phone: '',
+    gender: '',
+    birthday: '',
+    isEdit: false,
   },
 
   onLoad(options) {
@@ -13,8 +16,11 @@ Page({
       const u = app.globalData.userInfo;
       this.setData({
         isEdit: true,
-        avatarUrl: u.avatarUrl || '',
-        nickname: u.nickname || '',
+        avatarUrl:  u.avatarUrl  || '',
+        nickname:   u.nickname   || '',
+        phone:      u.phone      || '',
+        gender:     u.gender     || '',
+        birthday:   u.birthday   || '',
       });
     }
   },
@@ -29,34 +35,46 @@ Page({
     this.setData({ nickname: e.detail.value });
   },
 
-  submit() {
-    const { avatarUrl, nickname, isEdit } = this.data;
+  onPhoneInput(e)      { this.setData({ phone: e.detail.value }); },
+  onGenderTap(e)       { this.setData({ gender: e.currentTarget.dataset.val }); },
+  onBirthdayChange(e)  { this.setData({ birthday: e.detail.value }); },
+
+  async submit() {
+    const { avatarUrl, nickname, phone, gender, birthday, isEdit } = this.data;
+    const phoneTrimmed = phone.trim();
 
     if (!nickname.trim()) {
       wx.showToast({ title: '请输入昵称', icon: 'none' });
       return;
     }
-
-    const updates = {
-      nickname: nickname.trim(),
-      avatarUrl,
-      isRegistered: true,
-    };
-
-    // 首次注册时赋初始积分
-    if (!isEdit) {
-      updates.vipLevel = '普通会员';
-      updates.points = 100;
-      updates.balance = 0;
+    if (phoneTrimmed && !/^1[3-9]\d{9}$/.test(phoneTrimmed)) {
+      wx.showToast({ title: '请输入正确的手机号', icon: 'none' });
+      return;
     }
 
-    app.saveUserInfo(updates);
+    wx.showLoading({ title: isEdit ? '保存中...' : '注册中...' });
 
-    if (isEdit) {
-      wx.showToast({ title: '保存成功', icon: 'success' });
-      setTimeout(() => wx.navigateBack(), 800);
-    } else {
-      wx.reLaunch({ url: '/pages/index/index' });
+    try {
+      const res = await wx.cloud.callFunction({
+        name: 'login',
+        data: { nickname: nickname.trim(), avatarUrl, phone: phoneTrimmed, gender, birthday },
+      });
+
+      const { userInfo } = res.result;
+      app.saveUserInfo(userInfo);
+
+      wx.hideLoading();
+
+      if (isEdit) {
+        wx.showToast({ title: '保存成功', icon: 'success' });
+        setTimeout(() => wx.navigateBack(), 800);
+      } else {
+        wx.reLaunch({ url: '/pages/welcome/index' });
+      }
+    } catch (e) {
+      wx.hideLoading();
+      wx.showToast({ title: '网络错误，请重试', icon: 'none' });
+      console.error('login failed:', e);
     }
   },
 });
